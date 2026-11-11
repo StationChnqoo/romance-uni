@@ -166,7 +166,7 @@ const onRemove = () => {
 
 /* ---------------- 页头 ---------------- */
 .edit__head {
-  padding: 0 8rpx 34rpx;
+  padding: 0 8rpx 24rpx;
 }
 
 .edit__eyebrow {
@@ -194,7 +194,7 @@ const onRemove = () => {
 
 /* ---------------- 信纸卡 ---------------- */
 .edit__card {
-  padding: 12rpx 30rpx 30rpx;
+  padding: 8rpx 20rpx 20rpx;
 }
 
 .edit__date-row {
@@ -264,7 +264,6 @@ const onRemove = () => {
 .edit__mood--on {
   border-color: #f4a2c1;
   background-image: linear-gradient(120deg, #fff4f8, #ffe4ee);
-  box-shadow: 0 6rpx 16rpx rgba(226, 92, 148, 0.14);
 }
 
 .edit__mood-emoji {
@@ -301,7 +300,7 @@ const onRemove = () => {
   position: relative;
   width: 100%;
   min-height: 280rpx;
-  padding: 26rpx;
+  padding: 20rpx;
   font-size: 28rpx;
   color: var(--love-ink);
   line-height: 1.8;
@@ -330,10 +329,6 @@ const onRemove = () => {
   height: 164rpx;
   border-radius: 22rpx;
   background-color: var(--love-soft);
-}
-
-.edit__image {
-  box-shadow: 0 6rpx 16rpx rgba(226, 100, 148, 0.12);
 }
 
 .edit__image-x {

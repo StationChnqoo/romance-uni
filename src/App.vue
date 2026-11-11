@@ -75,8 +75,6 @@ uni-page-body,
   --love-cream: #ffebc4;
   --love-mint: #d5f0e5;
   --love-sky: #dce9ff;
-  --love-shadow: 0 14rpx 40rpx rgba(226, 100, 148, 0.09), 0 2rpx 10rpx rgba(226, 100, 148, 0.05);
-  --love-shadow-hero: 0 22rpx 48rpx rgba(226, 92, 148, 0.26);
 }
 
 /**

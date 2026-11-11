@@ -614,7 +614,7 @@ const onMenuDelete = async () => {
 const resetBtnStyle =
   'flex: 1; min-width: 0; margin-right: 16rpx; background-color: #fff; color: var(--love-ink-2); border: 2rpx solid var(--love-line); border-radius: 999rpx;'
 const doneBtnStyle = computed(() =>
-  `flex: 1; min-width: 0; background-image: linear-gradient(100deg, #ff92b4, #ee5a92); background-color: ${theme.value}; color: #fff; border: none; border-radius: 999rpx; box-shadow: 0 10rpx 24rpx rgba(226, 92, 148, 0.28);`
+  `flex: 1; min-width: 0; background-image: linear-gradient(100deg, #ff92b4, #ee5a92); background-color: ${theme.value}; color: #fff; border: none; border-radius: 999rpx;`
 )
 </script>
 
@@ -626,7 +626,6 @@ const doneBtnStyle = computed(() =>
   &__head {
     background-image: linear-gradient(180deg, #fff2f7, #fff);
     border-bottom: 1rpx solid var(--love-line);
-    box-shadow: 0 8rpx 24rpx rgba(226, 100, 148, 0.06);
     /* 上留白交给 tabs-inner（badge 要向上溢出半个高度），这里只留底部呼吸 */
     padding-bottom: 12rpx;
   }
@@ -669,7 +668,7 @@ const doneBtnStyle = computed(() =>
     align-items: center;
     /* 上 24rpx 专供 wd-badge 的 translateY(-50%) 溢出，scroll-view 才不会把角标切平；
        下 12rpx 是 tab 与搜索行之间的呼吸 */
-    padding: 24rpx 24rpx 12rpx;
+    padding: 16rpx 20rpx 8rpx;
   }
   &__tab {
     display: flex;
@@ -695,7 +694,7 @@ const doneBtnStyle = computed(() =>
     background-color: transparent;
   }
   &__body {
-    padding: 20rpx 30rpx 40rpx;
+    padding: 16rpx 24rpx 32rpx;
   }
   /* 当前筛选条件展示条（原「当前是示例数据」提示） */
   &__active {
@@ -703,11 +702,10 @@ const doneBtnStyle = computed(() =>
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
-    padding: 18rpx 22rpx;
+    padding: 14rpx 20rpx;
     border-radius: 24rpx;
     background-color: #fff;
     border: 1rpx solid var(--love-line);
-    box-shadow: var(--love-shadow);
     margin-bottom: 20rpx;
   }
   &__active-label {
@@ -745,11 +743,10 @@ const doneBtnStyle = computed(() =>
     flex: none;
   }
   &__todo {
-    padding: 24rpx;
+    padding: 16rpx;
     border-radius: 26rpx;
     background-image: linear-gradient(120deg, #fff6f9, #ffeaf2);
     border: 1rpx solid #fff;
-    box-shadow: 0 10rpx 28rpx rgba(226, 100, 148, 0.08);
     margin-bottom: 20rpx;
   }
   &__todo-head {
@@ -792,7 +789,6 @@ const doneBtnStyle = computed(() =>
     background-color: #fff;
     border: 1rpx solid rgba(255, 255, 255, 0.9);
     border-radius: 28rpx;
-    box-shadow: var(--love-shadow);
     margin-bottom: 20rpx;
     overflow: hidden;
   }
@@ -803,7 +799,7 @@ const doneBtnStyle = computed(() =>
   &__card-body {
     flex: 1;
     min-width: 0;
-    padding: 24rpx;
+    padding: 16rpx;
   }
   &__card-top {
     display: flex;
@@ -912,7 +908,6 @@ const doneBtnStyle = computed(() =>
     border-radius: 20rpx;
     overflow: hidden;
     background-color: var(--love-line);
-    box-shadow: 0 4rpx 12rpx rgba(226, 100, 148, 0.1);
     margin-right: 12rpx;
     margin-bottom: 12rpx;
   }
@@ -942,7 +937,6 @@ const doneBtnStyle = computed(() =>
     justify-content: center;
     background-image: linear-gradient(140deg, #ff9dbb, #ee5a92);
     border: 3rpx solid rgba(255, 255, 255, 0.85);
-    box-shadow: 0 16rpx 36rpx rgba(226, 92, 148, 0.38);
   }
   &__fab:active {
     transform: scale(0.94);
@@ -950,7 +944,7 @@ const doneBtnStyle = computed(() =>
 
   /* ---------------- 筛选弹窗 ---------------- */
   &__sheet {
-    padding: 20rpx 36rpx 40rpx;
+    padding: 16rpx 24rpx 32rpx;
     border-radius: 40rpx 40rpx 0 0;
     background-color: #fff;
   }
@@ -1007,10 +1001,9 @@ const doneBtnStyle = computed(() =>
   display: flex;
   align-items: center;
   margin-bottom: 20rpx;
-  padding: 10rpx 10rpx 10rpx 24rpx;
+  padding: 8rpx 8rpx 8rpx 20rpx;
   border-radius: 999rpx;
   background-color: #fff;
-  box-shadow: var(--love-shadow);
   border: 1rpx solid var(--love-line);
 }
 
@@ -1033,13 +1026,12 @@ const doneBtnStyle = computed(() =>
   font-size: 22rpx;
   color: #fff;
   background-image: linear-gradient(100deg, #ff92b4, #ee5a92);
-  box-shadow: 0 8rpx 18rpx rgba(226, 92, 148, 0.22);
 }
 
 .gf__menu-quote {
   display: block;
   margin: 8rpx 4rpx 26rpx;
-  padding: 22rpx 24rpx;
+  padding: 16rpx 20rpx;
   border-radius: 24rpx;
   background-color: var(--love-bg);
   font-size: 25rpx;
@@ -1058,7 +1050,7 @@ const doneBtnStyle = computed(() =>
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 22rpx 8rpx;
+  padding: 16rpx 8rpx;
   border-radius: 24rpx;
   background-color: var(--love-bg);
   border: 1rpx solid var(--love-line);
@@ -1105,10 +1097,9 @@ const doneBtnStyle = computed(() =>
 .gf__note-card {
   position: relative;
   width: 100%;
-  padding: 56rpx 46rpx 40rpx;
+  padding: 24rpx 24rpx 20rpx;
   border-radius: 40rpx;
   background-image: linear-gradient(155deg, #fff4f8, #ffe1ec 60%, #ffd6e5);
-  box-shadow: 0 24rpx 60rpx rgba(150, 45, 95, 0.24);
   border: 2rpx solid #fff;
   box-sizing: border-box;
   overflow: hidden;
@@ -1170,14 +1161,12 @@ const doneBtnStyle = computed(() =>
   font-size: 24rpx;
   color: #fff;
   background-image: linear-gradient(100deg, #ff92b4, #ee5a92);
-  box-shadow: 0 10rpx 24rpx rgba(226, 92, 148, 0.28);
 }
 
 .gf__note-btn--ghost {
   color: #b14077;
   background-image: none;
   background-color: #fff;
-  box-shadow: none;
   border: 1rpx solid #ffd7e6;
 }
 

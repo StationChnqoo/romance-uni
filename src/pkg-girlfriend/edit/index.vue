@@ -363,10 +363,9 @@ const onDelete = async () => {
   }
   &__form {
     margin: 30rpx;
-    padding: 34rpx 30rpx;
+    padding: 24rpx 24rpx;
     border-radius: 32rpx;
     background-color: #fff;
-    box-shadow: var(--love-shadow);
     /* wd-input / wd-textarea 的 cell 模式自带上下内边距，行距由 __line 控制，这里清零 */
     --wot-input-cell-padding: 0;
     --wot-input-padding: 0;

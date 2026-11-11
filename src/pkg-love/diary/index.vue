@@ -100,7 +100,7 @@ const onEdit = (id: string) => Router.navigate('EditLoveDiary', { id })
 
 /* ---------------- 写日记入口 ---------------- */
 .diary__hero {
-  padding: 40rpx 40rpx;
+  padding: 28rpx 24rpx;
 }
 
 .diary__hero-in {
@@ -137,7 +137,6 @@ const onEdit = (id: string) => Router.navigate('EditLoveDiary', { id })
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.22);
   border: 2rpx solid rgba(255, 255, 255, 0.4);
-  box-shadow: inset 0 2rpx 0 rgba(255, 255, 255, 0.25);
   color: #fff;
   font-size: 52rpx;
   flex-shrink: 0;
@@ -161,7 +160,7 @@ const onEdit = (id: string) => Router.navigate('EditLoveDiary', { id })
 .diary__card {
   position: relative;
   margin-left: 18rpx;
-  padding: 28rpx 28rpx 30rpx;
+  padding: 20rpx 20rpx;
 }
 
 /* 顶部小胶带：手账感 */
@@ -248,14 +247,13 @@ const onEdit = (id: string) => Router.navigate('EditLoveDiary', { id })
   height: 156rpx;
   border-radius: 20rpx;
   background-color: var(--love-soft);
-  box-shadow: 0 6rpx 16rpx rgba(226, 100, 148, 0.12);
 }
 /* ---------------- 空态引导 ---------------- */
 .diary__empty {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60rpx 40rpx 56rpx;
+  padding: 40rpx 24rpx 40rpx;
   margin-top: 10rpx;
 }
 
@@ -287,7 +285,6 @@ const onEdit = (id: string) => Router.navigate('EditLoveDiary', { id })
   padding: 18rpx 46rpx;
   border-radius: 999rpx;
   background-image: linear-gradient(100deg, #ff92b4, #ee5a92);
-  box-shadow: 0 10rpx 24rpx rgba(226, 92, 148, 0.28);
   color: #fff;
   font-size: 24rpx;
 }

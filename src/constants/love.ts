@@ -102,11 +102,11 @@ export const ANNIVERSARY_ICONS = ['heart', 'cake', 'flower', 'ring', 'sparkle', 
 
 /**
  * 主按钮统一样式（wd-button 的 custom-style）。
- * wot 的按钮默认直角，页面各自写一遍圆角/阴影会散，这里集中成胶囊 + 粉渐变 + 柔光。
+ * wot 的按钮默认直角，页面各自写一遍圆角会散，这里集中成胶囊 + 粉渐变（扁平、无投影）。
  * 注意：custom-style 是绑到组件根节点的内联样式，写不了 CSS 变量作用域外的类。
  */
 export const LOVE_PRIMARY_BTN =
-  'background-image: linear-gradient(100deg, #ff92b4, #ee5a92); background-color: #ee5a92; border-radius: 999rpx; border: none; box-shadow: 0 10rpx 24rpx rgba(226, 92, 148, 0.28);'
+  'background-image: linear-gradient(100deg, #ff92b4, #ee5a92); background-color: #ee5a92; border-radius: 999rpx; border: none;'
 
 /** 次按钮（删除 / 取消）：描边胶囊，不抢主按钮的视觉 */
 export const LOVE_GHOST_BTN =

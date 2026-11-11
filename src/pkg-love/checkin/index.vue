@@ -322,7 +322,7 @@ const onFinishReedit = () => {
 
 /* ---------------- 打卡主视觉 ---------------- */
 .ci__hero {
-  padding: 40rpx 40rpx 36rpx;
+  padding: 28rpx 24rpx 28rpx;
 }
 
 .ci__hero-title {
@@ -352,7 +352,7 @@ const onFinishReedit = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 22rpx 18rpx 18rpx;
+  padding: 16rpx 16rpx 14rpx;
   border-radius: 32rpx;
   background-color: rgba(255, 255, 255, 0.16);
   border: 1rpx solid rgba(255, 255, 255, 0.32);
@@ -361,7 +361,6 @@ const onFinishReedit = () => {
 .ci__person--done {
   background-color: rgba(255, 255, 255, 0.34);
   border-color: #fff;
-  box-shadow: 0 10rpx 26rpx rgba(150, 45, 95, 0.18);
 }
 
 .ci__person-avatar {
@@ -410,7 +409,6 @@ const onFinishReedit = () => {
 .ci__link--on .love-icon {
   color: #fff;
   font-size: 56rpx;
-  text-shadow: 0 6rpx 18rpx rgba(255, 255, 255, 0.6);
 }
 
 .ci__link-label {
@@ -424,7 +422,7 @@ const onFinishReedit = () => {
   align-items: center;
   justify-content: center;
   margin-top: 22rpx;
-  padding: 14rpx 24rpx;
+  padding: 12rpx 20rpx;
   border-radius: 999rpx;
   background-color: rgba(255, 255, 255, 0.24);
   font-size: 22rpx;
@@ -475,7 +473,7 @@ const onFinishReedit = () => {
 .ci__question,
 .ci__badges {
   margin-top: 28rpx;
-  padding: 28rpx 28rpx 32rpx;
+  padding: 20rpx 20rpx 24rpx;
 }
 
 .ci__head {
@@ -519,7 +517,6 @@ const onFinishReedit = () => {
 .ci__dot--on {
   border-color: transparent;
   background-image: linear-gradient(140deg, #ff9dbb, #ee5a92);
-  box-shadow: 0 8rpx 20rpx rgba(226, 92, 148, 0.28);
 }
 
 .ci__dot--today {
@@ -594,7 +591,7 @@ const onFinishReedit = () => {
 /* ---------------- 每日一问 ---------------- */
 .ci__q-body {
   position: relative;
-  padding: 26rpx 24rpx 24rpx;
+  padding: 20rpx 20rpx;
   margin: 24rpx 0 28rpx;
   border-radius: 24rpx;
   background-image: linear-gradient(120deg, #fff4f8, #ffeaf2);
@@ -622,7 +619,7 @@ const onFinishReedit = () => {
 
 .ci__answer {
   width: 92%;
-  padding: 22rpx 24rpx;
+  padding: 16rpx 20rpx;
   border-radius: 28rpx 28rpx 28rpx 8rpx;
   display: flex;
   flex-direction: column;
@@ -690,13 +687,11 @@ const onFinishReedit = () => {
   font-size: 22rpx;
   color: #fff;
   background-image: linear-gradient(100deg, #ff92b4, #ee5a92);
-  box-shadow: 0 6rpx 16rpx rgba(226, 92, 148, 0.22);
   width: fit-content;
 }
 
 .ci__save--ta {
   background-image: linear-gradient(100deg, #b99ae8, #9a74d6);
-  box-shadow: 0 6rpx 16rpx rgba(154, 116, 214, 0.22);
 }
 
 /* 封存态：绝不把对方已写的答案露出来 */
@@ -744,7 +739,7 @@ const onFinishReedit = () => {
 /* 揭晓后的对答气泡 */
 .ci__bubble {
   width: 92%;
-  padding: 22rpx 26rpx;
+  padding: 16rpx 20rpx;
   border-radius: 28rpx 28rpx 28rpx 8rpx;
   background-color: var(--love-bg);
   border: 1rpx solid var(--love-line);
@@ -777,7 +772,7 @@ const onFinishReedit = () => {
   display: flex;
   align-items: center;
   margin-top: 8rpx;
-  padding: 20rpx 24rpx;
+  padding: 16rpx 20rpx;
   border-radius: 24rpx;
   background-image: linear-gradient(110deg, #fff1f7, #ffe4ee);
   border: 1rpx solid #ffd9e7;
@@ -826,7 +821,7 @@ const onFinishReedit = () => {
 
 .ci__history-card {
   margin-left: 18rpx;
-  padding: 24rpx 26rpx;
+  padding: 16rpx 20rpx;
 }
 
 .ci__history-date {

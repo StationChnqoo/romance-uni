@@ -225,7 +225,7 @@ const onClear = () => {
 
 /* ---------------- 主视觉 ---------------- */
 .settings__hero {
-  padding: 44rpx 40rpx 46rpx;
+  padding: 28rpx 24rpx 28rpx;
 }
 
 .settings__hero-label {
@@ -263,10 +263,9 @@ const onClear = () => {
   justify-content: center;
   gap: 24rpx;
   margin: 28rpx 0 8rpx;
-  padding: 26rpx 20rpx;
+  padding: 20rpx 16rpx;
   border-radius: 32rpx;
   background-color: #fff;
-  box-shadow: var(--love-shadow);
 }
 
 .settings__avatar-wrap {
@@ -317,7 +316,7 @@ const onClear = () => {
 
 /* ---------------- 表单 ---------------- */
 .settings__card {
-  padding: 6rpx 28rpx;
+  padding: 4rpx 20rpx;
   overflow: hidden;
 }
 
@@ -384,7 +383,7 @@ const onClear = () => {
 
 /* ---------------- 宣言 ---------------- */
 .settings__vow {
-  padding: 24rpx 26rpx 18rpx;
+  padding: 20rpx 20rpx 16rpx;
   background-image: linear-gradient(120deg, #fff6f9, #ffeaf2);
 }
 
@@ -411,7 +410,7 @@ const onClear = () => {
 /* ---------------- 数据统计 ---------------- */
 .settings__stats {
   display: flex;
-  padding: 26rpx 10rpx;
+  padding: 16rpx 10rpx;
 }
 
 .settings__stat {
@@ -440,7 +439,7 @@ const onClear = () => {
 }
 
 .settings__info {
-  padding: 24rpx 10rpx 0;
+  padding: 16rpx 10rpx 0;
   font-size: 21rpx;
   line-height: 1.7;
   color: var(--love-ink-3);

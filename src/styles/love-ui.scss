@@ -2,11 +2,13 @@
  * Romance 情侣空间 · 视觉系统（全局类）
  *
  * 为什么放全局：首页 + pkg-love 六个页面 + 关于她共用同一套卡片 / 主视觉 / 按钮语言，
- * 用类而不是每页复制阴影与渐变，换配色只改这里 + App.vue 的 --love-* 变量。
+ * 用类而不是每页复制描边与色块，换配色只改这里 + App.vue 的 --love-* 变量。
  *
+ * ★ 扁平化：全站不用 box-shadow / inset 高光 / text-shadow。层级只靠四层平面关系：
+ *   页面粉底 → 白色卡面 → 1rpx 细描边 → 彩色色块，用留白和字重拉开节奏。
  * ★ 装饰一律用真实 <view>/<text> 节点（♥ 水印、光斑、闪点），不用 ::before / ::after：
  *   uni-app 小程序端伪元素支持不稳，真实节点三端表现一致。
- * ★ 光斑用 box-shadow 扩散做柔边，不用 radial-gradient（WXSS 支持度参差）。
+ * ★ 光斑是纯色半透明圆块，不靠 box-shadow 扩散柔边（WXSS 支持度参差）。
  *
  * 标准用法：
  *   <view class="lv-page">
@@ -28,29 +30,26 @@
   background-repeat: no-repeat;
 }
 
-/* 柔白卡片：大圆角 + 双层柔阴影 + 一圈极细亮边 */
+/* 卡片：白面 + 一圈细描边，靠底色区分层级，不用投影 */
 .lv-card {
-  border-radius: 32rpx;
+  border-radius: 24rpx;
   background-color: var(--love-surface);
-  box-shadow: 0 14rpx 40rpx rgba(226, 100, 148, 0.09), 0 2rpx 10rpx rgba(226, 100, 148, 0.05);
-  border: 1rpx solid rgba(255, 255, 255, 0.9);
+  border: 1rpx solid var(--love-line);
   box-sizing: border-box;
 }
 
 .lv-card--tight {
-  border-radius: 26rpx;
-  box-shadow: 0 8rpx 24rpx rgba(226, 100, 148, 0.07);
+  border-radius: 20rpx;
 }
 
-/* 主视觉卡：三段粉紫渐变 + 光斑 + 心形水印 */
+/* 主视觉卡：平面粉紫渐变 + 色块光斑 + 心形水印 */
 .lv-hero {
   position: relative;
   overflow: hidden;
-  border-radius: 40rpx;
-  padding: 44rpx 40rpx;
+  border-radius: 28rpx;
+  padding: 24rpx 24rpx;
   color: #fff;
   background-image: linear-gradient(128deg, #ffb3cb 0%, #f781ab 46%, #dd6ea9 100%);
-  box-shadow: 0 22rpx 48rpx rgba(226, 92, 148, 0.26), inset 0 1rpx 0 rgba(255, 255, 255, 0.35);
   box-sizing: border-box;
 }
 
@@ -63,8 +62,7 @@
   position: absolute;
   z-index: 0;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 70rpx 46rpx rgba(255, 255, 255, 0.07);
+  background-color: rgba(255, 255, 255, 0.14);
   pointer-events: none;
 }
 
@@ -194,16 +192,15 @@
   color: #e0518c;
 }
 
-/* emoji 容器：柔渐变圆角块，不再裸奔 */
+/* 图标容器：柔渐变圆角块，纯色块不用描边 */
 .lv-icon {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 88rpx;
   height: 88rpx;
-  border-radius: 30rpx;
+  border-radius: 24rpx;
   background-image: linear-gradient(140deg, #fff2f7, #ffe0ec);
-  box-shadow: inset 0 1rpx 0 #fff, 0 6rpx 16rpx rgba(226, 100, 148, 0.1);
   font-size: 42rpx;
   flex-shrink: 0;
   color: #e0518c;
@@ -225,14 +222,13 @@
   justify-content: center;
   width: 84rpx;
   height: 84rpx;
-  border-radius: 28rpx;
+  border-radius: 24rpx;
   background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 6rpx 16rpx rgba(226, 100, 148, 0.1);
   font-size: 42rpx;
   color: #e0518c;
 }
 
-/* 悬浮按钮 */
+/* 悬浮按钮：纯色圆 + 细白圈，靠颜色跳出来 */
 .lv-fab {
   position: fixed;
   right: 40rpx;
@@ -244,17 +240,16 @@
   align-items: center;
   justify-content: center;
   background-image: linear-gradient(140deg, #ff9dbb, #ee5a92);
-  box-shadow: 0 16rpx 36rpx rgba(226, 92, 148, 0.38), inset 0 2rpx 0 rgba(255, 255, 255, 0.45);
-  border: 3rpx solid rgba(255, 255, 255, 0.85);
+  border: 2rpx solid rgba(255, 255, 255, 0.85);
   z-index: 20;
 }
 
-/* 底部弹层 */
+/* 底部弹层：顶部一条细线代替投影 */
 .lv-sheet {
-  padding: 20rpx 36rpx 48rpx;
-  border-radius: 40rpx 40rpx 0 0;
+  padding: 16rpx 24rpx 32rpx;
+  border-radius: 32rpx 32rpx 0 0;
   background-color: var(--love-surface);
-  box-shadow: 0 -12rpx 40rpx rgba(226, 100, 148, 0.1);
+  border-top: 1rpx solid var(--love-line);
 }
 
 .lv-handle {
@@ -278,7 +273,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 90rpx 0;
+  padding: 56rpx 0;
 }
 
 .lv-empty__orb {
@@ -289,7 +284,7 @@
   align-items: center;
   justify-content: center;
   background-image: linear-gradient(140deg, #ffe9f1, #ffd6e5);
-  box-shadow: 0 12rpx 30rpx rgba(226, 100, 148, 0.12), inset 0 2rpx 0 #fff;
+  border: 1rpx solid var(--love-line);
   font-size: 68rpx;
   color: #fff;
 }

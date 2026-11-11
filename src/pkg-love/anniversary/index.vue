@@ -376,7 +376,7 @@ const onSave = () => {
 
 /* ---------------- 主视觉 ---------------- */
 .ann__hero {
-  padding: 40rpx 40rpx 44rpx;
+  padding: 28rpx 24rpx 28rpx;
 }
 
 .ann__hero-main {
@@ -387,7 +387,6 @@ const onSave = () => {
 
 .ann__hero-icon {
   background-image: linear-gradient(140deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.2));
-  box-shadow: inset 0 1rpx 0 rgba(255, 255, 255, 0.4);
   margin-right: 20rpx;
   color: #fff;
 }
@@ -430,7 +429,6 @@ const onSave = () => {
   padding: 6rpx;
   border-radius: 999rpx;
   background-color: #fff;
-  box-shadow: var(--love-shadow);
 }
 
 .ann__tab {
@@ -445,7 +443,6 @@ const onSave = () => {
 .ann__tab--on {
   color: #fff;
   background-image: linear-gradient(100deg, #ff92b4, #ee5a92);
-  box-shadow: 0 8rpx 18rpx rgba(226, 92, 148, 0.22);
 }
 
 .ann__sort {
@@ -499,12 +496,11 @@ const onSave = () => {
   overflow: hidden;
   display: flex;
   align-items: center;
-  padding: 26rpx 26rpx 26rpx 32rpx;
+  padding: 16rpx 20rpx;
 }
 
 .ann__card--soon {
   border-color: #ffc9dd;
-  box-shadow: 0 14rpx 32rpx rgba(226, 92, 148, 0.16);
 }
 
 .ann__card--past {
@@ -624,7 +620,7 @@ const onSave = () => {
   display: flex;
   align-items: center;
   margin: 24rpx 0;
-  padding: 24rpx;
+  padding: 16rpx;
   border-radius: 28rpx;
   background-image: linear-gradient(120deg, #fff3f8, #ffe7f0);
 }
@@ -666,7 +662,7 @@ const onSave = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18rpx 4rpx;
+  padding: 14rpx 4rpx;
   border-bottom: 1rpx solid var(--love-line);
 }
 
@@ -724,7 +720,7 @@ const onSave = () => {
 .ann__field--stack {
   flex-direction: column;
   align-items: flex-start;
-  padding: 24rpx 0 12rpx;
+  padding: 16rpx 0 8rpx;
 }
 
 .ann__field-label {
@@ -800,7 +796,6 @@ const onSave = () => {
   color: #fff;
   border-color: transparent;
   background-image: linear-gradient(100deg, #ff92b4, #ee5a92);
-  box-shadow: 0 8rpx 18rpx rgba(226, 92, 148, 0.22);
 }
 
 .ann__icons {
@@ -824,7 +819,6 @@ const onSave = () => {
 .ann__emoji--on {
   background-color: var(--love-soft);
   border-color: #f4a2c1;
-  box-shadow: 0 4rpx 12rpx rgba(226, 92, 148, 0.12);
 }
 
 .ann__form-actions {

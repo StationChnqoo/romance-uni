@@ -322,7 +322,7 @@ const onAdd = () => {
 
 /* ---------------- 进度主视觉 ---------------- */
 .ck__hero {
-  padding: 40rpx 40rpx 44rpx;
+  padding: 28rpx 24rpx 28rpx;
 }
 
 .ck__hero-row {
@@ -350,7 +350,6 @@ const onAdd = () => {
   border-radius: 999rpx;
   background-color: rgba(255, 255, 255, 0.28);
   margin-top: 30rpx;
-  box-shadow: inset 0 2rpx 6rpx rgba(180, 60, 110, 0.12);
 }
 
 .ck__bar-fill {
@@ -363,7 +362,6 @@ const onAdd = () => {
   padding-right: 4rpx;
   box-sizing: border-box;
   background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.85), #fff);
-  box-shadow: 0 2rpx 12rpx rgba(255, 255, 255, 0.4);
 }
 
 .ck__bar-heart {
@@ -399,7 +397,6 @@ const onAdd = () => {
   color: var(--love-ink-2);
   background-color: #fff;
   border: 1rpx solid var(--love-line);
-  box-shadow: 0 4rpx 12rpx rgba(226, 100, 148, 0.05);
   flex-shrink: 0;
 }
 
@@ -407,7 +404,6 @@ const onAdd = () => {
   color: #fff;
   border-color: transparent;
   background-image: linear-gradient(100deg, #ff92b4, #ee5a92);
-  box-shadow: 0 8rpx 20rpx rgba(226, 92, 148, 0.24);
 }
 
 /* ---------------- 清单条目 ---------------- */
@@ -420,7 +416,7 @@ const onAdd = () => {
 .ck__item {
   display: flex;
   align-items: center;
-  padding: 26rpx 24rpx;
+  padding: 16rpx 20rpx;
 }
 
 .ck__item--done {
@@ -443,7 +439,6 @@ const onAdd = () => {
 .ck__check--on {
   border-color: transparent;
   background-image: linear-gradient(140deg, #ff9dbb, #ee5a92);
-  box-shadow: 0 6rpx 16rpx rgba(226, 92, 148, 0.26);
 }
 
 .ck__check-heart {
@@ -513,7 +508,6 @@ const onAdd = () => {
   margin-left: 12rpx;
   flex-shrink: 0;
   background-color: var(--love-soft);
-  box-shadow: 0 4rpx 12rpx rgba(226, 100, 148, 0.12);
 }
 
 .ck__index {
@@ -536,11 +530,11 @@ const onAdd = () => {
 
 /* ---------------- 解锁 / 回忆弹层 ---------------- */
 .ck__sheet {
-  padding: 20rpx 36rpx 44rpx;
+  padding: 16rpx 24rpx 32rpx;
 }
 
 .ck__detail-head {
-  padding: 12rpx 4rpx 28rpx;
+  padding: 8rpx 4rpx 20rpx;
   border-bottom: 1rpx solid var(--love-line);
 }
 
@@ -636,7 +630,7 @@ const onAdd = () => {
 .ck__textarea {
   width: 100%;
   height: 132rpx;
-  padding: 22rpx 24rpx;
+  padding: 16rpx 20rpx;
   border-radius: 22rpx;
   background-color: var(--love-bg);
   border: 1rpx solid var(--love-line);
@@ -669,7 +663,7 @@ const onAdd = () => {
 .ck__recall-note {
   position: relative;
   margin-top: 26rpx;
-  padding: 30rpx 34rpx;
+  padding: 20rpx 24rpx;
   border-radius: 26rpx;
   background-image: linear-gradient(140deg, #fff7fa, #ffeef5);
   border-left: 4rpx solid #f7bcd2;
@@ -720,7 +714,7 @@ const onAdd = () => {
 .ck__sheet-cell {
   display: flex;
   min-width: 0;
-  padding: 20rpx 24rpx;
+  padding: 16rpx 20rpx;
   margin-bottom: 32rpx;
   border-radius: 22rpx;
   background-color: var(--love-bg);
@@ -745,7 +739,7 @@ const onAdd = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60rpx;
+  padding: 40rpx;
 }
 
 .ck__celebrate-ring {
@@ -756,7 +750,6 @@ const onAdd = () => {
   align-items: center;
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 0 0 20rpx rgba(255, 255, 255, 0.18), 0 20rpx 60rpx rgba(160, 40, 90, 0.24);
   animation: ck-pop 0.5s ease-out both;
 }
 

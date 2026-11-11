@@ -506,7 +506,7 @@ const onSaveQuickNote = async () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 34rpx 38rpx 22rpx;
+  padding: 24rpx 30rpx 16rpx;
 }
 
 .home__top-left {
@@ -547,7 +547,6 @@ const onSaveQuickNote = async () => {
   justify-content: center;
   background-image: linear-gradient(140deg, #fff, #ffe6ef);
   border: 2rpx dashed #f3a9c6;
-  box-shadow: 0 8rpx 20rpx rgba(226, 100, 148, 0.12);
   transform: rotate(-9deg);
   flex-shrink: 0;
   margin-left: 16rpx;
@@ -569,7 +568,7 @@ const onSaveQuickNote = async () => {
 /* ---------------- 恋爱天数主视觉 ---------------- */
 .hero {
   margin: 8rpx 30rpx 0;
-  padding: 42rpx 40rpx 34rpx;
+  padding: 28rpx 24rpx 24rpx;
 }
 
 .hero__days {
@@ -646,10 +645,9 @@ const onSaveQuickNote = async () => {
   display: flex;
   align-items: center;
   margin: 24rpx 30rpx 0;
-  padding: 24rpx 26rpx;
+  padding: 16rpx 20rpx;
   border-radius: 30rpx;
   background-image: linear-gradient(105deg, #fff, #fff0f5);
-  box-shadow: 0 12rpx 32rpx rgba(226, 100, 148, 0.09);
   border: 1rpx solid rgba(255, 255, 255, 0.9);
 }
 
@@ -661,7 +659,6 @@ const onSaveQuickNote = async () => {
   align-items: center;
   justify-content: center;
   background-image: linear-gradient(140deg, #ff9dbb, #ee5a92);
-  box-shadow: 0 8rpx 20rpx rgba(226, 92, 148, 0.3), inset 0 2rpx 0 rgba(255, 255, 255, 0.4);
   color: #fff;
   font-size: 34rpx;
   margin-right: 20rpx;
@@ -670,7 +667,6 @@ const onSaveQuickNote = async () => {
 
 .checkin__icon--done {
   background-image: linear-gradient(140deg, #ffd0df, #ffb0cb);
-  box-shadow: 0 6rpx 16rpx rgba(226, 92, 148, 0.16);
 }
 
 .checkin__body {
@@ -700,13 +696,11 @@ const onSaveQuickNote = async () => {
   font-weight: 600;
   color: #fff;
   background-image: linear-gradient(100deg, #ff92b4, #ee5a92);
-  box-shadow: 0 8rpx 20rpx rgba(226, 92, 148, 0.26);
 }
 
 .checkin__btn--done {
   color: #c07b9b;
   background-image: linear-gradient(100deg, #fff2f7, #ffe4ee);
-  box-shadow: none;
 }
 
 /* ---------------- 区块 ---------------- */
@@ -721,7 +715,7 @@ const onSaveQuickNote = async () => {
 .countdown__item {
   display: flex;
   align-items: center;
-  padding: 24rpx 0;
+  padding: 16rpx 0;
 }
 
 .countdown__item--split {
@@ -776,7 +770,7 @@ const onSaveQuickNote = async () => {
 .block__empty {
   display: flex;
   align-items: center;
-  padding: 30rpx;
+  padding: 20rpx;
 }
 
 .block__empty-orb {
@@ -801,14 +795,14 @@ const onSaveQuickNote = async () => {
 .grid__cell {
   width: 50%;
   box-sizing: border-box;
-  padding: 8rpx;
 }
 
 .grid__card {
   position: relative;
   overflow: hidden;
   min-height: 226rpx;
-  padding: 26rpx 24rpx 22rpx;
+  margin: 6rpx;
+  padding: 16rpx 16rpx;
   box-sizing: border-box;
 }
 
@@ -851,7 +845,7 @@ const onSaveQuickNote = async () => {
 .words {
   position: relative;
   overflow: hidden;
-  padding: 30rpx 30rpx 26rpx;
+  padding: 20rpx 20rpx 16rpx;
   border-radius: 32rpx;
   background-image: linear-gradient(140deg, #fff6f9 0%, #ffeaf2 100%);
   border-left: 6rpx solid #f6a8c6;
@@ -913,7 +907,7 @@ const onSaveQuickNote = async () => {
 .recent {
   display: flex;
   align-items: center;
-  padding: 22rpx 24rpx;
+  padding: 16rpx 20rpx;
   margin-bottom: 14rpx;
 }
 
@@ -989,7 +983,7 @@ const onSaveQuickNote = async () => {
   display: flex;
   align-items: center;
   margin: 0 30rpx 24rpx;
-  padding: 24rpx 26rpx;
+  padding: 16rpx 20rpx;
   background-image: linear-gradient(110deg, #fff4f8, #ffe8f1);
   border: 1rpx solid #ffd7e6;
 }
@@ -1036,7 +1030,7 @@ const onSaveQuickNote = async () => {
 .vow {
   position: relative;
   margin: 20rpx 30rpx 0;
-  padding: 22rpx 30rpx 22rpx 54rpx;
+  padding: 16rpx 20rpx 16rpx 48rpx;
   border-radius: 24rpx;
   background-color: rgba(255, 255, 255, 0.7);
   border: 1rpx solid var(--love-line);
@@ -1061,7 +1055,7 @@ const onSaveQuickNote = async () => {
   display: flex;
   align-items: center;
   margin-top: 16rpx;
-  padding: 18rpx 24rpx;
+  padding: 14rpx 20rpx;
   border-radius: 999rpx;
   background-image: linear-gradient(100deg, #fff1f7, #ffe3ee);
   border: 1rpx solid #ffd0e2;
@@ -1080,7 +1074,7 @@ const onSaveQuickNote = async () => {
 
 .stats {
   display: flex;
-  padding: 26rpx 10rpx;
+  padding: 16rpx 10rpx;
 }
 
 .stats__item {
@@ -1132,7 +1126,7 @@ const onSaveQuickNote = async () => {
 
 .quick__item {
   position: relative;
-  padding: 22rpx 26rpx 22rpx 100rpx;
+  padding: 16rpx 20rpx 16rpx 92rpx;
   border-radius: 26rpx;
   background-color: var(--love-bg);
   border: 1rpx solid var(--love-line);
@@ -1169,7 +1163,7 @@ const onSaveQuickNote = async () => {
 
 .quick__input {
   margin: 24rpx 0 28rpx;
-  padding: 22rpx 24rpx;
+  padding: 16rpx 20rpx;
   border-radius: 24rpx;
   background-color: var(--love-bg);
 }
