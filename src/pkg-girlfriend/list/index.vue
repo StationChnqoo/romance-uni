@@ -18,8 +18,10 @@
   - ★ 态度筛选自绘（scroll-view 横滚 + 透明下划线 + wd-badge），**不用 wd-tabs**：
     wd-tabs 的 useChildren.link() 在 App 端会递归重渲染导致卡死（项目血案）。
   - ★ 悬浮「+」内联 <view> + wd-icon（右下 96rpx 圆、主题色底），不预留列表高度。
-  - ★ 卡片不放「编辑 / 删除」按钮：整卡点击即进编辑页（二级页），删除在编辑页底部仅编辑态显示；
-    星标 / 附件预览用 @click.stop 拦住，不误触发整卡跳转。
+  - ★ 单击整卡进编辑页（二级页）；长按卡片唤出操作菜单（生成点滴卡片 / 补充细节 /
+    删除二次确认）。长按后系统可能补发 click，用 600ms 时间戳拦住误跳；星标 / 附件预览
+    用 @click.stop 拦住，不误触发整卡跳转。
+  - ★ 列表顶部「随手记一句」只填 content，其余用 createGirlNote() 默认值，落库后 reload。
   - ★ 日期放卡片右上角（星标左侧），下方 meta 行只留「当时的情境」；不再重复显示日期。
   - ★ 附件直接出缩略图：图片走 <image :src="mediaUrl(url)">（Android 原生层不认中文/空格），
     视频 / 文档用 getFile() 的类型图标占位；点哪块预览对应附件（图片 previewImage、
@@ -85,6 +87,19 @@
       </template>
 
       <view class="gf__body">
+        <!-- 随手记一句：竞品的「心动瞬间 / 一键生成点滴」，不用进编辑页填一整张表单 -->
+        <view class="gf__quick">
+          <input
+            v-model="quickText"
+            class="gf__quick-input"
+            :maxlength="200"
+            confirm-type="done"
+            placeholder="她刚说了什么？随口记一句…"
+            placeholder-class="gf__quick-placeholder"
+            @confirm="onQuickSave" />
+          <view class="gf__quick-btn" @click="onQuickSave">记一句</view>
+        </view>
+
         <!-- 当前显示：筛选都收进弹窗了，这里给一条反馈（原「当前是示例数据」提示条的位置） -->
         <view class="gf__active">
           <text class="gf__active-label">当前显示</text>
@@ -127,7 +142,8 @@
           v-for="(record, recordIndex) in list"
           :key="`${record.id}:${recordIndex}`"
           class="gf__card"
-          @click="onEdit(record)">
+          @click="onEdit(record)"
+          @longpress="onCardMenu(record)">
           <view class="gf__card-bar" :style="{ backgroundColor: attitudeOf(record.attitude).color }" />
           <view class="gf__card-body">
             <view class="gf__card-top">
@@ -255,6 +271,62 @@
         </view>
       </view>
     </wd-popup>
+
+    <!-- 长按卡片唤出操作菜单：竞品的「长按卡片管理」，删除要二次确认 -->
+    <wd-popup
+      v-model="menuVisible"
+      position="bottom"
+      :safe-area-inset-bottom="false"
+      :close-on-click-modal="true"
+      :root-portal="true"
+      :z-index="200">
+      <view class="gf__sheet">
+        <view class="lv-handle" />
+        <text class="gf__sheet-title">这句话要怎么处理</text>
+        <text class="gf__menu-quote">{{ menuRecord?.content }}</text>
+        <view class="gf__menu-grid">
+          <view class="gf__menu-item" @click="onMakeCard">
+            <text class="gf__menu-icon love-icon love-i-letter" />
+            <text class="gf__menu-label">生成点滴卡片</text>
+          </view>
+          <view class="gf__menu-item" @click="onMenuEdit">
+            <text class="gf__menu-icon love-icon love-i-quill" />
+            <text class="gf__menu-label">补充细节</text>
+          </view>
+          <view class="gf__menu-item" @click="onMenuDelete">
+            <text class="gf__menu-icon gf__menu-icon--danger love-icon love-i-close" />
+            <text class="gf__menu-label">{{ deleteArmed ? '再点一次删除' : '删掉这句' }}</text>
+          </view>
+        </view>
+        <text class="gf__menu-tip">长按任意卡片都能叫出这个菜单</text>
+      </view>
+    </wd-popup>
+
+    <!-- 点滴卡片：一键把一句话排成可以截图保存的卡片 -->
+    <wd-popup
+      v-model="cardVisible"
+      position="center"
+      :close-on-click-modal="true"
+      :root-portal="true"
+      :z-index="220">
+      <view class="gf__note-wrap">
+        <view class="gf__note-card">
+          <text class="gf__note-deco">“</text>
+          <text class="gf__note-eyebrow">SHE SAID · {{ cardRecord?.saidAt }}</text>
+          <text class="gf__note-content">{{ cardRecord?.content }}</text>
+          <view class="gf__note-line" />
+          <view class="gf__note-foot">
+            <text>{{ cardRecord ? attitudeOf(cardRecord.attitude).label : '' }}</text>
+            <text>记下来了 · only for us</text>
+          </view>
+        </view>
+        <view class="gf__note-actions">
+          <text class="gf__note-btn" @click="onCopyCard">复制这句话</text>
+          <text class="gf__note-btn gf__note-btn--ghost" @click="cardVisible = false">收好</text>
+        </view>
+        <text class="gf__note-tip">也可以直接截图，把这张卡片发给她</text>
+      </view>
+    </wd-popup>
   </view>
   <ToastContainer />
 </template>
@@ -267,7 +339,13 @@ import { Router } from '@/common/router'
 import { useUserStore } from '@/stores/user'
 import { useThemeVars } from '@/composables/useThemeVars'
 import { getFile, mediaUrl, openOfficeDocument, PicGoFileType, toast } from '@/utils'
-import { selectGirlNotes, selectGirlNoteStats, toggleGirlNoteStar } from '@/api'
+import {
+  deleteGirlNote,
+  mergeGirlNote,
+  selectGirlNotes,
+  selectGirlNoteStats,
+  toggleGirlNoteStar
+} from '@/api'
 import {
   GIRL_ATTITUDES,
   GIRL_SORTS,
@@ -277,7 +355,7 @@ import {
   statusTone
 } from '@/constants/girlfriend'
 import type { GirlSort } from '@/constants/girlfriend'
-import { createGirlNoteStats } from '@/types/girlfriend'
+import { createGirlNote, createGirlNoteStats } from '@/types/girlfriend'
 import type { GirlAttitude, GirlNote, GirlNoteStats, GirlStatus } from '@/types/girlfriend'
 
 const themeVars = useThemeVars()
@@ -296,6 +374,15 @@ const status = ref<StatusFilter>('')
 const sort = ref<GirlSort>('new')
 const starOnly = ref(false)
 const moreVisible = ref(false)
+/** 竞品交互：随手记一句 / 长按菜单 / 点滴卡片 */
+const quickText = ref('')
+const menuVisible = ref(false)
+const menuRecord = ref<GirlNote | null>(null)
+const deleteArmed = ref(false)
+const cardVisible = ref(false)
+const cardRecord = ref<GirlNote | null>(null)
+/** 长按之后系统可能补发一次 click，600ms 内忽略，避免误跳编辑页 */
+let lastLongPressAt = 0
 
 /** 态度 tab 角标取 /stats 的全局分组计数（当前页数据算不出总数） */
 const attitudeTabs = computed(() => [
@@ -430,6 +517,7 @@ const onToggleStar = async (record: GirlNote) => {
 }
 /** 列表卡片是完整 GirlNote，待办提醒只有 /stats 的精简条目，这里只需要 id */
 const onEdit = (record: { id: string }) => {
+  if (Date.now() - lastLongPressAt < 600) return
   Router.navigate('EditGirlfriendNote', { id: record.id })
 }
 const onAdd = () => {
@@ -454,6 +542,72 @@ const onAttachments = (record: GirlNote, index = 0) => {
   }
   if (openOfficeDocument(file)) return
   toast('该文件类型暂不支持预览')
+}
+
+/* ---------------- 随手记 / 长按菜单 / 点滴卡片 ---------------- */
+
+/** 只填 content，态度 / 状态 / 日期都用 createGirlNote() 的默认值 */
+const onQuickSave = async () => {
+  const text = quickText.value.trim()
+  if (!text) {
+    toast('先写一句她说的话吧')
+    return
+  }
+  const note = createGirlNote()
+  note.content = text
+  try {
+    await mergeGirlNote(note)
+    quickText.value = ''
+    toast('记下了')
+    pagingRef.value?.reload()
+    loadStats()
+  } catch (e) {
+    toast('没存上，稍后再试一次')
+  }
+}
+
+const onCardMenu = (record: GirlNote) => {
+  lastLongPressAt = Date.now()
+  menuRecord.value = record
+  deleteArmed.value = false
+  menuVisible.value = true
+}
+const onMenuEdit = () => {
+  const id = menuRecord.value?.id
+  menuVisible.value = false
+  if (id) Router.navigate('EditGirlfriendNote', { id })
+}
+const onMakeCard = () => {
+  cardRecord.value = menuRecord.value
+  menuVisible.value = false
+  cardVisible.value = true
+}
+const onCopyCard = () => {
+  const text = cardRecord.value?.content || ''
+  if (!text) return
+  uni.setClipboardData({
+    data: text,
+    success: () => toast('已复制，可以发给她了'),
+    fail: () => toast('复制失败，截图保存也可以')
+  })
+}
+const onMenuDelete = async () => {
+  if (!deleteArmed.value) {
+    deleteArmed.value = true
+    return
+  }
+  const id = menuRecord.value?.id
+  if (!id) return
+  try {
+    await deleteGirlNote(id)
+    menuVisible.value = false
+    deleteArmed.value = false
+    toast('已删掉')
+    pagingRef.value?.reload()
+    loadStats()
+  } catch (e) {
+    toast('删除失败，稍后再试')
+  }
 }
 
 /* ---------------- 弹窗按钮：主题色内联（wot 变量跨不过 mp isolated） ---------------- */
@@ -847,4 +1001,191 @@ const doneBtnStyle = computed(() =>
     margin-top: 24rpx;
   }
 }
+
+/* ---------------- 竞品交互：随手记 / 长按菜单 / 点滴卡片 ---------------- */
+.gf__quick {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 10rpx 10rpx 10rpx 24rpx;
+  border-radius: 999rpx;
+  background-color: #fff;
+  box-shadow: var(--love-shadow);
+  border: 1rpx solid var(--love-line);
+}
+
+.gf__quick-input {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 64rpx;
+  font-size: 24rpx;
+  color: var(--love-ink);
+}
+
+.gf__quick-placeholder {
+  color: var(--love-ink-3);
+}
+
+.gf__quick-btn {
+  flex-shrink: 0;
+  padding: 14rpx 28rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  color: #fff;
+  background-image: linear-gradient(100deg, #ff92b4, #ee5a92);
+  box-shadow: 0 8rpx 18rpx rgba(226, 92, 148, 0.22);
+}
+
+.gf__menu-quote {
+  display: block;
+  margin: 8rpx 4rpx 26rpx;
+  padding: 22rpx 24rpx;
+  border-radius: 24rpx;
+  background-color: var(--love-bg);
+  font-size: 25rpx;
+  line-height: 1.6;
+  color: var(--love-ink);
+}
+
+.gf__menu-grid {
+  display: flex;
+  gap: 14rpx;
+}
+
+.gf__menu-item {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 22rpx 8rpx;
+  border-radius: 24rpx;
+  background-color: var(--love-bg);
+  border: 1rpx solid var(--love-line);
+}
+
+.gf__menu-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 22rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: #fff;
+  background-image: linear-gradient(140deg, #ff9dbb, #ee5a92);
+}
+
+.gf__menu-icon--danger {
+  background-image: linear-gradient(140deg, #f4a6b6, #d96b84);
+}
+
+.gf__menu-label {
+  font-size: 21rpx;
+  color: var(--love-ink-2);
+  margin-top: 14rpx;
+  text-align: center;
+}
+
+.gf__menu-tip {
+  display: block;
+  text-align: center;
+  font-size: 19rpx;
+  color: var(--love-ink-3);
+  margin-top: 24rpx;
+}
+
+.gf__note-wrap {
+  width: 620rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gf__note-card {
+  position: relative;
+  width: 100%;
+  padding: 56rpx 46rpx 40rpx;
+  border-radius: 40rpx;
+  background-image: linear-gradient(155deg, #fff4f8, #ffe1ec 60%, #ffd6e5);
+  box-shadow: 0 24rpx 60rpx rgba(150, 45, 95, 0.24);
+  border: 2rpx solid #fff;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.gf__note-deco {
+  position: absolute;
+  left: 26rpx;
+  top: -18rpx;
+  font-size: 170rpx;
+  line-height: 1;
+  color: rgba(238, 90, 146, 0.14);
+}
+
+.gf__note-eyebrow {
+  display: block;
+  position: relative;
+  font-size: 20rpx;
+  letter-spacing: 3rpx;
+  color: #c2739a;
+}
+
+.gf__note-content {
+  display: block;
+  position: relative;
+  font-size: 32rpx;
+  line-height: 1.75;
+  color: #6d4355;
+  margin-top: 30rpx;
+  font-weight: 500;
+}
+
+.gf__note-line {
+  height: 1rpx;
+  background-color: rgba(238, 90, 146, 0.2);
+  margin: 44rpx 0 20rpx;
+}
+
+.gf__note-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 19rpx;
+  color: #b07e95;
+}
+
+.gf__note-actions {
+  display: flex;
+  gap: 16rpx;
+  width: 100%;
+  margin-top: 28rpx;
+}
+
+.gf__note-btn {
+  flex: 1 1 0;
+  text-align: center;
+  padding: 20rpx 0;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  color: #fff;
+  background-image: linear-gradient(100deg, #ff92b4, #ee5a92);
+  box-shadow: 0 10rpx 24rpx rgba(226, 92, 148, 0.28);
+}
+
+.gf__note-btn--ghost {
+  color: #b14077;
+  background-image: none;
+  background-color: #fff;
+  box-shadow: none;
+  border: 1rpx solid #ffd7e6;
+}
+
+.gf__note-tip {
+  font-size: 19rpx;
+  color: #9b6b82;
+  opacity: 0.9;
+  margin-top: 20rpx;
+}
+
 </style>

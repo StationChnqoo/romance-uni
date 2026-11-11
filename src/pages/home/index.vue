@@ -32,6 +32,16 @@
         </view>
       </view>
 
+      <!-- 首次引导：竞品第一次进来都会让你先把「两个人」建起来 -->
+      <view v-if="!love.profileDone" class="onboard lv-card" @click="onFeatureTap('LoveSettings')">
+        <view class="onboard__icon love-icon love-i-heart" />
+        <view class="onboard__body">
+          <text class="onboard__title">先把我们的故事起点填上</text>
+          <text class="onboard__sub">在一起的那天、两个人的昵称，一分钟就好</text>
+        </view>
+        <text class="onboard__go">去设置 ›</text>
+      </view>
+
       <!-- 恋爱天数主视觉：点进设置改开始日期 -->
       <view class="hero lv-hero" @click="onFeatureTap('LoveSettings')">
         <view class="lv-orb lv-orb--tr" />
@@ -63,20 +73,25 @@
         </view>
       </view>
 
+      <view v-if="love.vow" class="vow">
+        <text class="vow__quote">“</text>
+        <text class="vow__text">{{ love.vow }}</text>
+      </view>
+
       <!-- 今日打卡条 -->
       <view class="checkin" @click="onFeatureTap('LoveCheckin')">
-        <view class="checkin__icon" :class="{ 'checkin__icon--done': love.checkedInToday }">
+        <view class="checkin__icon" :class="{ 'checkin__icon--done': love.todayCheckinComplete }">
           <text class="love-icon love-i-heart" />
         </view>
         <view class="checkin__body">
-          <text class="checkin__title">{{ love.checkedInToday ? '今天已经说过我爱你啦' : '今天还没打卡哦' }}</text>
-          <text class="checkin__sub">连续 {{ love.checkinStreak }} 天 · 累计 {{ love.totalCheckins }} 次</text>
+          <text class="checkin__title">{{ checkinTitle }}</text>
+          <text class="checkin__sub">连续 {{ love.checkinStreak }} 天 · 一起完成 {{ love.totalCheckins }} 次</text>
         </view>
         <view
           class="checkin__btn"
-          :class="{ 'checkin__btn--done': love.checkedInToday }"
+          :class="{ 'checkin__btn--done': love.mineCheckedToday }"
           @click.stop="onQuickCheckIn">
-          <text>{{ love.checkedInToday ? '已打卡' : '打卡' }}</text>
+          <text>{{ love.mineCheckedToday ? '我说过啦' : '说一句' }}</text>
         </view>
       </view>
 
@@ -106,9 +121,13 @@
             </view>
           </view>
         </view>
-        <view v-else class="lv-card block__empty">
+        <view v-if="!love.upcoming.length" class="lv-card block__empty">
           <text class="block__empty-orb love-icon love-i-flower" />
           <text class="block__empty-text">去设置里填「在一起的那天」，纪念日会自动算好</text>
+        </view>
+        <view v-if="reminder" class="remind">
+          <text class="love-icon love-i-clock" />
+          <text class="remind__text">别忘了：{{ reminder.daysLeft }} 天后是「{{ reminder.title }}」</text>
         </view>
       </view>
 
@@ -134,6 +153,34 @@
         </view>
       </view>
 
+      <!-- 关系成长数据：竞品的「数据统计」轻量版 -->
+      <view class="block">
+        <view class="lv-section">
+          <view class="lv-section__left">
+            <view class="lv-section__bar" />
+            <text class="lv-section__title">一起攒下的</text>
+          </view>
+        </view>
+        <view class="stats lv-card">
+          <view class="stats__item">
+            <text class="stats__num">{{ love.spaceStats.checkins }}</text>
+            <text class="stats__label">双人打卡</text>
+          </view>
+          <view class="stats__item">
+            <text class="stats__num">{{ love.spaceStats.diaries }}</text>
+            <text class="stats__label">恋爱日记</text>
+          </view>
+          <view class="stats__item">
+            <text class="stats__num">{{ love.spaceStats.checklist }}</text>
+            <text class="stats__label">解锁小事</text>
+          </view>
+          <view class="stats__item">
+            <text class="stats__num">{{ love.spaceStats.answers }}</text>
+            <text class="stats__label">一起答过</text>
+          </view>
+        </view>
+      </view>
+
       <!-- 关于她：记录她说过的每一句话（cloud-uni pkg-girlfriend） -->
       <view class="block words" @click="onFeatureTap('GirlfriendList')">
         <text class="words__deco">“</text>
@@ -142,7 +189,10 @@
             <view class="lv-section__bar" />
             <text class="lv-section__title">她说过的话</text>
           </view>
-          <text class="lv-section__more">去记录 ›</text>
+          <view class="words__actions">
+            <text class="words__quick" @click.stop="onQuickNote">＋ 记一句</text>
+            <text class="lv-section__more">去记录 ›</text>
+          </view>
         </view>
         <text class="words__quote">{{ latestNote ? latestNote.content : '把她说过的每一句都记下来，别让随口一提变成忘记。' }}</text>
         <view class="words__foot">
@@ -188,6 +238,68 @@
       </view>
       <view class="home__bottom" />
     </scroll-view>
+
+    <!-- 首页快捷「+」：竞品的快速发布，不用先找到对应板块 -->
+    <view class="lv-fab" @click="quickVisible = true">
+      <wd-icon name="add" size="24px" color="#fff" />
+    </view>
+
+    <wd-popup
+      :model-value="quickVisible"
+      position="bottom"
+      :safe-area-inset-bottom="false"
+      :close-on-click-modal="true"
+      :root-portal="true"
+      :z-index="200"
+      @update:model-value="onQuickUpdate">
+      <view class="lv-sheet">
+        <view class="lv-handle" />
+        <text class="lv-sheet__title">今天想记点什么</text>
+        <view class="quick">
+          <view class="quick__item" @click="onQuickNote">
+            <view class="quick__icon love-icon love-i-letter" />
+            <text class="quick__label">记一句她说的话</text>
+            <text class="quick__sub">随口一提，别让它溜走</text>
+          </view>
+          <view class="quick__item" @click="onQuickGo('EditLoveDiary')">
+            <view class="quick__icon love-icon love-i-book" />
+            <text class="quick__label">写一篇恋爱日记</text>
+            <text class="quick__sub">把今天存进时光轴</text>
+          </view>
+          <view class="quick__item" @click="onQuickGo('LoveAnniversaries')">
+            <view class="quick__icon love-icon love-i-cake" />
+            <text class="quick__label">加一个纪念日</text>
+            <text class="quick__sub">下一个值得期待的日子</text>
+          </view>
+        </view>
+      </view>
+    </wd-popup>
+
+    <!-- 一句话快记：只填内容，其余用默认值，避免进二级页填一堆字段 -->
+    <wd-popup
+      :model-value="noteVisible"
+      position="bottom"
+      :safe-area-inset-bottom="false"
+      :close-on-click-modal="true"
+      :root-portal="true"
+      :z-index="210"
+      @update:model-value="onNoteUpdate">
+      <view class="lv-sheet">
+        <view class="lv-handle" />
+        <text class="lv-sheet__title">她今天说了什么</text>
+        <view class="quick__input">
+          <textarea
+            v-model="quickText"
+            class="quick__textarea"
+            :maxlength="200"
+            placeholder="她说：「…」"
+            placeholder-class="quick__placeholder" />
+        </view>
+        <wd-button block round :custom-style="LOVE_PRIMARY_BTN" @click="onSaveQuickNote">
+          记下来
+        </wd-button>
+      </view>
+    </wd-popup>
   </view>
 </template>
 
@@ -199,9 +311,10 @@ import { useThemeVars } from '@/composables/useThemeVars'
 import { useLoveStore } from '@/stores/love'
 import { Router } from '@/common/router'
 import { getStatusBarHeight, toast } from '@/utils'
-import { moodOf } from '@/constants/love'
+import { LOVE_PRIMARY_BTN, moodOf } from '@/constants/love'
 import { attitudeOf } from '@/constants/girlfriend'
-import { selectGirlNotes } from '@/api/girlfriend'
+import { mergeGirlNote, selectGirlNotes } from '@/api/girlfriend'
+import { createGirlNote } from '@/types/girlfriend'
 import type { GirlNote } from '@/types/girlfriend'
 
 type FeatureKey =
@@ -233,6 +346,18 @@ const greeting = computed(() => {
 
 const onFeatureTap = (key: FeatureKey) => Router.navigate(key)
 const onEditDiary = (id: string) => Router.navigate('EditLoveDiary', { id })
+
+/** 双人打卡：首页只替「我」说一句，另一位在打卡页点，两个人都说才算完成 */
+const checkinTitle = computed(() => {
+  if (love.todayCheckinComplete) return '今天两个人都说过我爱你啦'
+  if (love.mineCheckedToday) return `等 ${love.partnerName} 也来说一句`
+  if (love.partnerCheckedToday) return `轮到 ${love.myName} 说一句啦`
+  return '今天还没打卡哦'
+})
+/** 提前提醒生效：页内提示，不发系统通知（纯本地方案没有推送通道） */
+const reminder = computed(() =>
+  love.upcoming.find(item => item.remind > 0 && item.daysLeft > 0 && item.daysLeft <= item.remind)
+)
 
 /** tone 对应 styles/love-ui.scss 的 lv-tone--* 六色，让六张卡各有性格 */
 const features = computed(() => [
@@ -290,6 +415,9 @@ const features = computed(() => [
 
 const latestNote = ref<GirlNote | null>(null)
 const refreshing = ref(false)
+const quickVisible = ref(false)
+const noteVisible = ref(false)
+const quickText = ref('')
 
 const loadLatestNote = async () => {
   try {
@@ -312,12 +440,49 @@ const onRefresh = async () => {
 }
 
 const onQuickCheckIn = () => {
-  if (love.checkedInToday) {
-    toast('今天已经打过卡啦')
+  if (love.mineCheckedToday) {
+    toast(love.todayCheckinComplete ? '今天两个人都在啦' : '等另一半也来说一句')
     return
   }
-  love.checkIn()
-  toast('打卡成功，明天见')
+  love.checkInAs('mine')
+  toast('记下了，去打卡页让 TA 也点一下')
+}
+
+/* ---------------- 首页快捷发布 ---------------- */
+
+const onQuickUpdate = (v: boolean) => {
+  quickVisible.value = v
+}
+const onNoteUpdate = (v: boolean) => {
+  noteVisible.value = v
+}
+const onQuickGo = (key: 'EditLoveDiary' | 'LoveAnniversaries') => {
+  quickVisible.value = false
+  Router.navigate(key)
+}
+const onQuickNote = () => {
+  quickVisible.value = false
+  quickText.value = ''
+  noteVisible.value = true
+}
+/** 一句话快记：只填 content，其余用 createGirlNote() 的默认态度 / 状态 / 今天 */
+const onSaveQuickNote = async () => {
+  const text = quickText.value.trim()
+  if (!text) {
+    toast('先写一句她说的话吧')
+    return
+  }
+  const note = createGirlNote()
+  note.content = text
+  try {
+    await mergeGirlNote(note)
+    noteVisible.value = false
+    quickText.value = ''
+    toast('记下了')
+    await loadLatestNote()
+  } catch {
+    toast('没存上，稍后再试一次')
+  }
 }
 </script>
 
@@ -818,4 +983,208 @@ const onQuickCheckIn = () => {
 .home__bottom {
   height: 60rpx;
 }
+
+/* ---------------- 竞品交互新增：首次引导 / 宣言 / 提醒 / 统计 / 快捷发布 ---------------- */
+.onboard {
+  display: flex;
+  align-items: center;
+  margin: 0 30rpx 24rpx;
+  padding: 24rpx 26rpx;
+  background-image: linear-gradient(110deg, #fff4f8, #ffe8f1);
+  border: 1rpx solid #ffd7e6;
+}
+
+.onboard__icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 22rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: #fff;
+  background-image: linear-gradient(140deg, #ff9dbb, #ee5a92);
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.onboard__body {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.onboard__title {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--love-ink);
+}
+
+.onboard__sub {
+  display: block;
+  font-size: 20rpx;
+  color: var(--love-ink-2);
+  margin-top: 8rpx;
+}
+
+.onboard__go {
+  font-size: 21rpx;
+  color: #d2598c;
+  flex-shrink: 0;
+}
+
+.vow {
+  position: relative;
+  margin: 20rpx 30rpx 0;
+  padding: 22rpx 30rpx 22rpx 54rpx;
+  border-radius: 24rpx;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1rpx solid var(--love-line);
+}
+
+.vow__quote {
+  position: absolute;
+  left: 18rpx;
+  top: 6rpx;
+  font-size: 56rpx;
+  line-height: 1;
+  color: #f3b9d0;
+}
+
+.vow__text {
+  font-size: 23rpx;
+  line-height: 1.65;
+  color: #9b5c78;
+}
+
+.remind {
+  display: flex;
+  align-items: center;
+  margin-top: 16rpx;
+  padding: 18rpx 24rpx;
+  border-radius: 999rpx;
+  background-image: linear-gradient(100deg, #fff1f7, #ffe3ee);
+  border: 1rpx solid #ffd0e2;
+}
+
+.remind .love-icon {
+  font-size: 26rpx;
+  color: #e0518c;
+  margin-right: 12rpx;
+}
+
+.remind__text {
+  font-size: 21rpx;
+  color: #b14077;
+}
+
+.stats {
+  display: flex;
+  padding: 26rpx 10rpx;
+}
+
+.stats__item {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1rpx solid var(--love-line);
+}
+
+.stats__item:last-child {
+  border-right: none;
+}
+
+.stats__num {
+  font-size: 38rpx;
+  font-weight: 300;
+  line-height: 1.1;
+  color: #e0518c;
+}
+
+.stats__label {
+  font-size: 19rpx;
+  color: var(--love-ink-3);
+  margin-top: 10rpx;
+}
+
+.words__actions {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.words__quick {
+  padding: 8rpx 20rpx;
+  border-radius: 999rpx;
+  font-size: 20rpx;
+  color: #b14077;
+  background-color: rgba(255, 255, 255, 0.75);
+  border: 1rpx solid #ffd7e6;
+}
+
+.quick {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin: 24rpx 0 8rpx;
+}
+
+.quick__item {
+  position: relative;
+  padding: 22rpx 26rpx 22rpx 100rpx;
+  border-radius: 26rpx;
+  background-color: var(--love-bg);
+  border: 1rpx solid var(--love-line);
+}
+
+.quick__icon {
+  position: absolute;
+  left: 24rpx;
+  top: 22rpx;
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  color: #fff;
+  background-image: linear-gradient(140deg, #ff9dbb, #ee5a92);
+}
+
+.quick__label {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--love-ink);
+}
+
+.quick__sub {
+  display: block;
+  font-size: 20rpx;
+  color: var(--love-ink-3);
+  margin-top: 6rpx;
+}
+
+.quick__input {
+  margin: 24rpx 0 28rpx;
+  padding: 22rpx 24rpx;
+  border-radius: 24rpx;
+  background-color: var(--love-bg);
+}
+
+.quick__textarea {
+  width: 100%;
+  min-height: 140rpx;
+  font-size: 26rpx;
+  line-height: 1.65;
+  color: var(--love-ink);
+  box-sizing: border-box;
+}
+
+.quick__placeholder {
+  color: var(--love-ink-3);
+}
+
 </style>

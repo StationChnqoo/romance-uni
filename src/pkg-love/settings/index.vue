@@ -1,6 +1,9 @@
 <!--
-  情侣空间 · 设置：在一起的日子 + 双方昵称。
-  保存后首页恋爱天数、天数里程碑与周年倒数都由 love store 自动重算，不需要额外刷新逻辑。
+  情侣空间 · 设置。
+  竞品口径（恋爱记 / 小恩爱）：资料不只有昵称 —— 双方生日会自动变成倒数日、
+  恋爱宣言显示在首页、头像让两个人真的「在场」；还有一块关系数据统计，
+  以及清空记录这种危险操作的二次确认。
+  改开始日期后首页天数、里程碑与周年倒数都由 love store 自动重算。
 -->
 <template>
   <view :style="themeVars" class="settings lv-page">
@@ -19,6 +22,23 @@
           <text class="settings__hero-unit">天</text>
         </view>
         <text class="settings__hero-tip">从 {{ love.startDate }} 开始，每一天都算数</text>
+      </view>
+    </view>
+
+    <!-- 双人头像：资料里最有人味的一块，点一下换照片 -->
+    <view class="settings__avatars">
+      <view class="settings__avatar-wrap" @click="onPickAvatar('mine')">
+        <image v-if="form.myAvatar" class="settings__avatar-img" :src="form.myAvatar" mode="aspectFill" />
+        <view v-else class="settings__avatar"><text>{{ form.myName.slice(0, 1) }}</text></view>
+        <text class="settings__avatar-name">{{ form.myName }}</text>
+        <text class="settings__avatar-edit">换照片</text>
+      </view>
+      <view class="settings__link love-icon love-i-heart" />
+      <view class="settings__avatar-wrap" @click="onPickAvatar('partner')">
+        <image v-if="form.partnerAvatar" class="settings__avatar-img" :src="form.partnerAvatar" mode="aspectFill" />
+        <view v-else class="settings__avatar settings__avatar--ta"><text>{{ form.partnerName.slice(0, 1) }}</text></view>
+        <text class="settings__avatar-name">{{ form.partnerName }}</text>
+        <text class="settings__avatar-edit">换照片</text>
       </view>
     </view>
 
@@ -63,25 +83,89 @@
             placeholder="亲爱的" />
         </view>
       </view>
+
+      <view class="settings__row">
+        <view class="settings__row-icon love-icon love-i-gift" />
+        <text class="settings__label">我的生日</text>
+        <picker mode="date" :value="form.myBirthday || form.startDate" @change="onMyBirthdayChange">
+          <view class="settings__value">{{ form.myBirthday || '去设置' }} ›</view>
+        </picker>
+        <text v-if="form.myBirthday" class="settings__clear-mini" @click="form.myBirthday = ''">清除</text>
+      </view>
+
+      <view class="settings__row">
+        <view class="settings__row-icon love-icon love-i-cake" />
+        <text class="settings__label">TA 的生日</text>
+        <picker mode="date" :value="form.partnerBirthday || form.startDate" @change="onPartnerBirthdayChange">
+          <view class="settings__value">{{ form.partnerBirthday || '去设置' }} ›</view>
+        </picker>
+        <text v-if="form.partnerBirthday" class="settings__clear-mini" @click="form.partnerBirthday = ''">清除</text>
+      </view>
     </view>
 
-    <view class="settings__note">
-      <text>改了开始日期，所有纪念日倒数会跟着变</text>
+    <view class="lv-section">
+      <view class="lv-section__left">
+        <view class="lv-section__bar" />
+        <text class="lv-section__title">我们的恋爱宣言</text>
+      </view>
+    </view>
+    <view class="settings__vow lv-card">
+      <textarea
+        v-model="form.vow"
+        class="settings__vow-input"
+        :maxlength="60"
+        placeholder="写一句只属于我们的话，会显示在首页"
+        placeholder-class="settings__placeholder" />
+      <text class="settings__vow-count">{{ form.vow.length }} / 60</text>
+    </view>
+
+    <!-- 关系数据：竞品的「数据统计 / 爱情指数」轻量版 -->
+    <view class="lv-section">
+      <view class="lv-section__left">
+        <view class="lv-section__bar" />
+        <text class="lv-section__title">一起攒下的</text>
+      </view>
+    </view>
+    <view class="settings__stats lv-card">
+      <view class="settings__stat">
+        <text class="settings__stat-num">{{ love.spaceStats.checkins }}</text>
+        <text class="settings__stat-label">双人打卡</text>
+      </view>
+      <view class="settings__stat">
+        <text class="settings__stat-num">{{ love.spaceStats.diaries }}</text>
+        <text class="settings__stat-label">恋爱日记</text>
+      </view>
+      <view class="settings__stat">
+        <text class="settings__stat-num">{{ love.spaceStats.checklist }}</text>
+        <text class="settings__stat-label">解锁小事</text>
+      </view>
+      <view class="settings__stat">
+        <text class="settings__stat-num">{{ love.spaceStats.answers }}</text>
+        <text class="settings__stat-label">一起答过</text>
+      </view>
+    </view>
+
+    <view class="settings__info">
+      <text>生日会自动出现在纪念日倒数里。这里的情侣记录只存在这台设备上，换设备不会同步；「关于她」走云端账号，可跨设备查看。</text>
     </view>
 
     <view class="settings__footer">
       <wd-button block round :custom-style="LOVE_PRIMARY_BTN" @click="onSave">
         保存我们的设置
       </wd-button>
+      <text class="settings__danger" @click="onClear">
+        {{ clearArmed ? '再点一次，确认清空全部记录' : '清空全部记录' }}
+      </text>
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useThemeVars } from '@/composables/useThemeVars'
 import { useLoveStore } from '@/stores/love'
 import { LOVE_PRIMARY_BTN } from '@/constants/love'
+import { chooseLocalImage } from '@/utils/chooseImage'
 import { Router } from '@/common/router'
 import { toast } from '@/utils'
 
@@ -91,21 +175,44 @@ const love = useLoveStore()
 const form = reactive({
   startDate: love.startDate,
   myName: love.myName,
-  partnerName: love.partnerName
+  partnerName: love.partnerName,
+  vow: love.vow || '',
+  myBirthday: love.myBirthday || '',
+  partnerBirthday: love.partnerBirthday || '',
+  myAvatar: love.myAvatar || '',
+  partnerAvatar: love.partnerAvatar || ''
 })
+const clearArmed = ref(false)
 
 const onStartDateChange = (e: { detail: { value: string } }) => {
   form.startDate = e.detail.value
 }
+const onMyBirthdayChange = (e: { detail: { value: string } }) => {
+  form.myBirthday = e.detail.value
+}
+const onPartnerBirthdayChange = (e: { detail: { value: string } }) => {
+  form.partnerBirthday = e.detail.value
+}
+const onPickAvatar = async (role: 'mine' | 'partner') => {
+  const path = await chooseLocalImage()
+  if (!path) return
+  if (role === 'mine') form.myAvatar = path
+  else form.partnerAvatar = path
+}
 
 const onSave = () => {
-  love.setProfile({
-    startDate: form.startDate,
-    myName: form.myName,
-    partnerName: form.partnerName
-  })
+  love.setProfile({ ...form })
   toast('已保存，回到首页看看我们的天数')
   Router.back()
+}
+const onClear = () => {
+  if (!clearArmed.value) {
+    clearArmed.value = true
+    return
+  }
+  love.clearAll()
+  clearArmed.value = false
+  toast('记录已清空，资料还在')
 }
 </script>
 
@@ -147,6 +254,65 @@ const onSave = () => {
   opacity: 0.88;
   margin-top: 26rpx;
   letter-spacing: 1rpx;
+}
+
+/* ---------------- 双人头像 ---------------- */
+.settings__avatars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24rpx;
+  margin: 28rpx 0 8rpx;
+  padding: 26rpx 20rpx;
+  border-radius: 32rpx;
+  background-color: #fff;
+  box-shadow: var(--love-shadow);
+}
+
+.settings__avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.settings__avatar,
+.settings__avatar-img {
+  width: 108rpx;
+  height: 108rpx;
+  border-radius: 50%;
+  border: 4rpx solid #ffe0ec;
+  background-color: #ffe0ec;
+}
+
+.settings__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42rpx;
+  color: #d8437c;
+}
+
+.settings__avatar--ta {
+  background-color: #e5d5ff;
+  border-color: #e5d5ff;
+  color: #8a63bd;
+}
+
+.settings__link {
+  font-size: 40rpx;
+  color: #e0518c;
+}
+
+.settings__avatar-name {
+  font-size: 22rpx;
+  color: var(--love-ink);
+  margin-top: 12rpx;
+}
+
+.settings__avatar-edit {
+  font-size: 19rpx;
+  color: var(--love-ink-3);
+  margin-top: 6rpx;
 }
 
 /* ---------------- 表单 ---------------- */
@@ -207,14 +373,89 @@ const onSave = () => {
   justify-content: flex-end;
 }
 
-.settings__note {
+.settings__clear-mini {
+  font-size: 19rpx;
+  color: var(--love-ink-3);
+  margin-left: 14rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 999rpx;
+  background-color: var(--love-bg);
+}
+
+/* ---------------- 宣言 ---------------- */
+.settings__vow {
+  padding: 24rpx 26rpx 18rpx;
+  background-image: linear-gradient(120deg, #fff6f9, #ffeaf2);
+}
+
+.settings__vow-input {
+  width: 100%;
+  min-height: 110rpx;
+  font-size: 26rpx;
+  line-height: 1.7;
+  color: var(--love-ink);
+  box-sizing: border-box;
+}
+
+.settings__placeholder {
+  color: var(--love-ink-3);
+}
+
+.settings__vow-count {
+  display: block;
+  text-align: right;
+  font-size: 19rpx;
+  color: var(--love-ink-3);
+}
+
+/* ---------------- 数据统计 ---------------- */
+.settings__stats {
+  display: flex;
+  padding: 26rpx 10rpx;
+}
+
+.settings__stat {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1rpx solid var(--love-line);
+}
+
+.settings__stat:last-child {
+  border-right: none;
+}
+
+.settings__stat-num {
+  font-size: 40rpx;
+  font-weight: 300;
+  line-height: 1.1;
+  color: #e0518c;
+}
+
+.settings__stat-label {
+  font-size: 19rpx;
+  color: var(--love-ink-3);
+  margin-top: 10rpx;
+}
+
+.settings__info {
   padding: 24rpx 10rpx 0;
   font-size: 21rpx;
+  line-height: 1.7;
   color: var(--love-ink-3);
   text-align: center;
 }
 
 .settings__footer {
   margin-top: 48rpx;
+}
+
+.settings__danger {
+  display: block;
+  text-align: center;
+  margin-top: 30rpx;
+  font-size: 21rpx;
+  color: #c58a9b;
 }
 </style>

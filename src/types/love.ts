@@ -15,6 +15,22 @@ export interface LoveAnniversary {
   repeat: 'yearly' | 'once'
   /** love-icons.scss 的语义图标名，如 heart / cake / flower */
   icon: string
+  /** 提前几天在本页 / 首页提醒：0 当天 / 1 / 3 / 7；旧存档无此字段按 0 处理 */
+  remind?: number
+  /** 置顶：排序时排在前面，竞品「把重要的日子置顶」 */
+  pinned?: boolean
+  /** 备注：那天想做什么、要准备什么 */
+  note?: string
+  /** 创建时间，用于「按添加时间」排序 */
+  createdAt?: string
+  /** 系统生成（双方生日），不可编辑 / 删除 */
+  system?: boolean
+}
+
+/** 双人打卡：同一天两个人各自点过，都点了才算完成（小恩爱 365 天双人签到口径） */
+export interface LoveCheckinDay {
+  mine: boolean
+  partner: boolean
 }
 
 /** 一件小事：预置 100 条 + 自己加的 */
@@ -67,6 +83,13 @@ export interface LoveUpcoming {
   daysLeft: number
   /** 第几个周年；天数里程碑 / 一次性日子为 0 */
   years: number
-  /** 自动算出来的（天数里程碑 / 周年），不可删除 */
+  /** 自动算出来的（天数里程碑 / 周年 / 生日），不可删除 */
   auto: boolean
+  /** 同上，纪念日的提醒 / 置顶 / 备注，详情页要用 */
+  remind: number
+  pinned: boolean
+  note: string
+  createdAt: string
+  /** 正数日：从最初那天到今天已经过去多少天 */
+  daysPassed: number
 }

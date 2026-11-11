@@ -160,7 +160,12 @@ export const buildUpcoming = (
       date,
       daysLeft: left,
       years: a.repeat === 'yearly' ? Math.max(1, dayjs(date).year() - dayjs(a.date).year()) : 0,
-      auto: false
+      auto: !!a.system,
+      remind: a.remind || 0,
+      pinned: !!a.pinned,
+      note: a.note || '',
+      createdAt: a.createdAt || '',
+      daysPassed: daysSince(a.date)
     })
   })
 
@@ -175,7 +180,12 @@ export const buildUpcoming = (
       date,
       daysLeft: left,
       years: 0,
-      auto: true
+      auto: true,
+      remind: 0,
+      pinned: false,
+      note: '',
+      createdAt: '',
+      daysPassed: 0
     })
   })
 
@@ -190,12 +200,20 @@ export const buildUpcoming = (
       date,
       daysLeft: left,
       years: y,
-      auto: true
+      auto: true,
+      remind: 0,
+      pinned: false,
+      note: '',
+      createdAt: '',
+      daysPassed: 0
     })
     break
   }
 
-  return items.sort((a, b) => a.daysLeft - b.daysLeft)
+  /** 置顶优先，其余按临近程度；竞品「把重要的日子置在顶部」 */
+  return items.sort(
+    (a, b) => Number(b.pinned) - Number(a.pinned) || a.daysLeft - b.daysLeft
+  )
 }
 
 /**
@@ -229,3 +247,44 @@ export const DEFAULT_DIARIES: LoveDiary[] = [
     createAt: `${dayjs().subtract(3, 'day').format('YYYY-MM-DD')} 23:50:00`
   }
 ]
+
+/* ---------------- 竞品交互口径：提醒 / 正数日 / 打卡仪式 ---------------- */
+
+/** 正数日：从那天到今天已经过去多少天（纪念日详情的「已经一起走过」） */
+export const daysSince = (date: string) =>
+  Math.max(0, dayjs().startOf('day').diff(dayjs(date).startOf('day'), 'day'))
+
+/** 提前提醒档位：纯本地页内提醒，不开系统推送（无账号 / 无推送通道） */
+export const REMIND_OPTIONS = [
+  { value: 0, label: '当天' },
+  { value: 1, label: '提前 1 天' },
+  { value: 3, label: '提前 3 天' },
+  { value: 7, label: '提前 7 天' }
+] as const
+
+/** 连续打卡里程碑：竞品的成就勋章，达标点亮 */
+export const CHECKIN_BADGES = [
+  { days: 7, label: '一周', icon: 'sparkle' },
+  { days: 30, label: '一个月', icon: 'star' },
+  { days: 100, label: '100 天', icon: 'hand-heart' },
+  { days: 365, label: '365 天', icon: 'cake' }
+] as const
+
+/** 打卡成功后的一句情话，按当天取，同一天固定 */
+export const CHECKIN_TIPS = [
+  '今天也要好好相爱呀。',
+  '喜欢是藏不住的，连打字都在笑。',
+  '世界很大，但我只想在你的旁边。',
+  '把今天也存进我们的时光轴里。',
+  '有你在的日常，就是最好的日子。',
+  '慢慢来，我们还有好多好多年。',
+  '一句我爱你，说一万遍也不腻。',
+  '愿你今天被温柔地对待。',
+  '想到你，就会不自觉地笑一下。',
+  '所有的纪念日，都是从今天攒起来的。'
+] as const
+
+export const checkinTipOfDay = () => {
+  const dayOfYear = dayjs().startOf('day').diff(dayjs().startOf('year'), 'day')
+  return CHECKIN_TIPS[dayOfYear % CHECKIN_TIPS.length]
+}
