@@ -118,7 +118,7 @@ const onModelUpdate = (val: boolean) => {
     /* <text> 是行内元素，display:block 才能按容器宽度排布；居中设在外层 view 上 */
     display: block;
     font-size: 30rpx;
-    font-weight: 600;
+    font-weight: 500;
     color: #1f2d3d;
     text-align: center;
   }
@@ -140,7 +140,7 @@ const onModelUpdate = (val: boolean) => {
   &__label {
     display: block;
     font-size: 26rpx;
-    font-weight: 600;
+    font-weight: 500;
     color: #333;
   }
 
@@ -175,7 +175,7 @@ const onModelUpdate = (val: boolean) => {
   }
   &__split-value {
     font-size: 24rpx;
-    font-weight: 600;
+    font-weight: 500;
     color: #333;
   }
   &__split-note {

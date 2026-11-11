@@ -238,7 +238,7 @@ const onClear = () => {
 }
 
 .settings__hero-unit {
-  font-size: 30rpx;
+  font-size: 28rpx;
   font-weight: 300;
   margin-left: 16rpx;
   opacity: 0.92;
@@ -283,7 +283,7 @@ const onClear = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 42rpx;
+  font-size: 40rpx;
   color: #d8437c;
 }
 
@@ -305,7 +305,7 @@ const onClear = () => {
 }
 
 .settings__avatar-edit {
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: var(--love-ink-3);
   margin-top: 6rpx;
 }
@@ -342,7 +342,7 @@ const onClear = () => {
 }
 
 .settings__label {
-  font-size: 27rpx;
+  font-size: 26rpx;
   color: var(--love-ink);
   flex-shrink: 0;
 }
@@ -369,7 +369,7 @@ const onClear = () => {
 }
 
 .settings__clear-mini {
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: var(--love-ink-3);
   margin-left: 14rpx;
   padding: 4rpx 12rpx;
@@ -399,7 +399,7 @@ const onClear = () => {
 .settings__vow-count {
   display: block;
   text-align: right;
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: var(--love-ink-3);
 }
 
@@ -429,14 +429,14 @@ const onClear = () => {
 }
 
 .settings__stat-label {
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: var(--love-ink-3);
   margin-top: 10rpx;
 }
 
 .settings__info {
   padding: 16rpx 10rpx 0;
-  font-size: 21rpx;
+  font-size: 22rpx;
   line-height: 1.7;
   color: var(--love-ink-3);
   text-align: center;
@@ -450,7 +450,7 @@ const onClear = () => {
   display: block;
   text-align: center;
   margin-top: 30rpx;
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: #c58a9b;
 }
 </style>

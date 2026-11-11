@@ -332,7 +332,7 @@ const onAdd = () => {
 }
 
 .ck__hero-total {
-  font-size: 34rpx;
+  font-size: 32rpx;
   font-weight: 300;
   margin-left: 16rpx;
   opacity: 0.85;
@@ -372,7 +372,7 @@ const onAdd = () => {
 
 .ck__hero-tip {
   display: block;
-  font-size: 21rpx;
+  font-size: 22rpx;
   opacity: 0.85;
   margin-top: 18rpx;
   letter-spacing: 1rpx;
@@ -454,7 +454,7 @@ const onAdd = () => {
 
 .ck__title {
   display: block;
-  font-size: 27rpx;
+  font-size: 26rpx;
   color: var(--love-ink);
   line-height: 1.5;
 }
@@ -471,7 +471,7 @@ const onAdd = () => {
 }
 
 .ck__cat {
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: #d2598c;
   padding: 4rpx 14rpx;
   border-radius: 999rpx;
@@ -479,20 +479,20 @@ const onAdd = () => {
 }
 
 .ck__date {
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: var(--love-ink-3);
   margin-left: 12rpx;
 }
 
 .ck__todo {
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: #d2598c;
   margin-left: 12rpx;
 }
 
 .ck__note {
   display: block;
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: var(--love-ink-2);
   margin-top: 10rpx;
   line-height: 1.6;
@@ -548,7 +548,7 @@ const onAdd = () => {
 .ck__detail-title {
   display: block;
   font-size: 36rpx;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.5;
   color: var(--love-ink);
   margin-top: 12rpx;
@@ -556,7 +556,7 @@ const onAdd = () => {
 
 .ck__detail-cat {
   display: block;
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: var(--love-ink-3);
   margin-top: 8rpx;
 }
@@ -594,7 +594,7 @@ const onAdd = () => {
 }
 
 .ck__photo-tip {
-  font-size: 25rpx;
+  font-size: 24rpx;
   color: #c96b98;
   margin-top: 18rpx;
 }
@@ -613,7 +613,7 @@ const onAdd = () => {
   border-radius: 999rpx;
   background-color: rgba(61, 43, 51, 0.55);
   color: #fff;
-  font-size: 19rpx;
+  font-size: 20rpx;
 }
 
 .ck__note-box {
@@ -622,7 +622,7 @@ const onAdd = () => {
 
 .ck__field-label {
   display: block;
-  font-size: 23rpx;
+  font-size: 24rpx;
   color: var(--love-ink-2);
   margin-bottom: 14rpx;
 }
@@ -682,7 +682,7 @@ const onAdd = () => {
 .ck__recall-text {
   position: relative;
   display: block;
-  font-size: 27rpx;
+  font-size: 26rpx;
   color: var(--love-ink);
   line-height: 1.8;
 }
@@ -692,7 +692,7 @@ const onAdd = () => {
   align-items: center;
   justify-content: center;
   margin-top: 26rpx;
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: var(--love-ink-3);
 }
 
@@ -769,20 +769,20 @@ const onAdd = () => {
 }
 
 .ck__celebrate-sub {
-  font-size: 25rpx;
+  font-size: 24rpx;
   color: rgba(255, 255, 255, 0.95);
   margin-top: 18rpx;
 }
 
 .ck__celebrate-date {
-  font-size: 21rpx;
+  font-size: 22rpx;
   letter-spacing: 2rpx;
   color: rgba(255, 255, 255, 0.8);
   margin-top: 12rpx;
 }
 
 .ck__celebrate-tip {
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: rgba(255, 255, 255, 0.7);
   margin-top: 80rpx;
 }

@@ -54,7 +54,7 @@
         <view class="lv-hero-in">
           <text class="lv-eyebrow">我们在一起的第</text>
           <view class="hero__days">
-            <text class="lv-display">{{ love.daysTogetherCount }}</text>
+            <text class="lv-display hero__days-num">{{ love.daysTogetherCount }}</text>
             <text class="hero__unit">天</text>
           </view>
           <view class="lv-rule hero__rule" />
@@ -137,10 +137,11 @@
           <view v-for="item in features" :key="item.title" class="grid__cell" @click="item.onTap">
             <view class="grid__card lv-card" :class="'lv-tone--' + item.tone">
               <text class="grid__deco love-icon love-i-heart" />
-              <view class="lv-tone__icon love-icon" :class="'love-i-' + item.icon" />
+              <wd-badge :model-value="item.count" :max="99" bg-color="#ee5a92" :top="4" :right="8">
+                <view class="lv-tone__icon love-icon" :class="'love-i-' + item.icon" />
+              </wd-badge>
               <text class="grid__title">{{ item.title }}</text>
               <text class="grid__sub">{{ item.sub }}</text>
-              <text v-if="item.badge" class="grid__badge">{{ item.badge }}</text>
             </view>
           </view>
         </view>
@@ -347,13 +348,15 @@ const reminder = computed(() =>
   love.upcoming.find(item => item.remind > 0 && item.daysLeft > 0 && item.daysLeft <= item.remind)
 )
 
-/** tone 对应 styles/love-ui.scss 的 lv-tone--* 六色，让六张卡各有性格 */
+/** tone 对应 styles/love-ui.scss 的 lv-tone--* 六色，让六张卡各有性格。
+ *  count 只放纯数字，交给 wd-badge 挂在图标右上角；0 表示不显示，
+ *  不再为状态/CTA 单独占一行（点击卡片本身就是入口）。 */
 const features = computed(() => [
   {
     icon: 'letter',
     title: '关于她',
     sub: '记下她说过的每句话',
-    badge: '她的小事记 ›',
+    count: 0,
     tone: 'rose',
     onTap: () => Router.navigate('GirlfriendList')
   },
@@ -361,7 +364,7 @@ const features = computed(() => [
     icon: 'cake',
     title: '纪念日',
     sub: '倒数每个重要日子',
-    badge: love.upcoming.length ? `${love.upcoming.length} 个日子 ›` : '去添加 ›',
+    count: love.upcoming.length,
     tone: 'peach',
     onTap: () => Router.navigate('LoveAnniversaries')
   },
@@ -369,7 +372,7 @@ const features = computed(() => [
     icon: 'todo',
     title: '100 件小事',
     sub: '解锁一件，留一张合照',
-    badge: `已完成 ${love.checklistDoneCount} 件 ›`,
+    count: love.checklistDoneCount,
     tone: 'mint',
     onTap: () => Router.navigate('LoveChecklist')
   },
@@ -377,7 +380,7 @@ const features = computed(() => [
     icon: 'book',
     title: '恋爱日记',
     sub: '把日常写成时光轴',
-    badge: love.sortedDiaries.length ? `已写 ${love.sortedDiaries.length} 篇 ›` : '从今天开始 ›',
+    count: love.sortedDiaries.length,
     tone: 'sky',
     onTap: () => Router.navigate('LoveDiaries')
   },
@@ -385,7 +388,7 @@ const features = computed(() => [
     icon: 'chat',
     title: '每日一问',
     sub: '一天一题，写完再揭晓',
-    badge: questionBadge.value,
+    count: 0,
     tone: 'lilac',
     onTap: () => Router.navigate('LoveQuestion')
   },
@@ -393,7 +396,7 @@ const features = computed(() => [
     icon: 'settings',
     title: '我们的设置',
     sub: '在一起的日子与昵称',
-    badge: '去看看 ›',
+    count: 0,
     tone: 'cream',
     onTap: () => Router.navigate('LoveSettings')
   }
@@ -503,14 +506,14 @@ const onSaveQuickNote = async () => {
 .home__greeting {
   display: block;
   font-size: 40rpx;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 1rpx;
   color: var(--love-ink);
 }
 
 .home__sub {
   display: block;
-  font-size: 23rpx;
+  font-size: 24rpx;
   color: var(--love-ink-3);
   margin-top: 8rpx;
 }
@@ -532,7 +535,7 @@ const onSaveQuickNote = async () => {
 }
 
 .home__seal-heart {
-  font-size: 34rpx;
+  font-size: 32rpx;
   color: #ee5a92;
   line-height: 1;
 }
@@ -554,6 +557,12 @@ const onSaveQuickNote = async () => {
   display: flex;
   align-items: baseline;
   margin-top: 18rpx;
+}
+
+/* 只有 hero 的恋爱天数用钉钉进步体（数字子集，见 styles/fonts.scss）。
+   全站其余文字仍走 App.vue 的苹方字体栈，不要写进全局 font-family。 */
+.hero__days-num {
+  font-family: 'DingTalk-JinBuTi', 'PingFang SC', sans-serif;
 }
 
 .hero__unit {
@@ -600,7 +609,7 @@ const onSaveQuickNote = async () => {
 }
 
 .hero__names {
-  font-size: 23rpx;
+  font-size: 24rpx;
   display: flex;
   align-items: center;
   margin-left: 14rpx;
@@ -614,7 +623,7 @@ const onSaveQuickNote = async () => {
 }
 
 .hero__edit {
-  font-size: 21rpx;
+  font-size: 22rpx;
   opacity: 0.85;
   flex-shrink: 0;
 }
@@ -639,7 +648,7 @@ const onSaveQuickNote = async () => {
   justify-content: center;
   background-image: linear-gradient(140deg, #ff9dbb, #ee5a92);
   color: #fff;
-  font-size: 34rpx;
+  font-size: 32rpx;
   margin-right: 20rpx;
   flex-shrink: 0;
 }
@@ -652,7 +661,7 @@ const onSaveQuickNote = async () => {
 .question__title {
   display: block;
   font-size: 28rpx;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--love-ink);
 }
 
@@ -703,15 +712,15 @@ const onSaveQuickNote = async () => {
 
 .countdown__title {
   display: block;
-  font-size: 27rpx;
-  font-weight: 600;
+  font-size: 26rpx;
+  font-weight: 500;
   color: var(--love-ink);
 }
 
 .countdown__date {
   display: flex;
   align-items: center;
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: var(--love-ink-3);
   margin-top: 8rpx;
   letter-spacing: 1rpx;
@@ -725,14 +734,14 @@ const onSaveQuickNote = async () => {
 }
 
 .countdown__days {
-  font-size: 42rpx;
+  font-size: 40rpx;
   font-weight: 300;
   line-height: 1;
   color: #e0518c;
 }
 
 .countdown__unit {
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: var(--love-ink-3);
   margin-top: 8rpx;
 }
@@ -744,14 +753,14 @@ const onSaveQuickNote = async () => {
 }
 
 .block__empty-orb {
-  font-size: 46rpx;
+  font-size: 40rpx;
   margin-right: 20rpx;
   color: #e0518c;
 }
 
 .block__empty-text {
   flex: 1 1 0;
-  font-size: 23rpx;
+  font-size: 24rpx;
   line-height: 1.6;
   color: var(--love-ink-3);
 }
@@ -767,48 +776,43 @@ const onSaveQuickNote = async () => {
   box-sizing: border-box;
 }
 
+/* 宫格：图标在上、文案在下的纵向卡；状态数字由 wd-badge 挂在图标右上角，
+   不再单独占一行，也不设固定最小高度 */
 .grid__card {
   position: relative;
   overflow: hidden;
-  min-height: 226rpx;
   margin: 6rpx;
-  padding: 16rpx 16rpx;
+  padding: 20rpx 20rpx 18rpx;
   box-sizing: border-box;
 }
 
+/* 右上角心形水印：比初版收小，避免为了装饰留出大片空白 */
 .grid__deco {
   position: absolute;
   right: -8rpx;
-  top: -26rpx;
-  font-size: 116rpx;
+  top: -18rpx;
+  font-size: 88rpx;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.45);
   transform: rotate(-16deg);
+  pointer-events: none;
 }
 
 .grid__title {
   display: block;
-  font-size: 29rpx;
-  font-weight: 600;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 1.3;
   color: var(--love-ink);
-  margin-top: 18rpx;
+  margin-top: 14rpx;
 }
 
 .grid__sub {
   display: block;
-  font-size: 21rpx;
+  font-size: 22rpx;
+  line-height: 1.3;
   color: var(--love-ink-2);
   margin-top: 6rpx;
-}
-
-.grid__badge {
-  display: inline-flex;
-  margin-top: 16rpx;
-  padding: 6rpx 16rpx;
-  border-radius: 999rpx;
-  background-color: rgba(255, 255, 255, 0.75);
-  font-size: 19rpx;
-  color: #d2598c;
 }
 
 /* ---------------- 她说过的话（信笺） ---------------- */
@@ -840,7 +844,7 @@ const onSaveQuickNote = async () => {
 .words__quote {
   display: block;
   position: relative;
-  font-size: 29rpx;
+  font-size: 28rpx;
   line-height: 1.8;
   color: #6d4355;
   margin: 22rpx 0 24rpx;
@@ -899,7 +903,7 @@ const onSaveQuickNote = async () => {
 }
 
 .recent__mon {
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: var(--love-ink-3);
   margin-top: 8rpx;
 }
@@ -911,7 +915,7 @@ const onSaveQuickNote = async () => {
 
 .recent__mood {
   display: block;
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: var(--love-ink-2);
 }
 .recent__mood .love-icon {
@@ -922,7 +926,7 @@ const onSaveQuickNote = async () => {
 
 .recent__text {
   display: block;
-  font-size: 25rpx;
+  font-size: 24rpx;
   color: var(--love-ink);
   margin-top: 8rpx;
   overflow: hidden;
@@ -931,7 +935,7 @@ const onSaveQuickNote = async () => {
 }
 
 .recent__go {
-  font-size: 34rpx;
+  font-size: 32rpx;
   color: var(--love-ink-3);
   margin-left: 12rpx;
 }
@@ -980,7 +984,7 @@ const onSaveQuickNote = async () => {
 .onboard__title {
   display: block;
   font-size: 26rpx;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--love-ink);
 }
 
@@ -992,7 +996,7 @@ const onSaveQuickNote = async () => {
 }
 
 .onboard__go {
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: #d2598c;
   flex-shrink: 0;
 }
@@ -1016,7 +1020,7 @@ const onSaveQuickNote = async () => {
 }
 
 .vow__text {
-  font-size: 23rpx;
+  font-size: 24rpx;
   line-height: 1.65;
   color: #9b5c78;
 }
@@ -1038,7 +1042,7 @@ const onSaveQuickNote = async () => {
 }
 
 .remind__text {
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: #b14077;
 }
 
@@ -1060,14 +1064,14 @@ const onSaveQuickNote = async () => {
 }
 
 .stats__num {
-  font-size: 38rpx;
+  font-size: 36rpx;
   font-weight: 300;
   line-height: 1.1;
   color: #e0518c;
 }
 
 .stats__label {
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: var(--love-ink-3);
   margin-top: 10rpx;
 }
@@ -1120,7 +1124,7 @@ const onSaveQuickNote = async () => {
 .quick__label {
   display: block;
   font-size: 26rpx;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--love-ink);
 }
 

@@ -127,21 +127,21 @@
   border-radius: 999rpx;
   background-color: rgba(255, 255, 255, 0.2);
   border: 1rpx solid rgba(255, 255, 255, 0.28);
-  font-size: 21rpx;
+  font-size: 22rpx;
   letter-spacing: 3rpx;
   color: #fff;
 }
 
 /* 大数字：超细字重 + 紧字距，杂志封面感 */
 .lv-display {
-  font-size: 132rpx;
+  font-size: 96rpx;
   font-weight: 200;
   line-height: 1;
   letter-spacing: -4rpx;
   color: #fff;
 }
 
-.lv-display--sm { font-size: 92rpx; }
+.lv-display--sm { font-size: 72rpx; }
 
 .lv-rule {
   height: 1rpx;
@@ -171,13 +171,13 @@
 
 .lv-section__title {
   font-size: 32rpx;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 1rpx;
   color: var(--love-ink);
 }
 
 .lv-section__more {
-  font-size: 23rpx;
+  font-size: 24rpx;
   color: var(--love-ink-3);
 }
 
@@ -187,7 +187,7 @@
   align-items: center;
   padding: 8rpx 18rpx;
   border-radius: 999rpx;
-  font-size: 21rpx;
+  font-size: 22rpx;
   background-color: var(--love-soft);
   color: #e0518c;
 }
@@ -201,7 +201,7 @@
   height: 88rpx;
   border-radius: 24rpx;
   background-image: linear-gradient(140deg, #fff2f7, #ffe0ec);
-  font-size: 42rpx;
+  font-size: 40rpx;
   flex-shrink: 0;
   color: #e0518c;
 }
@@ -216,15 +216,16 @@
 .lv-tone--mint   { background-image: linear-gradient(145deg, #f0fbf7 0%, #d9f2e9 100%); }
 .lv-tone--sky    { background-image: linear-gradient(145deg, #f1f7ff 0%, #dfeaff 100%); }
 
+/* 宫格图标块：纵向卡里在上，右上角由 wd-badge 叠数字角标 */
 .lv-tone__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 84rpx;
-  height: 84rpx;
-  border-radius: 24rpx;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 22rpx;
   background-color: rgba(255, 255, 255, 0.8);
-  font-size: 42rpx;
+  font-size: 36rpx;
   color: #e0518c;
 }
 
@@ -262,8 +263,8 @@
 
 .lv-sheet__title {
   display: block;
-  font-size: 34rpx;
-  font-weight: 600;
+  font-size: 32rpx;
+  font-weight: 500;
   color: var(--love-ink);
   margin-bottom: 24rpx;
 }

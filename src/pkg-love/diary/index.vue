@@ -115,15 +115,15 @@ const onEdit = (id: string) => Router.navigate('EditLoveDiary', { id })
 
 .diary__hero-title {
   display: block;
-  font-size: 38rpx;
-  font-weight: 600;
+  font-size: 36rpx;
+  font-weight: 500;
   letter-spacing: 1rpx;
   margin-top: 26rpx;
 }
 
 .diary__hero-sub {
   display: block;
-  font-size: 23rpx;
+  font-size: 24rpx;
   opacity: 0.9;
   margin-top: 12rpx;
 }
@@ -138,7 +138,7 @@ const onEdit = (id: string) => Router.navigate('EditLoveDiary', { id })
   background-color: rgba(255, 255, 255, 0.22);
   border: 2rpx solid rgba(255, 255, 255, 0.4);
   color: #fff;
-  font-size: 52rpx;
+  font-size: 48rpx;
   flex-shrink: 0;
   margin-left: 20rpx;
 }
@@ -188,7 +188,7 @@ const onEdit = (id: string) => Router.navigate('EditLoveDiary', { id })
 }
 
 .diary__date-day {
-  font-size: 52rpx;
+  font-size: 48rpx;
   font-weight: 300;
   line-height: 1;
   color: #e0518c;
@@ -229,7 +229,7 @@ const onEdit = (id: string) => Router.navigate('EditLoveDiary', { id })
 
 .diary__text {
   display: block;
-  font-size: 27rpx;
+  font-size: 26rpx;
   color: var(--love-ink);
   line-height: 1.75;
   margin-top: 22rpx;
@@ -264,7 +264,7 @@ const onEdit = (id: string) => Router.navigate('EditLoveDiary', { id })
 }
 
 .diary__empty-title {
-  font-size: 30rpx;
+  font-size: 28rpx;
   color: var(--love-ink);
   margin-top: 26rpx;
 }

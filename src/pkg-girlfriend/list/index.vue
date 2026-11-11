@@ -950,7 +950,7 @@ const doneBtnStyle = computed(() =>
   }
   &__sheet-title {
     display: block;
-    font-size: 30rpx;
+    font-size: 28rpx;
     font-weight: 500;
     color: var(--love-ink);
     margin-bottom: 8rpx;
@@ -1034,7 +1034,7 @@ const doneBtnStyle = computed(() =>
   padding: 16rpx 20rpx;
   border-radius: 24rpx;
   background-color: var(--love-bg);
-  font-size: 25rpx;
+  font-size: 24rpx;
   line-height: 1.6;
   color: var(--love-ink);
 }
@@ -1073,7 +1073,7 @@ const doneBtnStyle = computed(() =>
 }
 
 .gf__menu-label {
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: var(--love-ink-2);
   margin-top: 14rpx;
   text-align: center;
@@ -1082,7 +1082,7 @@ const doneBtnStyle = computed(() =>
 .gf__menu-tip {
   display: block;
   text-align: center;
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: var(--love-ink-3);
   margin-top: 24rpx;
 }
@@ -1142,7 +1142,7 @@ const doneBtnStyle = computed(() =>
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: #b07e95;
 }
 
@@ -1171,7 +1171,7 @@ const doneBtnStyle = computed(() =>
 }
 
 .gf__note-tip {
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: #9b6b82;
   opacity: 0.9;
   margin-top: 20rpx;

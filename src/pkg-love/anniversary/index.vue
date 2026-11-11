@@ -394,8 +394,8 @@ const onSave = () => {
 .ann__hero-title {
   flex: 1 1 0;
   min-width: 0;
-  font-size: 38rpx;
-  font-weight: 600;
+  font-size: 36rpx;
+  font-weight: 500;
   letter-spacing: 1rpx;
 }
 
@@ -415,7 +415,7 @@ const onSave = () => {
 .ann__hero-date,
 .ann__hero-empty {
   display: block;
-  font-size: 23rpx;
+  font-size: 24rpx;
   letter-spacing: 2rpx;
   opacity: 0.9;
   margin-top: 18rpx;
@@ -453,7 +453,7 @@ const onSave = () => {
 }
 
 .ann__sort-hint {
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: var(--love-ink-3);
 }
 
@@ -479,7 +479,7 @@ const onSave = () => {
 
 .ann__hint {
   display: block;
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: var(--love-ink-3);
   margin: 14rpx 6rpx 22rpx;
 }
@@ -537,7 +537,7 @@ const onSave = () => {
 
 .ann__title {
   font-size: 28rpx;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--love-ink);
 }
 
@@ -549,7 +549,7 @@ const onSave = () => {
 
 .ann__date {
   display: block;
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: var(--love-ink-3);
   margin-top: 8rpx;
   letter-spacing: 1rpx;
@@ -567,7 +567,7 @@ const onSave = () => {
   padding: 4rpx 14rpx;
   border-radius: 999rpx;
   background-color: var(--love-soft);
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: #d2598c;
 }
 
@@ -597,7 +597,7 @@ const onSave = () => {
 }
 
 .ann__days {
-  font-size: 44rpx;
+  font-size: 40rpx;
   font-weight: 300;
   line-height: 1;
   color: #e0518c;
@@ -605,7 +605,7 @@ const onSave = () => {
 
 .ann__unit,
 .ann__go {
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: var(--love-ink-3);
   margin-top: 6rpx;
 }
@@ -631,7 +631,7 @@ const onSave = () => {
   border-radius: 28rpx;
   background-color: #fff;
   color: #e0518c;
-  font-size: 44rpx;
+  font-size: 40rpx;
   margin-right: 22rpx;
 }
 
@@ -643,13 +643,13 @@ const onSave = () => {
 .ann__detail-count {
   display: block;
   font-size: 36rpx;
-  font-weight: 600;
+  font-weight: 500;
   color: #b14077;
 }
 
 .ann__detail-date {
   display: block;
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: var(--love-ink-2);
   margin-top: 8rpx;
 }
@@ -667,12 +667,12 @@ const onSave = () => {
 }
 
 .ann__detail-label {
-  font-size: 23rpx;
+  font-size: 24rpx;
   color: var(--love-ink-3);
 }
 
 .ann__detail-value {
-  font-size: 23rpx;
+  font-size: 24rpx;
   color: var(--love-ink);
   max-width: 60%;
   text-align: right;
@@ -697,7 +697,7 @@ const onSave = () => {
   text-align: center;
   padding: 18rpx 0;
   border-radius: 999rpx;
-  font-size: 23rpx;
+  font-size: 24rpx;
   color: #d2598c;
   background-color: var(--love-bg);
   border: 1rpx solid var(--love-line);
@@ -763,7 +763,7 @@ const onSave = () => {
 }
 
 .ann__field-tip {
-  font-size: 19rpx;
+  font-size: 20rpx;
   color: var(--love-ink-3);
   margin-top: 12rpx;
 }
@@ -789,7 +789,7 @@ const onSave = () => {
 
 .ann__chip--sm {
   padding: 12rpx 24rpx;
-  font-size: 21rpx;
+  font-size: 22rpx;
 }
 
 .ann__chip--on {
@@ -809,7 +809,7 @@ const onSave = () => {
   height: 66rpx;
   line-height: 64rpx;
   text-align: center;
-  font-size: 34rpx;
+  font-size: 32rpx;
   border: 2rpx solid transparent;
   border-radius: 22rpx;
   background-color: var(--love-bg);

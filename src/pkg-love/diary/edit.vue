@@ -179,7 +179,7 @@ const onRemove = () => {
 .edit__title {
   display: block;
   font-size: 40rpx;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 1rpx;
   color: var(--love-ink);
   margin-top: 14rpx;
@@ -187,7 +187,7 @@ const onRemove = () => {
 
 .edit__sub {
   display: block;
-  font-size: 23rpx;
+  font-size: 24rpx;
   color: var(--love-ink-3);
   margin-top: 10rpx;
 }
@@ -267,13 +267,13 @@ const onRemove = () => {
 }
 
 .edit__mood-emoji {
-  font-size: 30rpx;
+  font-size: 28rpx;
   margin-right: 10rpx;
   color: #e0518c;
 }
 
 .edit__mood-label {
-  font-size: 23rpx;
+  font-size: 24rpx;
   color: var(--love-ink-2);
 }
 

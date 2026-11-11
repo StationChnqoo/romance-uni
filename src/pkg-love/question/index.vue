@@ -196,16 +196,16 @@ const onFinishReedit = () => {
 
 .q__hero-title {
   display: block;
-  font-size: 42rpx;
-  font-weight: 600;
+  font-size: 40rpx;
+  font-weight: 500;
   letter-spacing: 2rpx;
   margin-top: 22rpx;
 }
 
 .q__hero-q {
   display: block;
-  font-size: 30rpx;
-  font-weight: 600;
+  font-size: 28rpx;
+  font-weight: 500;
   line-height: 1.65;
   margin-top: 26rpx;
 }
@@ -269,7 +269,7 @@ const onFinishReedit = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: #d8437c;
   background-color: #ffe0ec;
   margin-right: 14rpx;
@@ -282,7 +282,7 @@ const onFinishReedit = () => {
 }
 
 .q__answer-label {
-  font-size: 23rpx;
+  font-size: 24rpx;
   color: var(--love-ink-2);
 }
 
@@ -327,7 +327,7 @@ const onFinishReedit = () => {
 }
 
 .q__sealed .love-icon {
-  font-size: 34rpx;
+  font-size: 32rpx;
   color: #d2598c;
   margin-bottom: 10rpx;
 }
@@ -413,13 +413,13 @@ const onFinishReedit = () => {
 .q__reveal-title {
   display: block;
   font-size: 24rpx;
-  font-weight: 600;
+  font-weight: 500;
   color: #b14077;
 }
 
 .q__reveal-text {
   display: block;
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: var(--love-ink-2);
   margin-top: 6rpx;
 }
@@ -454,14 +454,14 @@ const onFinishReedit = () => {
 .q__history-q {
   display: block;
   font-size: 26rpx;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--love-ink);
   margin-top: 10rpx;
 }
 
 .q__history-a {
   display: block;
-  font-size: 23rpx;
+  font-size: 24rpx;
   line-height: 1.6;
   color: var(--love-ink-2);
   margin-top: 8rpx;
