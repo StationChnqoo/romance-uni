@@ -201,7 +201,7 @@
       :z-index="200">
       <view class="gf__sheet">
         <view class="lv-handle" />
-        <text class="gf__sheet-title">筛选与排序 ♡</text>
+        <text class="gf__sheet-title">筛选与排序</text>
 
         <text class="gf__sheet-label">状态</text>
         <view class="gf__sheet-opts">

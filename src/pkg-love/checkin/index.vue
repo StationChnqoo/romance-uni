@@ -7,8 +7,8 @@
     <view class="ci__hero lv-hero">
       <view class="lv-orb lv-orb--tr" />
       <view class="lv-orb lv-orb--bl" />
-      <text class="lv-heart lv-heart--a">♥</text>
-      <text class="lv-heart lv-heart--b">♥</text>
+      <text class="lv-heart lv-heart--a love-icon love-i-heart" />
+      <text class="lv-heart lv-heart--b love-icon love-i-heart" />
       <view class="lv-spark lv-spark--a" />
       <view class="lv-spark lv-spark--b" />
       <view class="lv-spark lv-spark--c" />
@@ -19,7 +19,7 @@
         <!-- 圆形打卡按钮：比直角按钮更有仪式感 -->
         <view class="ci__press" @click="onCheckIn">
           <view class="ci__press-ring" :class="{ 'ci__press-ring--done': love.checkedInToday }">
-            <text class="ci__press-heart">♥</text>
+            <text class="ci__press-heart love-icon love-i-heart" />
           </view>
           <text class="ci__press-text">{{ love.checkedInToday ? '已打卡 · 明天见' : '点一下打卡' }}</text>
         </view>
@@ -58,8 +58,8 @@
           <view
             class="ci__dot"
             :class="{ 'ci__dot--on': day.done, 'ci__dot--today': index === 6 }">
-            <text v-if="day.done" class="ci__dot-heart">♥</text>
-            <text v-else class="ci__dot-hollow">♡</text>
+            <text v-if="day.done" class="ci__dot-heart love-icon love-i-heart" />
+            <text v-else class="ci__dot-hollow love-icon love-i-heart-line" />
           </view>
           <text class="ci__dot-label">{{ day.label }}</text>
         </view>
@@ -91,7 +91,7 @@
           :maxlength="200"
           placeholder="写一句就好…"
           placeholder-class="ci__placeholder" />
-        <view class="ci__save" @click="onSaveMine">保存 ♡</view>
+        <view class="ci__save" @click="onSaveMine">保存</view>
       </view>
 
       <view class="ci__answer ci__answer--ta">
@@ -105,7 +105,7 @@
           :maxlength="200"
           placeholder="TA 说了什么…"
           placeholder-class="ci__placeholder" />
-        <view class="ci__save ci__save--ta" @click="onSavePartner">保存 ♡</view>
+        <view class="ci__save ci__save--ta" @click="onSavePartner">保存</view>
       </view>
     </view>
 

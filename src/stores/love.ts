@@ -3,8 +3,8 @@
  *
  * 口径与项目其它 store 一致：Vue3 setup 写法（ref + computed 直接返回）、
  * 整包 persist（storage: uniStorage），不在页面里自己调 setStorage。
- * 跨端提醒：diary.images 存的是本地图片路径（App 端 uni.saveFile 后的永久路径），
- * 换设备不会同步，这是「纯本地」方案的既定边界。
+ * 跨端提醒：diary.images / checklist.image 存的是本地图片路径（App 端 uni.saveFile
+ * 后的永久路径），换设备不会同步，这是「纯本地」方案的既定边界。
  */
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
@@ -14,6 +14,7 @@ import { uniStorage } from '@/storage/uniStorage'
 import {
   DAILY_QUESTIONS,
   DEFAULT_CHECKLIST,
+  DEFAULT_DIARIES,
   buildUpcoming,
   createId,
   daysTogether,
@@ -36,7 +37,16 @@ export const useLoveStore = defineStore(
 
     const anniversaries = ref<LoveAnniversary[]>([])
     const checklist = ref<LoveChecklistItem[]>(cloneDeep(DEFAULT_CHECKLIST))
-    const diaries = ref<LoveDiary[]>([])
+
+    /** 首装带 3 篇示例日记，用户可以直接编辑或删掉 */
+    const diaries = ref<LoveDiary[]>(cloneDeep(DEFAULT_DIARIES))
+    /**
+     * 一次性迁移标记：区分「旧版本 persist 里存的空数组」和「用户自己把日记删光了」。
+     * persist 是整包 hydrate，旧数据里的 diaries: [] 会盖掉上面的首装示例 ——
+     * 恢复后要补一次；但用户主动清空后绝不能再把示例塞回来。
+     */
+    const sampleSeeded = ref(false)
+
     /** 已打卡的日期 YYYY-MM-DD[]，天然去重靠 includes 判断 */
     const checkins = ref<string[]>([])
     /** key = 日期，同一天双方各一句 */
@@ -55,6 +65,12 @@ export const useLoveStore = defineStore(
       checklist.value.length
         ? Math.round((checklistDoneCount.value / checklist.value.length) * 100)
         : 0
+    )
+    /** 已解锁的小事按日期倒序，等于竞品「甜蜜空间」的回忆时间轴 */
+    const completedChecklist = computed(() =>
+      checklist.value
+        .filter(i => i.done)
+        .sort((a, b) => b.doneAt.localeCompare(a.doneAt))
     )
 
     const checkedInToday = computed(() => checkins.value.includes(todayStr()))
@@ -79,9 +95,18 @@ export const useLoveStore = defineStore(
     })
     const todayAnswer = computed(() => answers.value[todayStr()])
 
+    /**
+     * 示例日记在任何时机都可见：正常由 afterRestore 补齐，
+     * 这里再兜住「store 已经建好、diaries 仍是空且用户从没动过日记」的情况
+     * （HMR / 旧包热更新时不会出现一进页面就是空时光轴）。
+     * 用户写过或删过之后 sampleSeeded 为 true，空就是真空，交给空态引导。
+     */
+    const diarySource = computed(() =>
+      diaries.value.length || sampleSeeded.value ? diaries.value : DEFAULT_DIARIES
+    )
     /** 时光轴：日期新的在前，同一天按创建时间倒序 */
     const sortedDiaries = computed(() =>
-      [...diaries.value].sort(
+      [...diarySource.value].sort(
         (a, b) => b.date.localeCompare(a.date) || b.createAt.localeCompare(a.createAt)
       )
     )
@@ -105,11 +130,26 @@ export const useLoveStore = defineStore(
       anniversaries.value = anniversaries.value.filter(a => a.id !== id)
     }
 
-    const toggleChecklistItem = (id: string) => {
+    /**
+     * 解锁一件小事：参考恋爱记的「拍照打卡」——必须留下合照或一句心情，
+     * 由详情弹层确认后才调用，列表本身点一下不会改变状态。
+     */
+    const completeChecklistItem = (id: string, note: string, image: string) => {
       const item = checklist.value.find(i => i.id === id)
-      if (!item) return
-      item.done = !item.done
-      item.doneAt = item.done ? todayStr() : ''
+      if (!item || item.done) return
+      item.done = true
+      item.doneAt = todayStr()
+      item.note = note.trim()
+      item.image = image
+    }
+    /** 撤销打卡：连留念一起清掉，回到「还没一起做」 */
+    const undoChecklistItem = (id: string) => {
+      const item = checklist.value.find(i => i.id === id)
+      if (!item || !item.done) return
+      item.done = false
+      item.doneAt = ''
+      item.note = ''
+      item.image = ''
     }
     const addChecklistItem = (title: string) => {
       const text = title.trim()
@@ -120,15 +160,19 @@ export const useLoveStore = defineStore(
         category: '我们加的',
         done: false,
         doneAt: '',
+        note: '',
+        image: '',
         custom: true
       })
     }
+    /** 预置的 100 件不允许删，只对自己加的生效 */
     const removeChecklistItem = (id: string) => {
       checklist.value = checklist.value.filter(i => i.id !== id || !i.custom)
     }
 
     /** id 为空 = 新增；否则按 id 覆盖，编辑后列表即时更新 */
     const saveDiary = (diary: LoveDiary) => {
+      sampleSeeded.value = true
       const next: LoveDiary = {
         ...diary,
         id: diary.id || createId(),
@@ -139,6 +183,7 @@ export const useLoveStore = defineStore(
       else diaries.value.push(next)
     }
     const removeDiary = (id: string) => {
+      sampleSeeded.value = true
       diaries.value = diaries.value.filter(d => d.id !== id)
     }
 
@@ -170,12 +215,14 @@ export const useLoveStore = defineStore(
       anniversaries,
       checklist,
       diaries,
+      sampleSeeded,
       checkins,
       answers,
       daysTogetherCount,
       upcoming,
       checklistDoneCount,
       checklistProgress,
+      completedChecklist,
       checkedInToday,
       totalCheckins,
       checkinStreak,
@@ -185,7 +232,8 @@ export const useLoveStore = defineStore(
       setProfile,
       addAnniversary,
       removeAnniversary,
-      toggleChecklistItem,
+      completeChecklistItem,
+      undoChecklistItem,
       addChecklistItem,
       removeChecklistItem,
       saveDiary,
@@ -196,7 +244,22 @@ export const useLoveStore = defineStore(
   },
   {
     persist: {
-      storage: uniStorage
+      storage: uniStorage,
+      /**
+       * v1 插件整包 hydrate：旧 storage 里的 diaries: [] 会把首装示例盖成空，
+       * 所以恢复后补一次。sampleSeeded 为 true 说明用户已经写过 / 删过日记，
+       * 保持现状，避免「删光了又自己长回来」。
+       */
+      afterRestore: ({ store }) => {
+        const s = store as unknown as {
+          diaries: LoveDiary[]
+          sampleSeeded: boolean
+        }
+        if (!s.sampleSeeded && !s.diaries?.length) {
+          s.diaries = cloneDeep(DEFAULT_DIARIES)
+        }
+        s.sampleSeeded = true
+      }
     }
   }
 )

@@ -30,6 +30,8 @@ onHide(() => {
 /* 情侣空间视觉系统：lv-* 全局类（卡片 / 主视觉 / 装饰 / 按钮 / 弹层），详见该文件头部注释。
    ⚠️ 必须放 App.vue 的「无 scoped」style 块：页面级 style 会被加 data-v，跨不到 wd-popup 等组件根节点。 */
 @use './styles/love-ui.scss' as *;
+/* Remix Icon 子集字体：情侣空间所有图标统一走 .love-icon / .love-i-*，不再用 emoji */
+@use './styles/love-icons.scss' as *;
 
 /* 全局样式 */
 page {

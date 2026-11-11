@@ -7,8 +7,8 @@
     <view class="settings__hero lv-hero">
       <view class="lv-orb lv-orb--tr" />
       <view class="lv-orb lv-orb--bl" />
-      <text class="lv-heart lv-heart--a">♥</text>
-      <text class="lv-heart lv-heart--b">♥</text>
+      <text class="lv-heart lv-heart--a love-icon love-i-heart" />
+      <text class="lv-heart lv-heart--b love-icon love-i-heart" />
       <view class="lv-spark lv-spark--a" />
       <view class="lv-spark lv-spark--c" />
       <view class="lv-hero-in">
@@ -18,7 +18,7 @@
           <text class="lv-display">{{ love.daysTogetherCount }}</text>
           <text class="settings__hero-unit">天</text>
         </view>
-        <text class="settings__hero-tip">从 {{ love.startDate }} 开始，每一天都算数 ♡</text>
+        <text class="settings__hero-tip">从 {{ love.startDate }} 开始，每一天都算数</text>
       </view>
     </view>
 
@@ -31,7 +31,7 @@
 
     <view class="settings__card lv-card">
       <view class="settings__row">
-        <view class="settings__row-icon">💗</view>
+        <view class="settings__row-icon love-icon love-i-heart" />
         <text class="settings__label">在一起的那天</text>
         <picker mode="date" :value="form.startDate" @change="onStartDateChange">
           <view class="settings__value">{{ form.startDate }} ›</view>
@@ -39,7 +39,7 @@
       </view>
 
       <view class="settings__row">
-        <view class="settings__row-icon">🙋</view>
+        <view class="settings__row-icon love-icon love-i-user" />
         <text class="settings__label">我的昵称</text>
         <view class="settings__input-cell">
           <wd-input
@@ -52,7 +52,7 @@
       </view>
 
       <view class="settings__row">
-        <view class="settings__row-icon">🌷</view>
+        <view class="settings__row-icon love-icon love-i-flower" />
         <text class="settings__label">TA 的昵称</text>
         <view class="settings__input-cell">
           <wd-input
@@ -66,7 +66,7 @@
     </view>
 
     <view class="settings__note">
-      <text>♡ 改了开始日期，所有纪念日倒数会跟着变</text>
+      <text>改了开始日期，所有纪念日倒数会跟着变</text>
     </view>
 
     <view class="settings__footer">
@@ -177,6 +177,7 @@ const onSave = () => {
   font-size: 28rpx;
   margin-right: 18rpx;
   flex-shrink: 0;
+  color: #e0518c;
 }
 
 .settings__label {

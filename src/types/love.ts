@@ -13,7 +13,7 @@ export interface LoveAnniversary {
   /** YYYY-MM-DD */
   date: string
   repeat: 'yearly' | 'once'
-  /** emoji，避免引入图片资源 */
+  /** love-icons.scss 的语义图标名，如 heart / cake / flower */
   icon: string
 }
 
@@ -25,6 +25,12 @@ export interface LoveChecklistItem {
   done: boolean
   /** 完成日期 YYYY-MM-DD，未完成为空串 */
   doneAt: string
+  /**
+   * 解锁打卡时写的一句感受 / 那天的合照（本地永久路径）。
+   * 可选：旧版本 persist 里没有这两个字段，照常按「只完成、没留念」显示。
+   */
+  note?: string
+  image?: string
   /** 自己加的（可删除），预置项不能删 */
   custom: boolean
 }
@@ -54,6 +60,7 @@ export interface LoveAnswer {
 export interface LoveUpcoming {
   id: string
   title: string
+  /** 同 LoveAnniversary.icon */
   icon: string
   /** 本次要到的日期 YYYY-MM-DD */
   date: string

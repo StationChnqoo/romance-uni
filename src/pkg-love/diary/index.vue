@@ -7,17 +7,15 @@
     <view class="diary__hero lv-hero" @click="onAdd">
       <view class="lv-orb lv-orb--tr" />
       <view class="lv-orb lv-orb--bl" />
-      <text class="lv-heart lv-heart--a">♥</text>
+      <text class="lv-heart lv-heart--a love-icon love-i-heart" />
       <view class="lv-spark lv-spark--a" />
       <view class="lv-hero-in diary__hero-in">
         <view class="diary__hero-body">
           <text class="lv-eyebrow">OUR LITTLE DIARY</text>
           <text class="diary__hero-title">写下今天的一点点</text>
-          <text class="diary__hero-sub">以后回头翻，都是我们 ♡</text>
+          <text class="diary__hero-sub">以后回头翻，都是我们</text>
         </view>
-        <view class="diary__hero-pen">
-          <text>✎</text>
-        </view>
+        <view class="diary__hero-pen love-icon love-i-quill" />
       </view>
     </view>
 
@@ -41,7 +39,10 @@
               <text class="diary__date-month">{{ item.date.slice(0, 7) }}</text>
             </view>
             <view class="diary__head-right">
-              <text class="diary__mood">{{ moodOf(item.mood).emoji }} {{ moodOf(item.mood).label }}</text>
+              <view class="diary__mood">
+                <text class="love-icon" :class="'love-i-' + moodOf(item.mood).icon" />
+                <text>{{ moodOf(item.mood).label }}</text>
+              </view>
               <text class="diary__week">{{ weekOf(item.date) }}</text>
             </view>
           </view>
@@ -57,9 +58,14 @@
         </view>
       </view>
     </view>
-    <view v-else class="lv-empty">
-      <view class="lv-empty__orb">🌷</view>
-      <text class="lv-empty__text">还没有日记，从今天开始吧</text>
+    <view v-else class="diary__empty lv-card">
+      <view class="diary__empty-orb love-icon love-i-quill" />
+      <text class="diary__empty-title">第一页还空着</text>
+      <text class="diary__empty-sub">写一句今天的小事，以后翻回来都是我们</text>
+      <view class="diary__empty-btn" @click="onAdd">
+        <text class="love-icon love-i-quill" />
+        <text>写第一篇日记</text>
+      </view>
     </view>
 
     <view class="lv-fab" @click="onAdd">
@@ -203,11 +209,17 @@ const onEdit = (id: string) => Router.navigate('EditLoveDiary', { id })
 }
 
 .diary__mood {
+  display: flex;
+  align-items: center;
   font-size: 22rpx;
   color: #d2598c;
   padding: 6rpx 16rpx;
   border-radius: 999rpx;
   background-color: var(--love-soft);
+}
+.diary__mood .love-icon {
+  margin-right: 8rpx;
+  font-size: 22rpx;
 }
 
 .diary__week {
@@ -237,5 +249,52 @@ const onEdit = (id: string) => Router.navigate('EditLoveDiary', { id })
   border-radius: 20rpx;
   background-color: var(--love-soft);
   box-shadow: 0 6rpx 16rpx rgba(226, 100, 148, 0.12);
+}
+/* ---------------- 空态引导 ---------------- */
+.diary__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 40rpx 56rpx;
+  margin-top: 10rpx;
+}
+
+.diary__empty-orb {
+  font-size: 72rpx;
+  color: #e0518c;
+  line-height: 1;
+}
+
+.diary__empty-title {
+  font-size: 30rpx;
+  color: var(--love-ink);
+  margin-top: 26rpx;
+}
+
+.diary__empty-sub {
+  font-size: 22rpx;
+  color: var(--love-ink-3);
+  margin-top: 12rpx;
+  text-align: center;
+  line-height: 1.7;
+}
+
+.diary__empty-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 34rpx;
+  padding: 18rpx 46rpx;
+  border-radius: 999rpx;
+  background-image: linear-gradient(100deg, #ff92b4, #ee5a92);
+  box-shadow: 0 10rpx 24rpx rgba(226, 92, 148, 0.28);
+  color: #fff;
+  font-size: 24rpx;
+}
+
+.diary__empty-btn .love-icon {
+  font-size: 26rpx;
+  margin-right: 12rpx;
+  color: #fff;
 }
 </style>

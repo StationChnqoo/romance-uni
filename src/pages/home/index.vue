@@ -24,10 +24,10 @@
         <view class="home__top-left">
           <text class="home__eyebrow">OUR LITTLE WORLD · {{ dateLine }}</text>
           <text class="home__greeting">{{ greeting }}，{{ love.partnerName }}</text>
-          <text class="home__sub">今天也要好好相爱呀 ♡</text>
+          <text class="home__sub">今天也要好好相爱呀</text>
         </view>
         <view class="home__seal">
-          <text class="home__seal-heart">♥</text>
+          <text class="home__seal-heart love-icon love-i-heart" />
           <text class="home__seal-text">since {{ love.startDate.slice(0, 4) }}</text>
         </view>
       </view>
@@ -36,13 +36,13 @@
       <view class="hero lv-hero" @click="onFeatureTap('LoveSettings')">
         <view class="lv-orb lv-orb--tr" />
         <view class="lv-orb lv-orb--bl" />
-        <text class="lv-heart lv-heart--a">♥</text>
-        <text class="lv-heart lv-heart--b">♥</text>
+        <text class="lv-heart lv-heart--a love-icon love-i-heart" />
+        <text class="lv-heart lv-heart--b love-icon love-i-heart" />
         <view class="lv-spark lv-spark--a" />
         <view class="lv-spark lv-spark--b" />
         <view class="lv-spark lv-spark--c" />
         <view class="lv-hero-in">
-          <text class="lv-eyebrow">♡ 我们在一起的第 ♡</text>
+          <text class="lv-eyebrow">我们在一起的第</text>
           <view class="hero__days">
             <text class="lv-display">{{ love.daysTogetherCount }}</text>
             <text class="hero__unit">天</text>
@@ -52,7 +52,11 @@
             <view class="hero__pair">
               <text class="hero__avatar hero__avatar--me">{{ love.myName.slice(0, 1) }}</text>
               <text class="hero__avatar hero__avatar--ta">{{ love.partnerName.slice(0, 1) }}</text>
-              <text class="hero__names">{{ love.myName }} ♥ {{ love.partnerName }}</text>
+              <view class="hero__names">
+                <text>{{ love.myName }}</text>
+                <text class="love-icon love-i-heart" />
+                <text>{{ love.partnerName }}</text>
+              </view>
             </view>
             <text class="hero__edit">始于 {{ love.startDate }} ›</text>
           </view>
@@ -62,7 +66,7 @@
       <!-- 今日打卡条 -->
       <view class="checkin" @click="onFeatureTap('LoveCheckin')">
         <view class="checkin__icon" :class="{ 'checkin__icon--done': love.checkedInToday }">
-          <text>♥</text>
+          <text class="love-icon love-i-heart" />
         </view>
         <view class="checkin__body">
           <text class="checkin__title">{{ love.checkedInToday ? '今天已经说过我爱你啦' : '今天还没打卡哦' }}</text>
@@ -72,7 +76,7 @@
           class="checkin__btn"
           :class="{ 'checkin__btn--done': love.checkedInToday }"
           @click.stop="onQuickCheckIn">
-          <text>{{ love.checkedInToday ? '已打卡' : '打卡 ♡' }}</text>
+          <text>{{ love.checkedInToday ? '已打卡' : '打卡' }}</text>
         </view>
       </view>
 
@@ -91,7 +95,7 @@
             :key="item.id"
             class="countdown__item"
             :class="{ 'countdown__item--split': index > 0 }">
-            <view class="lv-icon countdown__icon">{{ item.icon }}</view>
+            <view class="lv-icon countdown__icon love-icon" :class="'love-i-' + item.icon" />
             <view class="countdown__body">
               <text class="countdown__title">{{ item.title }}</text>
               <text class="countdown__date">{{ item.date }}</text>
@@ -103,7 +107,7 @@
           </view>
         </view>
         <view v-else class="lv-card block__empty">
-          <text class="block__empty-orb">🌷</text>
+          <text class="block__empty-orb love-icon love-i-flower" />
           <text class="block__empty-text">去设置里填「在一起的那天」，纪念日会自动算好</text>
         </view>
       </view>
@@ -120,8 +124,8 @@
         <view class="grid">
           <view v-for="item in features" :key="item.title" class="grid__cell" @click="item.onTap">
             <view class="grid__card lv-card" :class="'lv-tone--' + item.tone">
-              <text class="grid__deco">♥</text>
-              <view class="lv-tone__icon">{{ item.emoji }}</view>
+              <text class="grid__deco love-icon love-i-heart" />
+              <view class="lv-tone__icon love-icon" :class="'love-i-' + item.icon" />
               <text class="grid__title">{{ item.title }}</text>
               <text class="grid__sub">{{ item.sub }}</text>
               <text v-if="item.badge" class="grid__badge">{{ item.badge }}</text>
@@ -146,7 +150,7 @@
           <text class="words__meta">
             {{ latestNote ? `${latestNote.saidAt} · ${attitudeOf(latestNote.attitude).label}` : '来自「关于她」· 喜欢 / 心愿 / 随口一提' }}
           </text>
-          <text class="words__heart">♥</text>
+          <text class="words__heart love-icon love-i-heart" />
         </view>
       </view>
 
@@ -169,7 +173,10 @@
             <text class="recent__mon">{{ item.date.slice(5, 7) }} 月</text>
           </view>
           <view class="recent__body">
-            <text class="recent__mood">{{ moodOf(item.mood).emoji }} {{ moodOf(item.mood).label }}</text>
+            <view class="recent__mood">
+              <text class="love-icon" :class="'love-i-' + moodOf(item.mood).icon" />
+              <text>{{ moodOf(item.mood).label }}</text>
+            </view>
             <text class="recent__text">{{ item.content }}</text>
           </view>
           <text class="recent__go">›</text>
@@ -177,7 +184,7 @@
       </view>
 
       <view class="home__sign">
-        <text>made with ♥ · only for us</text>
+        <text>made with love · only for us</text>
       </view>
       <view class="home__bottom" />
     </scroll-view>
@@ -230,7 +237,7 @@ const onEditDiary = (id: string) => Router.navigate('EditLoveDiary', { id })
 /** tone 对应 styles/love-ui.scss 的 lv-tone--* 六色，让六张卡各有性格 */
 const features = computed(() => [
   {
-    emoji: '💌',
+    icon: 'letter',
     title: '关于她',
     sub: '记下她说过的每句话',
     badge: '她的小事记 ›',
@@ -238,7 +245,7 @@ const features = computed(() => [
     onTap: () => Router.navigate('GirlfriendList')
   },
   {
-    emoji: '🎂',
+    icon: 'cake',
     title: '纪念日',
     sub: '倒数每个重要日子',
     badge: love.upcoming.length ? `${love.upcoming.length} 个日子 ›` : '去添加 ›',
@@ -246,15 +253,15 @@ const features = computed(() => [
     onTap: () => Router.navigate('LoveAnniversaries')
   },
   {
-    emoji: '✅',
+    icon: 'todo',
     title: '100 件小事',
-    sub: '一件一件一起完成',
+    sub: '解锁一件，留一张合照',
     badge: `已完成 ${love.checklistDoneCount} 件 ›`,
     tone: 'mint',
     onTap: () => Router.navigate('LoveChecklist')
   },
   {
-    emoji: '📖',
+    icon: 'book',
     title: '恋爱日记',
     sub: '把日常写成时光轴',
     badge: love.sortedDiaries.length ? `已写 ${love.sortedDiaries.length} 篇 ›` : '从今天开始 ›',
@@ -262,7 +269,7 @@ const features = computed(() => [
     onTap: () => Router.navigate('LoveDiaries')
   },
   {
-    emoji: '💗',
+    icon: 'hand-heart',
     title: '每日打卡',
     sub: '每天一句我爱你',
     badge: `连续 ${love.checkinStreak} 天 ›`,
@@ -270,7 +277,7 @@ const features = computed(() => [
     onTap: () => Router.navigate('LoveCheckin')
   },
   {
-    emoji: '⚙️',
+    icon: 'settings',
     title: '我们的设置',
     sub: '在一起的日子与昵称',
     badge: '去看看 ›',
@@ -451,9 +458,16 @@ const onQuickCheckIn = () => {
 
 .hero__names {
   font-size: 23rpx;
+  display: flex;
+  align-items: center;
   margin-left: 14rpx;
   opacity: 0.95;
   white-space: nowrap;
+}
+.hero__names .love-icon {
+  margin: 0 8rpx;
+  font-size: 20rpx;
+  color: #fff;
 }
 
 .hero__edit {
@@ -566,7 +580,8 @@ const onQuickCheckIn = () => {
 }
 
 .countdown__date {
-  display: block;
+  display: flex;
+  align-items: center;
   font-size: 21rpx;
   color: var(--love-ink-3);
   margin-top: 8rpx;
@@ -602,6 +617,7 @@ const onQuickCheckIn = () => {
 .block__empty-orb {
   font-size: 46rpx;
   margin-right: 20rpx;
+  color: #e0518c;
 }
 
 .block__empty-text {
@@ -768,6 +784,11 @@ const onQuickCheckIn = () => {
   display: block;
   font-size: 21rpx;
   color: var(--love-ink-2);
+}
+.recent__mood .love-icon {
+  margin-right: 8rpx;
+  font-size: 22rpx;
+  color: #d2598c;
 }
 
 .recent__text {

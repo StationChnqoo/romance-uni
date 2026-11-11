@@ -8,22 +8,23 @@
     <view class="ann__hero lv-hero">
       <view class="lv-orb lv-orb--tr" />
       <view class="lv-orb lv-orb--bl" />
-      <text class="lv-heart lv-heart--a">♥</text>
-      <text class="lv-heart lv-heart--b">♥</text>
+      <text class="lv-heart lv-heart--a love-icon love-i-heart" />
+      <text class="lv-heart lv-heart--b love-icon love-i-heart" />
       <view class="lv-spark lv-spark--a" />
       <view class="lv-spark lv-spark--b" />
       <view class="lv-hero-in">
         <text class="lv-eyebrow">NEXT SPECIAL DAY</text>
         <template v-if="next">
           <view class="ann__hero-main">
-            <view class="lv-icon ann__hero-icon">{{ next.icon }}</view>
+            <view class="lv-icon ann__hero-icon love-icon" :class="'love-i-' + next.icon" />
             <text class="ann__hero-title">{{ next.title }}</text>
           </view>
           <view class="ann__hero-count">
-            <text class="lv-display lv-display--sm">{{ next.daysLeft === 0 ? '♥' : next.daysLeft }}</text>
+            <text v-if="next.daysLeft === 0" class="lv-display lv-display--sm love-icon love-i-heart" />
+            <text v-else class="lv-display lv-display--sm">{{ next.daysLeft }}</text>
             <text class="ann__hero-unit">{{ next.daysLeft === 0 ? '就是今天' : '天后见' }}</text>
           </view>
-          <text class="ann__hero-date">♡ {{ next.date }}</text>
+          <text class="ann__hero-date">{{ next.date }}</text>
         </template>
         <text v-else class="ann__hero-empty">先去设置里填「在一起的那天」吧</text>
       </view>
@@ -36,12 +37,12 @@
       </view>
       <text class="lv-section__more">共 {{ list.length }} 个日子</text>
     </view>
-    <text class="ann__hint">带「自动」的是按我们在一起的天数算出来的 ♡</text>
+    <text class="ann__hint">带「自动」的是按我们在一起的天数算出来的</text>
 
     <view v-if="list.length" class="ann__list">
       <view v-for="item in list" :key="item.id" class="ann__card lv-card">
         <view class="ann__stripe" />
-        <view class="lv-icon ann__icon">{{ item.icon }}</view>
+        <view class="lv-icon ann__icon love-icon" :class="'love-i-' + item.icon" />
         <view class="ann__body">
           <text class="ann__title">{{ item.title }}</text>
           <text class="ann__date">{{ item.date }}{{ item.years ? ` · 第 ${item.years} 年` : '' }}</text>
@@ -55,7 +56,7 @@
       </view>
     </view>
     <view v-else class="lv-empty">
-      <view class="lv-empty__orb">🎈</view>
+      <view class="lv-empty__orb love-icon love-i-sparkle" />
       <text class="lv-empty__text">还没有记下特别的日子，点右下角加一个</text>
     </view>
 
@@ -73,7 +74,7 @@
       @update:model-value="onPopupUpdate">
       <view class="lv-sheet">
         <view class="lv-handle" />
-        <text class="lv-sheet__title">加一个纪念日 ♡</text>
+        <text class="lv-sheet__title">加一个纪念日</text>
 
         <view class="ann__field">
           <text class="ann__field-label">叫什么</text>
@@ -112,11 +113,11 @@
           <text class="ann__field-label">挑个图标</text>
           <view class="ann__icons">
             <text
-              v-for="emoji in ANNIVERSARY_ICONS"
-              :key="emoji"
-              class="ann__emoji"
-              :class="{ 'ann__emoji--on': form.icon === emoji }"
-              @click="form.icon = emoji">{{ emoji }}</text>
+              v-for="name in ANNIVERSARY_ICONS"
+              :key="name"
+              class="ann__emoji love-icon"
+              :class="'love-i-' + name + (form.icon === name ? ' ann__emoji--on' : '')"
+              @click="form.icon = name" />
           </view>
         </view>
 
@@ -146,7 +147,7 @@ const form = reactive({
   title: '',
   date: todayStr(),
   repeat: 'yearly' as 'yearly' | 'once',
-  icon: '💗'
+  icon: 'heart'
 })
 
 const onPopupUpdate = (v: boolean) => {
@@ -198,6 +199,7 @@ const onRemove = (id: string) => {
   background-image: linear-gradient(140deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.2));
   box-shadow: inset 0 1rpx 0 rgba(255, 255, 255, 0.4);
   margin-right: 20rpx;
+  color: #fff;
 }
 
 .ann__hero-title {
@@ -267,6 +269,7 @@ const onRemove = (id: string) => {
   border-radius: 28rpx;
   margin-right: 22rpx;
   font-size: 40rpx;
+  color: #e0518c;
 }
 
 .ann__body {
@@ -418,6 +421,7 @@ const onRemove = (id: string) => {
   border: 2rpx solid transparent;
   border-radius: 22rpx;
   background-color: var(--love-bg);
+  color: #e0518c;
 }
 
 .ann__emoji--on {

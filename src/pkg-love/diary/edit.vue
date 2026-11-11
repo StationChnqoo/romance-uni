@@ -8,12 +8,12 @@
     <view class="edit__head">
       <text class="edit__eyebrow">A LITTLE NOTE FOR US</text>
       <text class="edit__title">{{ form.id ? '改一改这篇日记' : '写下今天的一点点' }}</text>
-      <text class="edit__sub">以后回头翻，都是我们 ♡</text>
+      <text class="edit__sub">以后回头翻，都是我们</text>
     </view>
 
     <view class="edit__card lv-card">
       <view class="edit__date-row">
-        <view class="edit__date-icon">🗓</view>
+        <view class="edit__date-icon love-icon love-i-calendar" />
         <text class="edit__label">哪一天</text>
         <picker mode="date" :value="form.date" @change="onDateChange">
           <view class="edit__value">{{ form.date }} ›</view>
@@ -29,7 +29,7 @@
             class="edit__mood"
             :class="{ 'edit__mood--on': form.mood === m.key }"
             @click="form.mood = m.key">
-            <text class="edit__mood-emoji">{{ m.emoji }}</text>
+            <text class="edit__mood-emoji love-icon" :class="'love-i-' + m.icon" />
             <text class="edit__mood-label">{{ m.label }}</text>
           </view>
         </view>
@@ -51,7 +51,7 @@
           <text class="edit__image-x" @click="onRemoveImage(index)">×</text>
         </view>
         <view v-if="form.images.length < 3" class="edit__image-add" @click="onChooseImage">
-          <text class="edit__image-plus">＋</text>
+          <text class="edit__image-plus love-icon love-i-add" />
           <text class="edit__image-tip">加张照片</text>
         </view>
       </view>
@@ -215,6 +215,7 @@ const onRemove = () => {
   font-size: 28rpx;
   margin-right: 18rpx;
   flex-shrink: 0;
+  color: #e0518c;
 }
 
 .edit__label {
@@ -269,6 +270,7 @@ const onRemove = () => {
 .edit__mood-emoji {
   font-size: 30rpx;
   margin-right: 10rpx;
+  color: #e0518c;
 }
 
 .edit__mood-label {

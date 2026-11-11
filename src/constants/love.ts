@@ -8,6 +8,7 @@ import dayjs from 'dayjs'
 import type {
   LoveAnniversary,
   LoveChecklistItem,
+  LoveDiary,
   LoveUpcoming
 } from '@/types/love'
 
@@ -55,6 +56,8 @@ export const DEFAULT_CHECKLIST: LoveChecklistItem[] = WISH_TEXTS.map((title, i) 
   category: LOVE_CATEGORIES[Math.floor(i / 20)],
   done: false,
   doneAt: '',
+  note: '',
+  image: '',
   custom: false
 }))
 
@@ -73,7 +76,7 @@ export const DAILY_QUESTIONS: string[] = [
   '你觉得我哪个小习惯最可爱？', '如果只能留一张我们的合照，选哪张？',
   '今天给自己打几分？为什么？', '你希望我最近多陪你做点什么？',
   '我们吵过的一次架，现在回头看会笑吗？', '你最喜欢我怎么称呼你？',
-  '如果给今天配一个 emoji，你会选哪个？', '最近有没有一个瞬间特别想抱抱我？',
+  '如果给今天配一个小图标，你会选哪个？', '最近有没有一个瞬间特别想抱抱我？',
   '你最想和我一起完成清单里的哪一件？', '我们最该改掉的一个小毛病是什么？',
   '你觉得「被好好记住」是什么感觉？', '今天有没有为我骄傲一下？',
   '下一次纪念日，你想要什么样的惊喜？', '你最舍不得删的一条聊天记录是哪句？',
@@ -82,25 +85,25 @@ export const DAILY_QUESTIONS: string[] = [
   '你希望我们以后养一只什么小动物？', '用三个词形容我们的现在'
 ]
 
-/** 日记心情 */
+/** 日记心情：icon 为 love-icons.scss 的语义图标名（love-i-<icon>） */
 export const MOODS = [
-  { key: 'sweet', label: '甜蜜', emoji: '💗' },
-  { key: 'happy', label: '开心', emoji: '😊' },
-  { key: 'calm', label: '平淡', emoji: '🌿' },
-  { key: 'miss', label: '想念', emoji: '🌙' },
-  { key: 'tired', label: '有点累', emoji: '☁️' },
-  { key: 'quarrel', label: '闹别扭', emoji: '🫧' }
+  { key: 'sweet', label: '甜蜜', icon: 'heart' },
+  { key: 'happy', label: '开心', icon: 'sun' },
+  { key: 'calm', label: '平淡', icon: 'leaf' },
+  { key: 'miss', label: '想念', icon: 'moon' },
+  { key: 'tired', label: '有点累', icon: 'cloud' },
+  { key: 'quarrel', label: '闹别扭', icon: 'bubble' }
 ] as const
 
 export const moodOf = (key: string) => MOODS.find(m => m.key === key) || MOODS[0]
 
-/** 纪念日可选图标 */
-export const ANNIVERSARY_ICONS = ['💗', '🎂', '🌹', '💍', '🎈', '✈️', '🎬', '🍰', '🌟', '🧸']
+/** 纪念日可选图标：语义名 -> love-i-* 类（Remix Icon 子集，见 styles/love-icons.scss） */
+export const ANNIVERSARY_ICONS = ['heart', 'cake', 'flower', 'ring', 'sparkle', 'plane', 'movie', 'gift', 'star', 'bear']
 
 /**
  * 主按钮统一样式（wd-button 的 custom-style）。
  * wot 的按钮默认直角，页面各自写一遍圆角/阴影会散，这里集中成胶囊 + 粉渐变 + 柔光。
- * ⚠️ custom-style 是绑到组件根节点的内联样式，写不了 CSS 变量作用域外的类。
+ * 注意：custom-style 是绑到组件根节点的内联样式，写不了 CSS 变量作用域外的类。
  */
 export const LOVE_PRIMARY_BTN =
   'background-image: linear-gradient(100deg, #ff92b4, #ee5a92); background-color: #ee5a92; border-radius: 999rpx; border: none; box-shadow: 0 10rpx 24rpx rgba(226, 92, 148, 0.28);'
@@ -168,7 +171,7 @@ export const buildUpcoming = (
     items.push({
       id: `milestone-${n}`,
       title: `在一起 ${n} 天`,
-      icon: '💗',
+      icon: 'heart',
       date,
       daysLeft: left,
       years: 0,
@@ -183,7 +186,7 @@ export const buildUpcoming = (
     items.push({
       id: `year-${y}`,
       title: `在一起 ${y} 周年`,
-      icon: '🎂',
+      icon: 'cake',
       date,
       daysLeft: left,
       years: y,
@@ -194,3 +197,35 @@ export const buildUpcoming = (
 
   return items.sort((a, b) => a.daysLeft - b.daysLeft)
 }
+
+/**
+ * 首装示例日记：第一次打开时光轴就有内容，用户写完自己的第一篇可以直接删掉。
+ * 不是只读假数据 —— id 固定为 sample-*，编辑 / 删除都走 store 的常规动作。
+ * 日期按「今天 / 昨天 / 三天前」相对生成，装得再晚也像刚发生。
+ */
+export const DEFAULT_DIARIES: LoveDiary[] = [
+  {
+    id: 'sample-1',
+    date: dayjs().format('YYYY-MM-DD'),
+    content: '路过花店时你说「这束好像我们家客厅」，然后就真的抱了一束回家。',
+    mood: 'sweet',
+    images: [],
+    createAt: `${dayjs().format('YYYY-MM-DD')} 20:30:00`
+  },
+  {
+    id: 'sample-2',
+    date: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
+    content: '一起把厨房折腾得一团糟，最后煮出来的面还是有点咸，但你吃得很认真。',
+    mood: 'happy',
+    images: [],
+    createAt: `${dayjs().subtract(1, 'day').format('YYYY-MM-DD')} 21:10:00`
+  },
+  {
+    id: 'sample-3',
+    date: dayjs().subtract(3, 'day').format('YYYY-MM-DD'),
+    content: '你出差的第一晚，视频里困得眼睛都睁不开，还是陪我聊到了十二点。',
+    mood: 'miss',
+    images: [],
+    createAt: `${dayjs().subtract(3, 'day').format('YYYY-MM-DD')} 23:50:00`
+  }
+]
