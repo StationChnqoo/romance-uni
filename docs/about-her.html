@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>关于她 · 小事记</title>
+<style>
+  :root {
+    --bg: #f6f3ef;
+    --surface: #ffffff;
+    --surface-2: #faf8f6;
+    --ink: #2e2a26;
+    --ink-2: #6e6660;
+    --ink-3: #a39b94;
+    --line: #ebe5de;
+    --brand: #e0785c;
+    --brand-soft: #fbede8;
+    --like: #e0785c;
+    --dislike: #6c7c93;
+    --wish: #c69540;
+    --mention: #7e9a8b;
+    --danger: #c6544a;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #e9e4dd;
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  button { cursor: pointer; border: 0; background: none; padding: 0; }
+  .page {
+    max-width: 480px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: var(--bg);
+    box-shadow: 0 0 40px rgba(60, 45, 35, .08);
+    position: relative;
+    padding-bottom: 96px;
+  }
+  .ico { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .ico--sm { width: 14px; height: 14px; }
+  .ico--lg { width: 24px; height: 24px; }
+
+  /* ---------- 顶部 ---------- */
+  .hero { padding: 28px 20px 16px; background: var(--surface); border-bottom: 1px solid var(--line); }
+  .hero__row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .hero__title { font-size: 24px; font-weight: 500; letter-spacing: 1px; margin: 0; line-height: 1.3; }
+  .hero__sub { font-size: 13px; color: var(--ink-2); margin: 6px 0 0; }
+  .hero__privacy { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-3); margin-top: 14px; }
+  .hero__more {
+    width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    color: var(--ink-2); background: var(--surface-2); border: 1px solid var(--line); flex: none;
+  }
+  .hero__more:active { background: var(--brand-soft); }
+
+  /* ---------- 统计 ---------- */
+  .stats { display: flex; gap: 8px; padding: 16px 20px 4px; }
+  .stat {
+    flex: 1 1 0; min-width: 0; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 14px; padding: 12px 6px; text-align: center;
+  }
+  .stat--on { border-color: var(--brand); background: var(--brand-soft); }
+  .stat__num { font-size: 20px; font-weight: 500; line-height: 1.2; }
+  .stat__label { font-size: 11px; color: var(--ink-2); margin-top: 2px; }
+  .stat:active { opacity: .7; }
+
+  /* ---------- 待办提醒 ---------- */
+  .todo-bar {
+    margin: 14px 20px 0; padding: 14px 16px; background: #fdf6ec; border: 1px solid #f0dfc0;
+    border-radius: 14px;
+  }
+  .todo-bar__head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: #96682a; }
+  .todo-bar__list { margin-top: 10px; }
+  .todo-bar__item {
+    display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2);
+    padding: 5px 0;
+  }
+  .todo-bar__item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .todo-bar__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--wish); flex: none; }
+
+  /* ---------- 示例提示 ---------- */
+  .demo-bar {
+    margin: 14px 20px 0; padding: 10px 14px; border-radius: 12px; background: var(--brand-soft);
+    border: 1px solid #f2d6cc; font-size: 12px; color: #a4523b;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .demo-bar button { color: #a4523b; font-weight: 500; white-space: nowrap; text-decoration: underline; }
+
+  /* ---------- 筛选 ---------- */
+  .filters { padding: 16px 0 4px; }
+  .search {
+    margin: 0 20px; display: flex; align-items: center; gap: 8px; background: var(--surface);
+    border: 1px solid var(--line); border-radius: 12px; padding: 0 12px; height: 40px; color: var(--ink-3);
+  }
+  .search input { flex: 1 1 0; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 14px; color: var(--ink); }
+  .search input::placeholder { color: var(--ink-3); }
+  .scroller { display: flex; gap: 8px; overflow-x: auto; padding: 12px 20px 2px; scrollbar-width: none; }
+  .scroller::-webkit-scrollbar { display: none; }
+  .chip {
+    height: 32px; display: inline-flex; align-items: center; gap: 6px; padding: 0 14px;
+    border-radius: 16px; border: 1px solid var(--line); background: var(--surface);
+    font-size: 13px; color: var(--ink-2); white-space: nowrap; flex: none;
+  }
+  .chip--on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .chip--tone-on { color: #fff; border-color: transparent; }
+  .filter-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 20px 0; }
+  .filter-row__left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .select {
+    height: 30px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface);
+    padding: 0 10px; font-size: 12px; color: var(--ink-2); outline: 0; max-width: 130px;
+  }
+  .star-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+  .star-toggle input { display: none; }
+  .star-toggle__box {
+    width: 30px; height: 18px; border-radius: 9px; background: #ddd5cd; position: relative; transition: background .18s;
+  }
+  .star-toggle__box::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%;
+    background: #fff; transition: transform .18s;
+  }
+  .star-toggle input:checked + .star-toggle__box { background: var(--brand); }
+  .star-toggle input:checked + .star-toggle__box::after { transform: translateX(12px); }
+  .result-count { font-size: 12px; color: var(--ink-3); padding: 12px 20px 0; }
+
+  /* ---------- 时间线 ---------- */
+  .month-title { font-size: 12px; color: var(--ink-3); padding: 18px 20px 8px; letter-spacing: 1px; }
+  .cards { padding: 0 20px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    margin-bottom: 12px; overflow: hidden; display: flex; position: relative;
+  }
+  .card__bar { width: 4px; flex: none; }
+  .card__body { flex: 1 1 0; min-width: 0; padding: 14px 14px 12px; }
+  .card__top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .pill {
+    height: 22px; display: inline-flex; align-items: center; gap: 4px; padding: 0 9px;
+    border-radius: 11px; font-size: 11px; white-space: nowrap; flex: none;
+  }
+  .pill--tone { color: #fff; }
+  .pill--soft { background: var(--surface-2); border: 1px solid var(--line); color: var(--ink-2); }
+  .pill--warn { background: #fdf3e6; color: #96682a; border: 1px solid #f0dfc0; }
+  .pill--done { background: #edf4ef; color: #4d7a5f; border: 1px solid #d5e6da; }
+  .pill--avoid { background: #eef1f5; color: var(--dislike); border: 1px solid #dbe2ea; }
+  .card__star { margin-left: auto; color: #c9bfb5; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; flex: none; }
+  .card__star--on { color: var(--wish); }
+  .card__content {
+    font-size: 15px; font-weight: 500; line-height: 1.55; margin: 10px 0 0;
+    word-break: break-word; text-align: left;
+  }
+  .card__memo {
+    margin-top: 10px; padding: 10px 12px; background: var(--surface-2); border-radius: 10px;
+    font-size: 13px; color: var(--ink-2); line-height: 1.55; word-break: break-word; text-align: left;
+  }
+  .card__memo-label { color: var(--ink-3); font-size: 11px; display: block; margin-bottom: 2px; }
+  .card__meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; font-size: 12px; color: var(--ink-3); }
+  .card__meta-item { display: inline-flex; align-items: center; gap: 4px; }
+  .card__tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .tag { height: 20px; display: inline-flex; align-items: center; padding: 0 8px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line); font-size: 11px; color: var(--ink-2); }
+  .attach-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .attach-img { width: 72px; height: 72px; border-radius: 10px; object-fit: cover; border: 1px solid var(--line); display: block; }
+  .attach-file {
+    display: flex; align-items: center; gap: 6px; max-width: 100%; height: 32px; padding: 0 10px;
+    border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); font-size: 12px; color: var(--ink-2);
+  }
+  .attach-file span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 150px; }
+  .card__actions { display: flex; gap: 16px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+  .card__act { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--ink-3); }
+  .card__act--del { color: #b9807a; margin-left: auto; }
+
+  /* ---------- 空态 ---------- */
+  .empty { padding: 40px 24px 20px; text-align: center; }
+  .empty__mark { width: 64px; height: 64px; border-radius: 20px; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .empty__title { font-size: 16px; font-weight: 500; }
+  .empty__desc { font-size: 13px; color: var(--ink-2); margin: 8px 0 0; line-height: 1.7; }
+  .idea-title { font-size: 12px; color: var(--ink-3); padding: 24px 20px 8px; letter-spacing: 1px; }
+  .ideas { padding: 0 20px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .idea { height: 32px; display: inline-flex; align-items: center; padding: 0 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); font-size: 12px; color: var(--ink-2); }
+  .idea:active { background: var(--brand-soft); }
+
+  /* ---------- 悬浮按钮 ---------- */
+  .fab {
+    position: fixed; right: max(20px, calc((100vw - 480px) / 2 + 20px)); bottom: 28px;
+    width: 56px; height: 56px; border-radius: 28px; background: var(--brand); color: #fff;
+    display: flex; align-items: center; justify-content: center; z-index: 20;
+    box-shadow: 0 6px 18px rgba(224, 120, 92, .36);
+  }
+  .fab:active { transform: scale(.94); }
+
+  /* ---------- 弹层 ---------- */
+  .mask { position: fixed; inset: 0; background: rgba(38, 30, 24, .42); z-index: 40; display: none; }
+  .mask--on { display: block; }
+  .sheet {
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: 480px;
+    max-height: 90vh; background: var(--surface); border-radius: 20px 20px 0 0; z-index: 50;
+    display: none; flex-direction: column;
+  }
+  .sheet--on { display: flex; }
+  .sheet__head { padding: 16px 20px 12px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; flex: none; }
+  .sheet__title { font-size: 16px; font-weight: 500; }
+  .sheet__close { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; color: var(--ink-2); }
+  .sheet__body { padding: 16px 20px 8px; overflow-y: auto; flex: 1 1 0; }
+  .sheet__foot { padding: 12px 20px 20px; border-top: 1px solid var(--line); display: flex; gap: 10px; flex: none; background: var(--surface); }
+  .btn { height: 44px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; font-weight: 500; flex: 1 1 0; min-width: 0; }
+  .btn--primary { background: var(--brand); color: #fff; }
+  .btn--plain { background: var(--surface); border: 1px solid var(--line); color: var(--ink-2); }
+  .btn--danger { background: var(--surface); border: 1px solid #ecd4d0; color: var(--danger); }
+  .btn:active { opacity: .82; }
+  .field { margin-bottom: 18px; }
+  .field__label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+  .field__label em { font-style: normal; color: var(--brand); }
+  .field__hint { font-size: 11px; color: var(--ink-3); font-weight: 400; margin-left: 6px; }
+  .input, .textarea, .date-input {
+    width: 100%; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2);
+    padding: 10px 12px; outline: 0; font-size: 14px; line-height: 1.6;
+  }
+  .textarea { min-height: 84px; resize: vertical; }
+  .input:focus, .textarea:focus, .date-input:focus { border-color: var(--brand); background: var(--surface); }
+  .options { display: flex; gap: 8px; flex-wrap: wrap; }
+  .opt {
+    height: 34px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px;
+    border-radius: 17px; border: 1px solid var(--line); background: var(--surface-2); font-size: 13px; color: var(--ink-2);
+  }
+  .opt--on { color: #fff; border-color: transparent; }
+  .attach-picker {
+    border: 1px dashed #d8cec4; border-radius: 12px; padding: 16px; background: var(--surface-2);
+    display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; color: var(--ink-2); text-align: center;
+  }
+  .attach-picker:active { background: var(--brand-soft); }
+  .attach-list { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .attach-thumb { position: relative; width: 68px; height: 68px; }
+  .attach-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
+  .attach-thumb button {
+    position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 10px;
+    background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center;
+  }
+  .attach-chip { max-width: 100%; height: 32px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); font-size: 12px; color: var(--ink-2); }
+  .attach-chip button { color: var(--danger); display: flex; }
+  .switch-line { display: flex; align-items: center; justify-content: space-between; padding: 6px 0 2px; }
+  .switch-line__label { font-size: 13px; font-weight: 500; }
+
+  /* ---------- 更多菜单 / 确认 / toast ---------- */
+  .menu { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: 480px; background: var(--surface); border-radius: 20px 20px 0 0; z-index: 50; padding: 8px 0 20px; display: none; }
+  .menu--on { display: block; }
+  .menu__item { display: flex; align-items: center; gap: 12px; padding: 14px 24px; font-size: 14px; width: 100%; text-align: left; }
+  .menu__item:active { background: var(--surface-2); }
+  .menu__item--danger { color: var(--danger); }
+  .confirm {
+    position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(320px, calc(100vw - 48px));
+    background: var(--surface); border-radius: 16px; z-index: 60; padding: 22px 20px 16px; display: none; text-align: center;
+  }
+  .confirm--on { display: block; }
+  .confirm__title { font-size: 16px; font-weight: 500; }
+  .confirm__msg { font-size: 13px; color: var(--ink-2); margin: 8px 0 20px; line-height: 1.7; }
+  .toast {
+    position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); z-index: 80;
+    background: rgba(46, 42, 38, .92); color: #fff; font-size: 13px; padding: 10px 18px;
+    border-radius: 20px; max-width: calc(100vw - 48px); opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .toast--on { opacity: 1; }
+  .viewer { position: fixed; inset: 0; background: rgba(24, 20, 16, .92); z-index: 70; display: none; align-items: center; justify-content: center; padding: 24px; }
+  .viewer--on { display: flex; }
+  .viewer img { max-width: 100%; max-height: 100%; border-radius: 8px; }
+  .viewer__close { position: absolute; top: 24px; right: 24px; width: 36px; height: 36px; border-radius: 18px; background: rgba(255,255,255,.16); color: #fff; display: flex; align-items: center; justify-content: center; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 5.6a5.2 5.2 0 0 0-7.4 0L12 7l-1.4-1.4a5.2 5.2 0 0 0-7.4 7.4L12 21l8.8-8a5.2 5.2 0 0 0 0-7.4z"/></symbol>
+    <symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><path d="M3 9h18v3H3zM5 12h14v9H5zM12 9v12"/><path d="M12 9S9.5 9 8.5 8s-.5-3 1-3 2.5 4 2.5 4zM12 9s2.5 0 3.5-1 .5-3-1-3-2.5 4-2.5 4z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 14a3 3 0 0 1-3 3H9l-5 3V6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3z"/><path d="M8 8h8M8 12h5"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2-5.5-2.9-5.5 2.9 1-6.2L3 9.6l6.2-.9z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L20 8l-4-4L4 16z"/><path d="M14 6l4 4"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M4 17l5-5 4 4 3-3 4 4"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v4h4"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M9 3h6l-1 6 3 3H7l3-3zM12 12v9"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 17l.7 1.8L21.5 19.5l-1.8.7L19 22l-.7-1.8-1.8-.7 1.8-.7z"/></symbol>
+  </defs>
+</svg>
+
+<div class="page">
+  <header class="hero">
+    <div class="hero__row">
+      <div>
+        <h1 class="hero__title">关于她</h1>
+        <p class="hero__sub">她说的每一件小事，都值得被记住</p>
+      </div>
+      <button class="hero__more" id="moreBtn" aria-label="更多"><svg class="ico"><use href="#i-more"/></svg></button>
+    </div>
+    <div class="hero__privacy"><svg class="ico ico--sm"><use href="#i-lock"/></svg>只保存在这台设备的浏览器里，不会上传到任何服务器</div>
+  </header>
+
+  <section class="stats" id="stats"></section>
+  <div id="demoBar"></div>
+  <div id="todoBar"></div>
+
+  <section class="filters">
+    <div class="search">
+      <svg class="ico ico--sm"><use href="#i-search"/></svg>
+      <input id="searchInput" type="search" placeholder="搜她说过的话、备注、标签…" />
+    </div>
+    <div class="scroller" id="attitudeChips"></div>
+    <div class="scroller" id="categoryChips"></div>
+    <div class="filter-row">
+      <div class="filter-row__left">
+        <select class="select" id="statusSelect">
+          <option value="">全部状态</option>
+          <option value="record">仅记录</option>
+          <option value="todo">待安排</option>
+          <option value="done">已兑现</option>
+          <option value="avoid">需避开</option>
+        </select>
+        <select class="select" id="sortSelect">
+          <option value="new">最新的在前</option>
+          <option value="old">最早的在前</option>
+          <option value="weight">最要紧的在前</option>
+        </select>
+      </div>
+      <label class="star-toggle"><input type="checkbox" id="starOnly" /><span class="star-toggle__box"></span>只看星标</label>
+    </div>
+    <div class="result-count" id="resultCount"></div>
+  </section>
+
+  <main id="list"></main>
+
+  <section id="ideas">
+    <div class="idea-title">不知道从哪记起？点一个开头</div>
+    <div class="ideas" id="ideaChips"></div>
+  </section>
+
+  <button class="fab" id="fab" aria-label="记一件"><svg class="ico ico--lg"><use href="#i-plus"/></svg></button>
+</div>
+
+<div class="mask" id="mask"></div>
+
+<div class="sheet" id="sheet">
+  <div class="sheet__head">
+    <div class="sheet__title" id="sheetTitle">记一件小事</div>
+    <button class="sheet__close" id="sheetClose"><svg class="ico"><use href="#i-close"/></svg></button>
+  </div>
+  <div class="sheet__body">
+    <div class="field">
+      <label class="field__label">她说了什么 <em>*</em><span class="field__hint">尽量用她的原话，以后翻起来才有画面</span></label>
+      <textarea class="textarea" id="fContent" placeholder="比如：路过那家店的时候说，好想吃草莓蛋糕啊"></textarea>
+    </div>
+    <div class="field">
+      <label class="field__label">这句话属于哪一类 <em>*</em></label>
+      <div class="options" id="fAttitude"></div>
+    </div>
+    <div class="field">
+      <label class="field__label">归到哪个主题</label>
+      <div class="options" id="fCategory"></div>
+    </div>
+    <div class="field">
+      <label class="field__label">分量 <span class="field__hint">别把随口一句当成圣旨，也别漏掉她真正在意的</span></label>
+      <div class="options" id="fWeight"></div>
+    </div>
+    <div class="field">
+      <label class="field__label">后来怎么样了 <span class="field__hint">记了要做，才算真的记住</span></label>
+      <div class="options" id="fStatus"></div>
+    </div>
+    <div class="field">
+      <label class="field__label">什么时候说的</label>
+      <input class="date-input" type="date" id="fSaidAt" />
+    </div>
+    <div class="field">
+      <label class="field__label">当时的情境 <span class="field__hint">选填</span></label>
+      <input class="input" id="fScene" placeholder="比如：周五下班，一起走回家的路上" />
+    </div>
+    <div class="field">
+      <label class="field__label">我的备注 / 打算怎么做 <span class="field__hint">选填</span></label>
+      <textarea class="textarea" id="fMemo" placeholder="比如：下周六买一个带过去；点菜时记得备注不加香菜"></textarea>
+    </div>
+    <div class="field">
+      <label class="field__label">标签 <span class="field__hint">选填，用逗号分开</span></label>
+      <input class="input" id="fTags" placeholder="比如：忌口, 生日, 草莓" />
+    </div>
+    <div class="field">
+      <label class="field__label">附件 <span class="field__hint">截图、聊天记录、照片、文档都可以</span></label>
+      <button class="attach-picker" id="attachPicker"><svg class="ico ico--sm"><use href="#i-upload"/></svg>选择图片或文件</button>
+      <input type="file" id="fileInput" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.md,.zip" style="display:none" />
+      <div class="attach-list" id="attachList"></div>
+    </div>
+    <div class="field switch-line">
+      <span class="switch-line__label">加星标，置顶提醒自己</span>
+      <label class="star-toggle"><input type="checkbox" id="fStarred" /><span class="star-toggle__box"></span></label>
+    </div>
+  </div>
+  <div class="sheet__foot">
+    <button class="btn btn--danger" id="fDelete" style="display:none">删除</button>
+    <button class="btn btn--plain" id="fCancel">取消</button>
+    <button class="btn btn--primary" id="fSave">保存</button>
+  </div>
+</div>
+
+<div class="menu" id="menu">
+  <button class="menu__item" id="menuExport"><svg class="ico"><use href="#i-download"/></svg>导出备份（JSON）</button>
+  <button class="menu__item" id="menuImport"><svg class="ico"><use href="#i-upload"/></svg>导入备份</button>
+  <input type="file" id="importInput" accept="application/json,.json" style="display:none" />
+  <button class="menu__item" id="menuIdeas"><svg class="ico"><use href="#i-spark"/></svg>看看可以记些什么</button>
+  <button class="menu__item menu__item--danger" id="menuClear"><svg class="ico"><use href="#i-trash"/></svg>清空全部记录</button>
+</div>
+
+<div class="confirm" id="confirm">
+  <div class="confirm__title" id="confirmTitle">确定吗</div>
+  <div class="confirm__msg" id="confirmMsg"></div>
+  <div style="display:flex;gap:10px">
+    <button class="btn btn--plain" id="confirmNo">取消</button>
+    <button class="btn btn--primary" id="confirmYes">确定</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="viewer" id="viewer"><button class="viewer__close" id="viewerClose"><svg class="ico"><use href="#i-close"/></svg></button><img id="viewerImg" alt="附件预览" /></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'about-her.records.v1';
+  var SEED_KEY = 'about-her.seeded.v1';
+
+  var ATTITUDES = [
+    { key: 'like', label: '喜欢', icon: 'i-heart', color: '#e0785c' },
+    { key: 'dislike', label: '不喜欢', icon: 'i-ban', color: '#6c7c93' },
+    { key: 'wish', label: '心愿清单', icon: 'i-gift', color: '#c69540' },
+    { key: 'mention', label: '随口一提', icon: 'i-chat', color: '#7e9a8b' }
+  ];
+  var CATEGORIES = [
+    { key: 'food', label: '吃的喝的' },
+    { key: 'gift', label: '礼物穿搭' },
+    { key: 'media', label: '影视音乐' },
+    { key: 'trip', label: '想去的地方' },
+    { key: 'habit', label: '生活习惯' },
+    { key: 'mood', label: '情绪心情' },
+    { key: 'info', label: '重要资料' },
+    { key: 'other', label: '其它' }
+  ];
+  var WEIGHTS = [
+    { key: 'casual', label: '随口' },
+    { key: 'care', label: '有点在意' },
+    { key: 'must', label: '别忘' }
+  ];
+  var STATUSES = [
+    { key: 'record', label: '仅记录' },
+    { key: 'todo', label: '待安排' },
+    { key: 'done', label: '已兑现' },
+    { key: 'avoid', label: '需避开' }
+  ];
+  var IDEAS = [
+    { text: '她不吃什么 / 过敏', attitude: 'dislike', category: 'info', weight: 'must', status: 'avoid', hint: '她不吃什么、对什么过敏…' },
+    { text: '尺码和常用色号', attitude: 'mention', category: 'info', weight: 'must', status: 'record', hint: '鞋码、衣服尺码、口红色号…' },
+    { text: '她提过想去的地方', attitude: 'wish', category: 'trip', weight: 'care', status: 'todo', hint: '她说想去哪儿、想看什么…' },
+    { text: '她夸过的一家店', attitude: 'like', category: 'food', weight: 'care', status: 'todo', hint: '她说好吃 / 想再去的那家店…' },
+    { text: '她不喜欢被怎样对待', attitude: 'dislike', category: 'mood', weight: 'must', status: 'avoid', hint: '吵架时她说过的那句话…' },
+    { text: '她最近的压力', attitude: 'mention', category: 'mood', weight: 'care', status: 'record', hint: '她最近在忙什么、担心什么…' },
+    { text: '重要的日子', attitude: 'mention', category: 'info', weight: 'must', status: 'record', hint: '生日、纪念日、家人生日…' },
+    { text: '她随口说想要的东西', attitude: 'wish', category: 'gift', weight: 'care', status: 'todo', hint: '逛街时多看了两眼的东西…' }
+  ];
+
+  var SEED = [
+    { content: '路过甜品店的时候说，好想吃草莓蛋糕啊', attitude: 'like', category: 'food', weight: 'care', status: 'todo', scene: '周五下班，一起走回家', memo: '下周六买一个带过去，别买奶油的，她偏爱果味的', tags: ['草莓', '甜品'], starred: false, offset: 2 },
+    { content: '我不吃香菜，闻到那个味儿就不行', attitude: 'dislike', category: 'info', weight: 'must', status: 'avoid', scene: '第一次一起吃面', memo: '点外卖记得备注「不加香菜」，出去吃饭也先说一声', tags: ['忌口'], starred: true, offset: 12 },
+    { content: '好想去看一次海边的日出啊，一直没看成', attitude: 'wish', category: 'trip', weight: 'care', status: 'todo', scene: '睡前刷到旅行视频', memo: '可以挑个周末，提前看好天气和车次，别只说「以后去」', tags: ['旅行', '日出'], starred: true, offset: 5 },
+    { content: '这家的拿铁太甜了，下次不点这个', attitude: 'dislike', category: 'food', weight: 'casual', status: 'record', scene: '周日下午咖啡馆', memo: '', tags: ['咖啡'], starred: false, offset: 8 },
+    { content: '鞋码 37，穿久了会磨脚，鞋要软一点的', attitude: 'mention', category: 'info', weight: 'must', status: 'record', scene: '聊到买鞋', memo: '买鞋前先问一次，别凭印象猜', tags: ['尺码'], starred: true, offset: 20 },
+    { content: '加班到很晚的时候，其实不想听道理，就想有人听我说完', attitude: 'mention', category: 'mood', weight: 'must', status: 'record', scene: '有次她加班后打电话', memo: '先听，别急着给建议，也别急着说「这没什么」', tags: ['相处', '情绪'], starred: true, offset: 15 },
+    { content: '说那部老电影的配乐特别好听', attitude: 'like', category: 'media', weight: 'casual', status: 'record', scene: '窝在沙发上刷片单', memo: '可以存进一起看的片单', tags: ['电影'], starred: false, offset: 1 },
+    { content: '豆沙色的口红好像挺好看的', attitude: 'wish', category: 'gift', weight: 'care', status: 'todo', scene: '逛商场时多看了两眼', memo: '生日/纪念日候选，先记下色号方向，别直接买错色', tags: ['送礼', '生日'], starred: false, offset: 4 }
+  ];
+
+  var state = {
+    records: [],
+    tab: 'all',
+    category: '',
+    keyword: '',
+    status: '',
+    sort: 'new',
+    starOnly: false,
+    editingId: null,
+    draftAttachments: []
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function icon(name, cls) {
+    return '<svg class="ico ' + (cls || '') + '"><use href="#' + name + '"/></svg>';
+  }
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function fmtDate(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function today() { return fmtDate(new Date()); }
+  function shiftDate(days) {
+    var d = new Date();
+    d.setDate(d.getDate() - days);
+    return fmtDate(d);
+  }
+  function now() { return new Date().toISOString(); }
+  function uid() { return 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+  function find(list, key) {
+    for (var i = 0; i < list.length; i++) if (list[i].key === key) return list[i];
+    return null;
+  }
+  function att(k) { return find(ATTITUDES, k) || ATTITUDES[3]; }
+  function cat(k) { return find(CATEGORIES, k) || CATEGORIES[7]; }
+  function wgt(k) { return find(WEIGHTS, k) || WEIGHTS[0]; }
+  function sts(k) { return find(STATUSES, k) || STATUSES[0]; }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) { /* 数据损坏时退回示例 */ }
+    if (!localStorage.getItem(SEED_KEY)) {
+      var demo = SEED.map(function (s) {
+        return {
+          id: uid(), content: s.content, attitude: s.attitude, category: s.category,
+          weight: s.weight, status: s.status, scene: s.scene, memo: s.memo,
+          tags: s.tags.slice(), attachments: [], starred: s.starred,
+          saidAt: shiftDate(s.offset), createAt: now(), updateAt: now(), demo: true
+        };
+      });
+      try {
+        localStorage.setItem(SEED_KEY, '1');
+        localStorage.setItem(KEY, JSON.stringify(demo));
+      } catch (e) {}
+      return demo;
+    }
+    return [];
+  }
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(state.records));
+      return true;
+    } catch (e) {
+      showToast('本机空间不足，建议先导出备份并删掉大附件');
+      return false;
+    }
+  }
+
+  var toastTimer = null;
+  function showToast(msg) {
+    var t = $('toast');
+    t.textContent = msg;
+    t.classList.add('toast--on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('toast--on'); }, 2200);
+  }
+  var confirmResolve = null;
+  function ask(title, msg) {
+    $('confirmTitle').textContent = title;
+    $('confirmMsg').textContent = msg;
+    $('confirm').classList.add('confirm--on');
+    $('mask').classList.add('mask--on');
+    return new Promise(function (resolve) { confirmResolve = resolve; });
+  }
+  function closeConfirm(val) {
+    $('confirm').classList.remove('confirm--on');
+    if (!$('sheet').classList.contains('sheet--on') && !$('menu').classList.contains('menu--on')) {
+      $('mask').classList.remove('mask--on');
+    }
+    if (confirmResolve) { confirmResolve(val); confirmResolve = null; }
+  }
+  function showMask() { $('mask').classList.add('mask--on'); }
+  function hideMaskIfIdle() {
+    if (!$('sheet').classList.contains('sheet--on') && !$('menu').classList.contains('menu--on') && !$('confirm').classList.contains('confirm--on')) {
+      $('mask').classList.remove('mask--on');
+    }
+  }
+
+  /* ---------------- 筛选与排序 ---------------- */
+  function filtered() {
+    var kw = state.keyword.trim().toLowerCase();
+    var list = state.records.filter(function (r) {
+      if (state.tab !== 'all' && r.attitude !== state.tab) return false;
+      if (state.category && r.category !== state.category) return false;
+      if (state.status && r.status !== state.status) return false;
+      if (state.starOnly && !r.starred) return false;
+      if (kw) {
+        var hay = [r.content, r.memo, r.scene, (r.tags || []).join(' ')].join(' ').toLowerCase();
+        if (hay.indexOf(kw) < 0) return false;
+      }
+      return true;
+    });
+    var weightRank = { must: 3, care: 2, casual: 1 };
+    list.sort(function (a, b) {
+      if (state.sort === 'weight') {
+        var d = (weightRank[b.weight] || 0) - (weightRank[a.weight] || 0);
+        if (d) return d;
+      }
+      var da = a.saidAt || '', db = b.saidAt || '';
+      if (da !== db) return state.sort === 'old' ? (da < db ? -1 : 1) : (da > db ? -1 : 1);
+      var ca = a.createAt || '', cb = b.createAt || '';
+      return state.sort === 'old' ? (ca < cb ? -1 : 1) : (ca > cb ? -1 : 1);
+    });
+    return list;
+  }
+
+  /* ---------------- 渲染 ---------------- */
+  function renderStats() {
+    var all = state.records;
+    var todo = all.filter(function (r) { return r.status === 'todo'; }).length;
+    var wish = all.filter(function (r) { return r.attitude === 'wish'; }).length;
+    var avoid = all.filter(function (r) { return r.status === 'avoid' || r.attitude === 'dislike'; }).length;
+    var items = [
+      { key: 'all', num: all.length, label: '全部小事' },
+      { key: 'todo', num: todo, label: '还没安排' },
+      { key: 'wish', num: wish, label: '心愿' },
+      { key: 'avoid', num: avoid, label: '不喜欢' }
+    ];
+    var active = state.status === 'todo' ? 'todo'
+      : state.tab === 'wish' ? 'wish'
+      : state.tab === 'dislike' ? 'avoid'
+      : state.tab === 'all' && !state.status ? 'all' : '';
+    $('stats').innerHTML = items.map(function (it) {
+      return '<button class="stat' + (active === it.key ? ' stat--on' : '') + '" data-stat="' + it.key + '">' +
+        '<div class="stat__num">' + it.num + '</div><div class="stat__label">' + it.label + '</div></button>';
+    }).join('');
+  }
+
+  function renderDemoBar() {
+    var hasDemo = state.records.some(function (r) { return r.demo; });
+    $('demoBar').innerHTML = hasDemo
+      ? '<div class="demo-bar"><span>当前是示例数据，方便你看效果</span><button id="clearDemo">清空示例，开始记录</button></div>'
+      : '';
+    if (hasDemo) {
+      $('clearDemo').onclick = async function () {
+        var ok = await ask('清空示例？', '将删除所有示例记录，你自己记的内容会保留。');
+        if (ok) {
+          state.records = state.records.filter(function (r) { return !r.demo; });
+          save(); renderAll(); showToast('示例已清空');
+        }
+      };
+    }
+  }
+
+  function renderTodoBar() {
+    var todos = state.records.filter(function (r) { return r.status === 'todo'; })
+      .sort(function (a, b) { return (a.saidAt || '') < (b.saidAt || '') ? 1 : -1; }).slice(0, 3);
+    if (!todos.length) { $('todoBar').innerHTML = ''; return; }
+    $('todoBar').innerHTML = '<div class="todo-bar">' +
+      '<div class="todo-bar__head">' + icon('i-clock', 'ico--sm') + '还有 ' + state.records.filter(function (r) { return r.status === 'todo'; }).length + ' 件事等着你</div>' +
+      '<div class="todo-bar__list">' + todos.map(function (r) {
+        return '<div class="todo-bar__item"><i class="todo-bar__dot"></i><span>' + esc(r.content) + '</span></div>';
+      }).join('') + '</div></div>';
+  }
+
+  function renderChips() {
+    var tabs = [{ key: 'all', label: '全部', color: '#2e2a26' }].concat(ATTITUDES.map(function (a) {
+      return { key: a.key, label: a.label, color: a.color };
+    }));
+    $('attitudeChips').innerHTML = tabs.map(function (t) {
+      var on = state.tab === t.key;
+      var cls = 'chip' + (on ? (t.key === 'all' ? ' chip--on' : ' chip--tone-on') : '');
+      var style = on && t.key !== 'all' ? ' style="background:' + t.color + '"' : '';
+      return '<button class="' + cls + '"' + style + ' data-tab="' + t.key + '">' +
+        (t.key === 'all' ? '' : icon(att(t.key).icon, 'ico--sm')) + esc(t.label) + '</button>';
+    }).join('');
+    $('categoryChips').innerHTML = '<button class="chip' + (!state.category ? ' chip--on' : '') + '" data-cat="">所有主题</button>' +
+      CATEGORIES.map(function (c) {
+        return '<button class="chip' + (state.category === c.key ? ' chip--on' : '') + '" data-cat="' + c.key + '">' + esc(c.label) + '</button>';
+      }).join('');
+    $('ideaChips').innerHTML = IDEAS.map(function (it, i) {
+      return '<button class="idea" data-idea="' + i + '">' + esc(it.text) + '</button>';
+    }).join('');
+  }
+
+  function statusPill(r) {
+    if (r.status === 'todo') return '<span class="pill pill--warn">待安排</span>';
+    if (r.status === 'done') return '<span class="pill pill--done">已兑现</span>';
+    if (r.status === 'avoid') return '<span class="pill pill--avoid">需避开</span>';
+    return '';
+  }
+  function attachmentHtml(a) {
+    if (a.type && a.type.indexOf('image/') === 0) {
+      return '<img class="attach-img" src="' + esc(a.data) + '" alt="' + esc(a.name) + '" />';
+    }
+    return '<div class="attach-file">' + icon('i-file', 'ico--sm') + '<span>' + esc(a.name) + '</span></div>';
+  }
+  function cardHtml(r) {
+    var a = att(r.attitude);
+    var bar = '<div class="card__bar" style="background:' + a.color + '"></div>';
+    var top = '<span class="pill pill--tone" style="background:' + a.color + '">' + icon(a.icon, 'ico--sm') + esc(a.label) + '</span>' +
+      '<span class="pill pill--soft">' + esc(cat(r.category).label) + '</span>' +
+      (r.weight === 'must' ? '<span class="pill pill--warn">' + icon('i-pin', 'ico--sm') + '别忘</span>' :
+        r.weight === 'care' ? '<span class="pill pill--soft">有点在意</span>' : '') +
+      statusPill(r);
+    var star = '<button class="card__star' + (r.starred ? ' card__star--on' : '') + '" data-star="' + r.id + '" aria-label="星标">' +
+      '<svg class="ico" style="' + (r.starred ? 'fill:currentColor' : '') + '"><use href="#i-star"/></svg></button>';
+    var meta = '<div class="card__meta">' +
+      '<span class="card__meta-item">' + icon('i-calendar', 'ico--sm') + esc(r.saidAt || '') + '</span>' +
+      (r.scene ? '<span class="card__meta-item">' + icon('i-pin', 'ico--sm') + esc(r.scene) + '</span>' : '') +
+      '</div>';
+    var tags = (r.tags || []).length
+      ? '<div class="card__tags">' + r.tags.map(function (t) { return '<span class="tag"># ' + esc(t) + '</span>'; }).join('') + '</div>'
+      : '';
+    var atts = (r.attachments || []).length
+      ? '<div class="attach-grid">' + r.attachments.map(function (x) { return attachmentHtml(x); }).join('') + '</div>'
+      : '';
+    var actions = '<div class="card__actions">' +
+      '<button class="card__act" data-edit="' + r.id + '">' + icon('i-edit', 'ico--sm') + '编辑</button>' +
+      '<button class="card__act card__act--del" data-del="' + r.id + '">' + icon('i-trash', 'ico--sm') + '删除</button>' +
+      '</div>';
+    return '<article class="card">' + bar + '<div class="card__body">' +
+      '<div class="card__top">' + top + star + '</div>' +
+      '<p class="card__content">' + esc(r.content) + '</p>' +
+      (r.memo ? '<div class="card__memo"><span class="card__memo-label">我的备注 / 打算怎么做</span>' + esc(r.memo) + '</div>' : '') +
+      meta + tags + atts + actions +
+      '</div></article>';
+  }
+  function monthLabel(saidAt) {
+    if (!saidAt) return '未标日期';
+    var p = saidAt.split('-');
+    return p[0] + ' 年 ' + Number(p[1]) + ' 月';
+  }
+  function renderList() {
+    var list = filtered();
+    $('resultCount').textContent = state.records.length
+      ? '共 ' + list.length + ' 条记录' + (list.length !== state.records.length ? '（已筛选）' : '')
+      : '';
+    if (!list.length) {
+      $('list').innerHTML = '<div class="empty">' +
+        '<div class="empty__mark">' + icon('i-spark', 'ico--lg') + '</div>' +
+        '<div class="empty__title">' + (state.records.length ? '没有符合条件的小事' : '还没有记下什么') + '</div>' +
+        '<p class="empty__desc">' + (state.records.length
+          ? '换个词试试，或者把筛选条件清一清。'
+          : '不用想得太复杂，她随口说的一句话、一个表情、一次皱眉，都可以先记下来。<br>慢慢你就知道什么值得记了。') + '</p>' +
+        '</div>';
+      return;
+    }
+    var groups = [], last = '';
+    list.forEach(function (r) {
+      var m = monthLabel(r.saidAt);
+      if (m !== last) { groups.push({ label: m, items: [] }); last = m; }
+      groups[groups.length - 1].items.push(r);
+    });
+    $('list').innerHTML = groups.map(function (g) {
+      return '<div class="month-title">' + esc(g.label) + '</div><div class="cards">' +
+        g.items.map(cardHtml).join('') + '</div>';
+    }).join('');
+  }
+  function renderAll() {
+    renderStats(); renderDemoBar(); renderTodoBar(); renderChips(); renderList();
+  }
+
+  /* ---------------- 编辑弹层 ---------------- */
+  var draft = {};
+  function optHtml(list, current, group, colorFn) {
+    return list.map(function (o) {
+      var on = current === o.key;
+      var style = on ? ' style="background:' + (colorFn ? colorFn(o) : '#2e2a26') + '"' : '';
+      return '<button class="opt' + (on ? ' opt--on' : '') + '"' + style + ' data-group="' + group + '" data-key="' + o.key + '">' +
+        (o.icon ? icon(o.icon, 'ico--sm') : '') + esc(o.label) + '</button>';
+    }).join('');
+  }
+  function renderFormOptions() {
+    $('fAttitude').innerHTML = optHtml(ATTITUDES, draft.attitude, 'attitude', function (o) { return o.color; });
+    $('fCategory').innerHTML = optHtml(CATEGORIES, draft.category, 'category');
+    $('fWeight').innerHTML = optHtml(WEIGHTS, draft.weight, 'weight');
+    $('fStatus').innerHTML = optHtml(STATUSES, draft.status, 'status');
+  }
+  function renderDraftAttachments() {
+    $('attachList').innerHTML = state.draftAttachments.map(function (a, i) {
+      if (a.type && a.type.indexOf('image/') === 0) {
+        return '<div class="attach-thumb"><img src="' + esc(a.data) + '" alt="' + esc(a.name) + '" />' +
+          '<button data-remove-attach="' + i + '">' + icon('i-close', 'ico--sm') + '</button></div>';
+      }
+      return '<div class="attach-chip">' + icon('i-file', 'ico--sm') + '<span>' + esc(a.name) + '</span>' +
+        '<button data-remove-attach="' + i + '">' + icon('i-close', 'ico--sm') + '</button></div>';
+    }).join('');
+  }
+  function openSheet(record, idea) {
+    state.editingId = record ? record.id : null;
+    if (record) {
+      draft = {
+        content: record.content || '', attitude: record.attitude, category: record.category,
+        weight: record.weight, status: record.status, saidAt: record.saidAt || today(),
+        scene: record.scene || '', memo: record.memo || '', tags: (record.tags || []).join(', '),
+        starred: !!record.starred
+      };
+      state.draftAttachments = (record.attachments || []).slice();
+    } else {
+      draft = {
+        content: '', attitude: idea ? idea.attitude : 'mention',
+        category: idea ? idea.category : 'other',
+        weight: idea ? idea.weight : 'casual',
+        status: idea ? idea.status : 'record',
+        saidAt: today(), scene: '', memo: '', tags: '', starred: false
+      };
+      state.draftAttachments = [];
+    }
+    $('sheetTitle').textContent = record ? '编辑这件小事' : '记一件小事';
+    $('fDelete').style.display = record ? '' : 'none';
+    $('fContent').value = draft.content;
+    if (idea && !record) $('fContent').placeholder = idea.hint;
+    else $('fContent').placeholder = '比如：路过那家店的时候说，好想吃草莓蛋糕啊';
+    $('fSaidAt').value = draft.saidAt;
+    $('fScene').value = draft.scene;
+    $('fMemo').value = draft.memo;
+    $('fTags').value = draft.tags;
+    $('fStarred').checked = draft.starred;
+    renderFormOptions(); renderDraftAttachments();
+    $('sheet').classList.add('sheet--on'); showMask();
+  }
+  function closeSheet() {
+    $('sheet').classList.remove('sheet--on');
+    hideMaskIfIdle();
+  }
+  function readForm() {
+    return {
+      content: $('fContent').value.trim(),
+      attitude: draft.attitude, category: draft.category, weight: draft.weight, status: draft.status,
+      saidAt: $('fSaidAt').value || today(),
+      scene: $('fScene').value.trim(), memo: $('fMemo').value.trim(),
+      tags: $('fTags').value.split(/[,，、]/).map(function (s) { return s.trim(); }).filter(Boolean),
+      attachments: state.draftAttachments.slice(),
+      starred: $('fStarred').checked
+    };
+  }
+  function onSave() {
+    var v = readForm();
+    if (!v.content) { showToast('先写下她说了什么吧'); $('fContent').focus(); return; }
+    if (state.editingId) {
+      for (var i = 0; i < state.records.length; i++) {
+        if (state.records[i].id === state.editingId) {
+          var old = state.records[i];
+          state.records[i] = Object.assign({}, old, v, { updateAt: now(), demo: false });
+          break;
+        }
+      }
+    } else {
+      state.records.unshift(Object.assign({ id: uid(), createAt: now(), updateAt: now(), demo: false }, v));
+    }
+    if (!save()) return;
+    closeSheet(); renderAll(); showToast(state.editingId ? '已更新' : '记下了');
+    state.editingId = null;
+  }
+
+  /* ---------------- 附件 ---------------- */
+  function compressImage(file) {
+    return new Promise(function (resolve) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        var img = new Image();
+        img.onload = function () {
+          var max = 1000;
+          var scale = Math.min(1, max / Math.max(img.width, img.height));
+          var w = Math.max(1, Math.round(img.width * scale));
+          var h = Math.max(1, Math.round(img.height * scale));
+          var canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          var ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.72));
+        };
+        img.onerror = function () { resolve(reader.result); };
+        img.src = reader.result;
+      };
+      reader.onerror = function () { resolve(null); };
+      reader.readAsDataURL(file);
+    });
+  }
+  function readAsDataURL(file) {
+    return new Promise(function (resolve) {
+      var reader = new FileReader();
+      reader.onload = function () { resolve(reader.result); };
+      reader.onerror = function () { resolve(null); };
+      reader.readAsDataURL(file);
+    });
+  }
+  async function onFiles(files) {
+    var MAX = 1.5 * 1024 * 1024;
+    for (var i = 0; i < files.length; i++) {
+      var f = files[i];
+      if (f.size > MAX) { showToast('「' + f.name + '」超过 1.5MB，先压缩一下再传'); continue; }
+      var data = (f.type && f.type.indexOf('image/') === 0) ? await compressImage(f) : await readAsDataURL(f);
+      if (!data) { showToast('读取失败：' + f.name); continue; }
+      state.draftAttachments.push({ name: f.name, type: f.type || 'application/octet-stream', size: f.size, data: data });
+    }
+    renderDraftAttachments();
+    if (files.length) showToast('已添加 ' + files.length + ' 个附件');
+  }
+
+  /* ---------------- 备份 ---------------- */
+  function exportBackup() {
+    var payload = { app: 'about-her', version: 1, exportedAt: new Date().toISOString(), records: state.records };
+    var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = '关于她-备份-' + today() + '.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    showToast('备份已导出');
+  }
+  async function importBackup(file) {
+    try {
+      var text = await file.text();
+      var payload = JSON.parse(text);
+      var incoming = Array.isArray(payload) ? payload : payload.records;
+      if (!Array.isArray(incoming)) throw new Error('bad format');
+      var ok = await ask('导入备份', '将追加 ' + incoming.length + ' 条记录到现有内容（同 id 会跳过）。');
+      if (!ok) return;
+      var seen = {};
+      state.records.forEach(function (r) { seen[r.id] = 1; });
+      var added = 0;
+      incoming.forEach(function (r) {
+        if (!r || !r.content || seen[r.id]) return;
+        seen[r.id] = 1;
+        state.records.push(Object.assign({ id: uid(), createAt: now(), updateAt: now(), tags: [], attachments: [], starred: false }, r));
+        added++;
+      });
+      if (!save()) return;
+      renderAll(); showToast('已导入 ' + added + ' 条');
+    } catch (e) {
+      showToast('文件格式不对，请用本页导出的 JSON');
+    }
+  }
+
+  /* ---------------- 事件 ---------------- */
+  function bind() {
+    $('fab').onclick = function () { openSheet(null, null); };
+    $('sheetClose').onclick = closeSheet;
+    $('fCancel').onclick = closeSheet;
+    $('fSave').onclick = onSave;
+    $('fDelete').onclick = async function () {
+      var ok = await ask('删掉这条？', '删除之后就找不回来了。');
+      if (!ok) return;
+      state.records = state.records.filter(function (r) { return r.id !== state.editingId; });
+      save(); state.editingId = null; closeSheet(); renderAll(); showToast('已删除');
+    };
+    $('mask').onclick = function () {
+      if ($('confirm').classList.contains('confirm--on')) return;
+      closeSheet(); $('menu').classList.remove('menu--on'); hideMaskIfIdle();
+    };
+    $('confirmNo').onclick = function () { closeConfirm(false); };
+    $('confirmYes').onclick = function () { closeConfirm(true); };
+
+    $('searchInput').oninput = function () { state.keyword = this.value; renderList(); };
+    $('statusSelect').onchange = function () { state.status = this.value; renderList(); };
+    $('sortSelect').onchange = function () { state.sort = this.value; renderList(); };
+    $('starOnly').onchange = function () { state.starOnly = this.checked; renderList(); };
+
+    $('attitudeChips').onclick = function (e) {
+      var b = e.target.closest('[data-tab]'); if (!b) return;
+      state.tab = b.getAttribute('data-tab');
+      if (state.tab === 'all') { state.status = ''; $('statusSelect').value = ''; }
+      renderStats(); renderChips(); renderList();
+    };
+    $('categoryChips').onclick = function (e) {
+      var b = e.target.closest('[data-cat]'); if (!b) return;
+      state.category = b.getAttribute('data-cat');
+      renderChips(); renderList();
+    };
+    $('stats').onclick = function (e) {
+      var b = e.target.closest('[data-stat]'); if (!b) return;
+      var k = b.getAttribute('data-stat');
+      state.tab = 'all';
+      if (k === 'todo') state.status = 'todo'; else state.status = '';
+      if (k === 'wish') state.tab = 'wish';
+      if (k === 'avoid') { state.tab = 'dislike'; state.status = ''; }
+      $('statusSelect').value = state.status;
+      renderStats(); renderChips(); renderList();
+      window.scrollTo({ top: $('list').offsetTop - 60, behavior: 'smooth' });
+    };
+    $('ideaChips').onclick = function (e) {
+      var b = e.target.closest('[data-idea]'); if (!b) return;
+      openSheet(null, IDEAS[Number(b.getAttribute('data-idea'))]);
+    };
+
+    $('list').onclick = async function (e) {
+      var starBtn = e.target.closest('[data-star]');
+      if (starBtn) {
+        var sid = starBtn.getAttribute('data-star');
+        state.records.forEach(function (r) { if (r.id === sid) r.starred = !r.starred; });
+        save(); renderAll(); return;
+      }
+      var editBtn = e.target.closest('[data-edit]');
+      if (editBtn) {
+        var eid = editBtn.getAttribute('data-edit');
+        var rec = state.records.filter(function (r) { return r.id === eid; })[0];
+        if (rec) openSheet(rec, null);
+        return;
+      }
+      var delBtn = e.target.closest('[data-del]');
+      if (delBtn) {
+        var did = delBtn.getAttribute('data-del');
+        var ok = await ask('删掉这条？', '删除之后就找不回来了。');
+        if (ok) {
+          state.records = state.records.filter(function (r) { return r.id !== did; });
+          save(); renderAll(); showToast('已删除');
+        }
+        return;
+      }
+      var view = e.target.closest('img.attach-img');
+      if (view) { $('viewerImg').src = view.src; $('viewer').classList.add('viewer--on'); return; }
+      var card = e.target.closest('.card');
+      if (card) {
+        var cid = card.querySelector('[data-edit]');
+        if (cid) {
+          var cr = state.records.filter(function (r) { return r.id === cid.getAttribute('data-edit'); })[0];
+          if (cr) openSheet(cr, null);
+        }
+      }
+    };
+
+    $('sheet').onclick = function (e) {
+      var opt = e.target.closest('[data-group]');
+      if (opt) {
+        draft[opt.getAttribute('data-group')] = opt.getAttribute('data-key');
+        renderFormOptions();
+        return;
+      }
+      var rm = e.target.closest('[data-remove-attach]');
+      if (rm) {
+        state.draftAttachments.splice(Number(rm.getAttribute('data-remove-attach')), 1);
+        renderDraftAttachments();
+        return;
+      }
+      var view = e.target.closest('.attach-thumb img');
+      if (view) { $('viewerImg').src = view.src; $('viewer').classList.add('viewer--on'); }
+    };
+    $('attachPicker').onclick = function () { $('fileInput').click(); };
+    $('fileInput').onchange = function () {
+      if (this.files && this.files.length) onFiles(Array.prototype.slice.call(this.files));
+      this.value = '';
+    };
+    var picker = $('attachPicker');
+    picker.addEventListener('dragover', function (e) { e.preventDefault(); });
+    picker.addEventListener('drop', function (e) {
+      e.preventDefault();
+      if (e.dataTransfer.files.length) onFiles(Array.prototype.slice.call(e.dataTransfer.files));
+    });
+
+    $('moreBtn').onclick = function () { $('menu').classList.add('menu--on'); showMask(); };
+    $('menuExport').onclick = function () { $('menu').classList.remove('menu--on'); hideMaskIfIdle(); exportBackup(); };
+    $('menuImport').onclick = function () { $('importInput').click(); };
+    $('importInput').onchange = function () {
+      var f = this.files && this.files[0];
+      $('menu').classList.remove('menu--on'); hideMaskIfIdle();
+      if (f) importBackup(f);
+      this.value = '';
+    };
+    $('menuIdeas').onclick = function () {
+      $('menu').classList.remove('menu--on'); hideMaskIfIdle();
+      $('ideas').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+    $('menuClear').onclick = async function () {
+      $('menu').classList.remove('menu--on'); hideMaskIfIdle();
+      var ok = await ask('清空全部记录？', '所有内容都会被删除且无法恢复，建议先导出一份备份。');
+      if (ok) {
+        state.records = [];
+        try { localStorage.setItem(SEED_KEY, '1'); } catch (e) {}
+        save(); state.status = ''; state.tab = 'all'; state.category = '';
+        $('statusSelect').value = ''; $('searchInput').value = ''; state.keyword = '';
+        renderAll(); showToast('已清空');
+      }
+    };
+    $('viewerClose').onclick = function () { $('viewer').classList.remove('viewer--on'); };
+    $('viewer').onclick = function (e) {
+      if (e.target === this) this.classList.remove('viewer--on');
+    };
+  }
+
+  state.records = load();
+  bind();
+  renderAll();
+})();
+</script>
+</body>
+</html>

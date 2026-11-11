@@ -1,0 +1,8 @@
+/build
+
+# uni-app 前端打包产物：由 `uni build -p app` 产出后手动拷入 assets/apps/<appid>/www，
+# 换 appid 或重新构建后就过期，不入版本库。
+/src/main/assets/apps/
+
+# 源工程（Uni-core-android）带过来的 apk 构建产物，不入版本库。
+/release

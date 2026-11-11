@@ -1,0 +1,510 @@
+{
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^wd-(.*)": "wot-design-uni/components/wd-$1/wd-$1.vue",
+      "^z-paging$": "z-paging/components/z-paging/z-paging.vue",
+      "^z-paging-refresh$": "z-paging/components/z-paging/components/z-paging-refresh.vue",
+      "^z-paging-load-more$": "z-paging/components/z-paging/components/z-paging-load-more.vue",
+      "^z-paging-cell$": "z-paging/components/z-paging-cell/z-paging-cell.vue",
+      "^z-paging-empty-view$": "z-paging/components/z-paging-empty-view/z-paging-empty-view.vue",
+      "^z-paging-swiper$": "z-paging/components/z-paging-swiper/z-paging-swiper.vue",
+      "^z-paging-swiper-item$": "z-paging/components/z-paging-swiper-item/z-paging-swiper-item.vue"
+    }
+  },
+  "pages": [
+    {
+      "path": "pages/home/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "Romance"
+      }
+    }
+  ],
+  "subPackages": [
+    {
+      "root": "pkg-auth",
+      "pages": [
+        {
+          "path": "login/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "登录",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-wallet",
+      "pages": [
+        {
+          "path": "list/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "钱包",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "detail/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "钱包详情",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "edit/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "编辑钱包",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-media",
+      "pages": [
+        {
+          "path": "list/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "媒体",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "edit/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "编辑媒体",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-anniversary",
+      "pages": [
+        {
+          "path": "list/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "纪念日",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "edit/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "编辑纪念日",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-dating",
+      "pages": [
+        {
+          "path": "list/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "相亲",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "detail/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "相亲详情",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "edit/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "编辑相亲对象",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "edit-progress/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "编辑进度",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-post",
+      "pages": [
+        {
+          "path": "list/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "笔记",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "edit/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "编辑笔记",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "detail/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "笔记详情",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "edit-category/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "分类",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "search/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "搜索笔记",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-portfolio",
+      "pages": [
+        {
+          "path": "records/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "投资记录",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "edit-record/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "编辑记录资产",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-market",
+      "pages": [
+        {
+          "path": "choose-global/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "全球指数",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "edit-msn-weights/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "编辑权重",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-settings",
+      "pages": [
+        {
+          "path": "settings/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "设置",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black",
+            "backgroundColor": "#f0f0f0"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-misc",
+      "pages": [
+        {
+          "path": "valuation/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "估值计算器",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "intraday/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "日内收益走势",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "webviewer/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "详情",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "preview-markdown/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "Markdown 预览",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "rebalancer/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "再平衡计算器",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "preview-video/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "视频",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-codepush",
+      "pages": [
+        {
+          "path": "check/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "检测升级",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-duole",
+      "pages": [
+        {
+          "path": "baohuang/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "保皇",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-program",
+      "pages": [
+        {
+          "path": "list/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "纪录片",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "detail/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "纪录片",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "edit-series/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "编辑系列",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "edit-episode/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "编辑期目",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-twitter",
+      "pages": [
+        {
+          "path": "list/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "推特",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "edit/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "编辑博主",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-girlfriend",
+      "pages": [
+        {
+          "path": "list/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "关于她",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "edit/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "记一件小事",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pkg-love",
+      "pages": [
+        {
+          "path": "settings/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "我们的设置",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "anniversary/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "纪念日",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "checklist/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "100 件小事",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "diary/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "恋爱日记",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "diary/edit",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "写日记",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "checkin/index",
+          "style": {
+            "navigationStyle": "default",
+            "navigationBarTitleText": "每日打卡",
+            "navigationBarBackgroundColor": "#FFE9F1",
+            "navigationBarTextStyle": "black"
+          }
+        }
+      ]
+    }
+  ],
+  "globalStyle": {
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Romance",
+    "navigationBarBackgroundColor": "#FFE9F1",
+    "backgroundColor": "#FFF5F8"
+  }
+}

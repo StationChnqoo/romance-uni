@@ -1,0 +1,34 @@
+node_modules/
+dist/
+unpackage/
+.DS_Store
+*.log
+.idea/
+.vscode/
+.hbuilderx/
+# WorkBuddy 本地工作区数据（个人笔记 / 会话记忆），不入库
+.workbuddy/
+# 未被引用、已移出主包的静态资源备份
+.unused-assets/
+
+# yarn 产物：.yarn/ 是零安装缓存（大量 zip，曾塞进 66MB）；
+# *.lock = yarn.lock（本项目实际用 npm，依赖锁定以 package-lock.json 为准）
+.yarn/
+*.lock
+
+# ---------- Android 离线打包壳（android/，磁盘上约 785MB）----------
+# 子目录自带的 android/.gitignore 与 android/app/.gitignore 其实已经覆盖了这些，
+# 这里是在仓库根再兜一层：万一那两个文件被删掉/覆盖，也不会把几百 MB 构建产物 add 进来。
+# ⚠️ 注意不要忽略 android/app/libs/*.aar —— 那些是 uni-app 原生 SDK 依赖，必须入库。
+android/build/
+android/app/build/
+android/.gradle/
+android/captures/
+android/.cxx/
+android/.externalNativeBuild/
+android/local.properties
+# Gradle 构建输出 / uni 前端产物（www）/ apk 输出目录
+android/app/release/
+android/app/src/main/assets/apps/
+*.apk
+*.aab

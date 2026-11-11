@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ==================== 权限 ====================
+         离线打包时 manifest.json 里勾的权限不会自动同步到原生工程，
+         相机 / 相册 / 录音等运行时权限必须在这里显式声明，否则一调用就闪退。
+         （lib.5plus.base-release.aar 已自带 WRITE_EXTERNAL_STORAGE 与
+          READ_MEDIA_IMAGES / READ_MEDIA_VIDEO / READ_MEDIA_VISUAL_USER_SELECTED） -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <!-- 存储 / 相册：Android 12 及以下读相册必须有 READ_EXTERNAL_STORAGE -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- 相机 / 录像 / 音频 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- 定位（拍照 EXIF、后续地图模块） -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- 设备信息（DCloud 统计 / 风控链路） -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- 相机硬件特性：Android 12+ 要求显式声明；required=false 避免没相机的设备被应用商店过滤 -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+
+    <application
+        android:name=".MainApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Uni"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:name,android:usesCleartextTraffic"
+        >
+        <activity
+            android:exported="true"
+            android:name="io.dcloud.PandoraEntry"
+            android:configChanges="orientation|keyboardHidden|keyboard|navigation"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:hardwareAccelerated="true"
+            android:theme="@style/TranslucentTheme"
+            android:windowSoftInputMode="adjustResize" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="uni-app" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="io.dcloud.PandoraEntryActivity"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|keyboardHidden|screenSize|mcc|mnc|fontScale|keyboard|smallestScreenSize|screenLayout|screenSize|uiMode"
+            android:hardwareAccelerated="true"
+            android:permission="com.miui.securitycenter.permission.AppPermissionsEditor"
+            android:theme="@style/DCloudTheme"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+        <!-- 相册库（com.dmcbig.mediapicker）的拍照页。
+             lib.5plus.base-release.aar 自带的 manifest 只声明了同库的
+             PickerActivity / PreviewActivity，漏了这个 —— 但类和资源都在 aar 里，
+             不在这儿声明就会 ActivityNotFoundException 闪退。 -->
+        <activity
+            android:name="com.dmcbig.mediapicker.TakePhotoActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="false"
+            android:theme="@style/DeviceDefault.Light"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <meta-data
+            android:name="dcloud_appkey"
+            android:value="d748fecbeb9f99fd2ed0d3f91110b61a" />
+    </application>
+
+</manifest>
