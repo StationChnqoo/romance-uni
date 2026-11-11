@@ -2,7 +2,7 @@
  * 情侣空间数据模型 —— 纯本地（Pinia + persist），不依赖任何后端接口。
  *
  * 参考小恩爱 / 恋爱记的常用功能收敛为四块：纪念日倒数、100 件小事、
- * 恋爱日记时光轴、每日打卡 + 每日一问；再加「关于她」（复用 pkg-girlfriend）。
+ * 恋爱日记时光轴、每日一问；再加「关于她」（复用 pkg-girlfriend）。
  * 所有 id 由 constants/love.ts 的 createId() 本地生成。
  */
 
@@ -27,12 +27,6 @@ export interface LoveAnniversary {
   system?: boolean
 }
 
-/** 双人打卡：同一天两个人各自点过，都点了才算完成（小恩爱 365 天双人签到口径） */
-export interface LoveCheckinDay {
-  mine: boolean
-  partner: boolean
-}
-
 /** 一件小事：预置 100 条 + 自己加的 */
 export interface LoveChecklistItem {
   id: string
@@ -42,7 +36,7 @@ export interface LoveChecklistItem {
   /** 完成日期 YYYY-MM-DD，未完成为空串 */
   doneAt: string
   /**
-   * 解锁打卡时写的一句感受 / 那天的合照（本地永久路径）。
+   * 解锁时写的一句感受 / 那天的合照（本地永久路径）。
    * 可选：旧版本 persist 里没有这两个字段，照常按「只完成、没留念」显示。
    */
   note?: string

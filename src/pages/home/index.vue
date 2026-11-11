@@ -1,6 +1,6 @@
 <!--
   情侣空间首页（Romance）。
-  恋爱天数 / 今日打卡 / 纪念日倒数 / 功能宫格 / 「她说过的话」/ 最近日记。
+  恋爱天数 / 今日一问 / 纪念日倒数 / 功能宫格 / 「她说过的话」/ 最近日记。
 
   数据口径：恋爱相关全部走 love store（Pinia persist，返回页面自动是最新值），
   不做 onShow 重拉；「她说过的话」来自 cloud-uni 的 pkg-girlfriend /girl-notes，
@@ -78,21 +78,14 @@
         <text class="vow__text">{{ love.vow }}</text>
       </view>
 
-      <!-- 今日打卡条 -->
-      <view class="checkin" @click="onFeatureTap('LoveCheckin')">
-        <view class="checkin__icon" :class="{ 'checkin__icon--done': love.todayCheckinComplete }">
-          <text class="love-icon love-i-heart" />
+      <!-- 今日一问：一天一题，先各自封存再揭晓 -->
+      <view class="question" @click="onFeatureTap('LoveQuestion')">
+        <view class="question__icon love-icon love-i-chat" />
+        <view class="question__body">
+          <text class="question__title">今天想问你</text>
+          <text class="question__sub">{{ love.todayQuestion }}</text>
         </view>
-        <view class="checkin__body">
-          <text class="checkin__title">{{ checkinTitle }}</text>
-          <text class="checkin__sub">连续 {{ love.checkinStreak }} 天 · 一起完成 {{ love.totalCheckins }} 次</text>
-        </view>
-        <view
-          class="checkin__btn"
-          :class="{ 'checkin__btn--done': love.mineCheckedToday }"
-          @click.stop="onQuickCheckIn">
-          <text>{{ love.mineCheckedToday ? '我说过啦' : '说一句' }}</text>
-        </view>
+        <text class="question__go">{{ questionBadge }}</text>
       </view>
 
       <!-- 纪念日倒数 -->
@@ -162,10 +155,6 @@
           </view>
         </view>
         <view class="stats lv-card">
-          <view class="stats__item">
-            <text class="stats__num">{{ love.spaceStats.checkins }}</text>
-            <text class="stats__label">双人打卡</text>
-          </view>
           <view class="stats__item">
             <text class="stats__num">{{ love.spaceStats.diaries }}</text>
             <text class="stats__label">恋爱日记</text>
@@ -322,7 +311,7 @@ type FeatureKey =
   | 'LoveAnniversaries'
   | 'LoveChecklist'
   | 'LoveDiaries'
-  | 'LoveCheckin'
+  | 'LoveQuestion'
   | 'LoveSettings'
 
 const themeVars = useThemeVars()
@@ -347,12 +336,11 @@ const greeting = computed(() => {
 const onFeatureTap = (key: FeatureKey) => Router.navigate(key)
 const onEditDiary = (id: string) => Router.navigate('EditLoveDiary', { id })
 
-/** 双人打卡：首页只替「我」说一句，另一位在打卡页点，两个人都说才算完成 */
-const checkinTitle = computed(() => {
-  if (love.todayCheckinComplete) return '今天两个人都说过我爱你啦'
-  if (love.mineCheckedToday) return `等 ${love.partnerName} 也来说一句`
-  if (love.partnerCheckedToday) return `轮到 ${love.myName} 说一句啦`
-  return '今天还没打卡哦'
+/** 今日一问只给状态：不做连续天数、断签提醒，跳过一天也不损失 */
+const questionBadge = computed(() => {
+  if (love.answerRevealed) return '已揭晓 ›'
+  if (love.todayAnswer?.mine || love.todayAnswer?.partner) return '待揭晓 ›'
+  return '去回答 ›'
 })
 /** 提前提醒生效：页内提示，不发系统通知（纯本地方案没有推送通道） */
 const reminder = computed(() =>
@@ -394,12 +382,12 @@ const features = computed(() => [
     onTap: () => Router.navigate('LoveDiaries')
   },
   {
-    icon: 'hand-heart',
-    title: '每日打卡',
-    sub: '每天一句我爱你',
-    badge: `连续 ${love.checkinStreak} 天 ›`,
+    icon: 'chat',
+    title: '每日一问',
+    sub: '一天一题，写完再揭晓',
+    badge: questionBadge.value,
     tone: 'lilac',
-    onTap: () => Router.navigate('LoveCheckin')
+    onTap: () => Router.navigate('LoveQuestion')
   },
   {
     icon: 'settings',
@@ -437,15 +425,6 @@ const onRefresh = async () => {
   refreshing.value = true
   await loadLatestNote()
   refreshing.value = false
-}
-
-const onQuickCheckIn = () => {
-  if (love.mineCheckedToday) {
-    toast(love.todayCheckinComplete ? '今天两个人都在啦' : '等另一半也来说一句')
-    return
-  }
-  love.checkInAs('mine')
-  toast('记下了，去打卡页让 TA 也点一下')
 }
 
 /* ---------------- 首页快捷发布 ---------------- */
@@ -640,18 +619,18 @@ const onSaveQuickNote = async () => {
   flex-shrink: 0;
 }
 
-/* ---------------- 今日打卡 ---------------- */
-.checkin {
+/* ---------------- 今日一问 ---------------- */
+.question {
   display: flex;
   align-items: center;
   margin: 24rpx 30rpx 0;
   padding: 16rpx 20rpx;
   border-radius: 30rpx;
   background-image: linear-gradient(105deg, #fff, #fff0f5);
-  border: 1rpx solid rgba(255, 255, 255, 0.9);
+  border: 1rpx solid var(--love-line);
 }
 
-.checkin__icon {
+.question__icon {
   width: 76rpx;
   height: 76rpx;
   border-radius: 50%;
@@ -665,42 +644,33 @@ const onSaveQuickNote = async () => {
   flex-shrink: 0;
 }
 
-.checkin__icon--done {
-  background-image: linear-gradient(140deg, #ffd0df, #ffb0cb);
-}
-
-.checkin__body {
+.question__body {
   flex: 1 1 0;
   min-width: 0;
 }
 
-.checkin__title {
+.question__title {
   display: block;
   font-size: 28rpx;
   font-weight: 600;
   color: var(--love-ink);
 }
 
-.checkin__sub {
+.question__sub {
   display: block;
   font-size: 22rpx;
   color: var(--love-ink-3);
   margin-top: 8rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.checkin__btn {
+.question__go {
   flex-shrink: 0;
-  padding: 16rpx 30rpx;
-  border-radius: 999rpx;
-  font-size: 24rpx;
-  font-weight: 600;
-  color: #fff;
-  background-image: linear-gradient(100deg, #ff92b4, #ee5a92);
-}
-
-.checkin__btn--done {
-  color: #c07b9b;
-  background-image: linear-gradient(100deg, #fff2f7, #ffe4ee);
+  margin-left: 16rpx;
+  font-size: 22rpx;
+  color: #d2598c;
 }
 
 /* ---------------- 区块 ---------------- */

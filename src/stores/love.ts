@@ -8,7 +8,6 @@
  *
  * 交互口径参考小恩爱 / 恋爱记 / Amorno：
  * - 纪念日：可编辑 / 置顶 / 提前提醒 / 正数日，自动里程碑与双方生日只读
- * - 打卡：两个人各自点过才算当天完成（365 天双人签到），不是随手 toggle
  * - 每日一问：双方先各自私下写，都写完才一起揭晓（Connection Cards）
  */
 import { computed, ref } from 'vue'
@@ -17,7 +16,6 @@ import dayjs from 'dayjs'
 import { cloneDeep } from '@/utils'
 import { uniStorage } from '@/storage/uniStorage'
 import {
-  CHECKIN_BADGES,
   DAILY_QUESTIONS,
   DEFAULT_CHECKLIST,
   DEFAULT_DIARIES,
@@ -29,7 +27,6 @@ import {
 import type {
   LoveAnniversary,
   LoveAnswer,
-  LoveCheckinDay,
   LoveChecklistItem,
   LoveDiary
 } from '@/types/love'
@@ -64,9 +61,6 @@ export const useLoveStore = defineStore(
      */
     const sampleSeeded = ref(false)
 
-    /** 双方都点过才算完成的日期；checkinRoles 里存两个人分别点过没有 */
-    const checkins = ref<string[]>([])
-    const checkinRoles = ref<Record<string, LoveCheckinDay>>({})
     /** key = 日期，同一天双方各一句 */
     const answers = ref<Record<string, LoveAnswer>>({})
 
@@ -123,31 +117,6 @@ export const useLoveStore = defineStore(
         .sort((a, b) => b.doneAt.localeCompare(a.doneAt))
     )
 
-    /** 今天两个人分别点过没有 */
-    const todayRoles = computed(() => checkinRoles.value[todayStr()] || { mine: false, partner: false })
-    const mineCheckedToday = computed(() => !!todayRoles.value.mine)
-    const partnerCheckedToday = computed(() => !!todayRoles.value.partner)
-    /** 双方都完成才算今天打卡成功 */
-    const todayCheckinComplete = computed(
-      () => mineCheckedToday.value && partnerCheckedToday.value
-    )
-    const totalCheckins = computed(() => checkins.value.length)
-    /** 连续打卡：今天没打就从昨天往前数，断了就归零 */
-    const checkinStreak = computed(() => {
-      const set = new Set(checkins.value)
-      let cursor = dayjs().startOf('day')
-      if (!set.has(cursor.format('YYYY-MM-DD'))) cursor = cursor.subtract(1, 'day')
-      let n = 0
-      while (set.has(cursor.format('YYYY-MM-DD'))) {
-        n++
-        cursor = cursor.subtract(1, 'day')
-      }
-      return n
-    })
-    const unlockedBadges = computed(() =>
-      CHECKIN_BADGES.filter(b => checkinStreak.value >= b.days)
-    )
-
     /** 当年第几天取模，保证同一天固定一道题 */
     const todayQuestion = computed(() => {
       const dayOfYear = dayjs().startOf('day').diff(dayjs().startOf('year'), 'day')
@@ -158,27 +127,10 @@ export const useLoveStore = defineStore(
     const answerRevealed = computed(
       () => !!(todayAnswer.value?.mine && todayAnswer.value?.partner)
     )
-    /** 连续一起答完题的天数 */
-    const answerStreak = computed(() => {
-      const done = new Set(
-        Object.values(answers.value)
-          .filter(a => a.mine && a.partner)
-          .map(a => a.date)
-      )
-      let cursor = dayjs().startOf('day')
-      if (!done.has(cursor.format('YYYY-MM-DD'))) cursor = cursor.subtract(1, 'day')
-      let n = 0
-      while (done.has(cursor.format('YYYY-MM-DD'))) {
-        n++
-        cursor = cursor.subtract(1, 'day')
-      }
-      return n
-    })
     /** 关系成长数据：竞品的「数据统计 / 爱情指数」轻量版 */
     const spaceStats = computed(() => ({
       diaries: diaries.value.length,
       checklist: checklistDoneCount.value,
-      checkins: totalCheckins.value,
       answers: Object.values(answers.value).filter(a => a.mine && a.partner).length
     }))
 
@@ -243,7 +195,7 @@ export const useLoveStore = defineStore(
     }
 
     /**
-     * 解锁一件小事：参考恋爱记的「拍照打卡」——必须留下合照或一句心情，
+     * 解锁一件小事：参考恋爱记的留念解锁——必须留下合照或一句心情，
      * 由详情弹层确认后才调用，列表本身点一下不会改变状态。
      */
     const completeChecklistItem = (id: string, note: string, image: string) => {
@@ -254,7 +206,7 @@ export const useLoveStore = defineStore(
       item.note = note.trim()
       item.image = image
     }
-    /** 撤销打卡：连留念一起清掉，回到「还没一起做」 */
+    /** 撤销解锁：连留念一起清掉，回到「还没一起做」 */
     const undoChecklistItem = (id: string) => {
       const item = checklist.value.find(i => i.id === id)
       if (!item || !item.done) return
@@ -299,21 +251,6 @@ export const useLoveStore = defineStore(
       diaries.value = diaries.value.filter(d => d.id !== id)
     }
 
-    /**
-     * 双人打卡：各自点一次，两人都点过才写入 checkins（连续天数按「都完成」的天算）。
-     * 同一天重复点幂等；已完成的日子不允许反悔，避免随手切换状态。
-     */
-    const checkInAs = (role: 'mine' | 'partner') => {
-      const key = todayStr()
-      const current = checkinRoles.value[key] || { mine: false, partner: false }
-      if (current.mine && current.partner) return
-      const next = { ...current, [role]: true }
-      checkinRoles.value = { ...checkinRoles.value, [key]: next }
-      if (next.mine && next.partner && !checkins.value.includes(key)) {
-        checkins.value.push(key)
-      }
-    }
-
     const saveAnswer = (role: 'mine' | 'partner', text: string) => {
       const key = todayStr()
       const current = answers.value[key] || {
@@ -333,8 +270,6 @@ export const useLoveStore = defineStore(
       anniversaries.value = []
       checklist.value = cloneDeep(DEFAULT_CHECKLIST)
       diaries.value = []
-      checkins.value = []
-      checkinRoles.value = {}
       answers.value = {}
       sampleSeeded.value = true
     }
@@ -353,8 +288,6 @@ export const useLoveStore = defineStore(
       checklist,
       diaries,
       sampleSeeded,
-      checkins,
-      checkinRoles,
       answers,
       daysTogetherCount,
       upcoming,
@@ -362,16 +295,9 @@ export const useLoveStore = defineStore(
       checklistDoneCount,
       checklistProgress,
       completedChecklist,
-      mineCheckedToday,
-      partnerCheckedToday,
-      todayCheckinComplete,
-      totalCheckins,
-      checkinStreak,
-      unlockedBadges,
       todayQuestion,
       todayAnswer,
       answerRevealed,
-      answerStreak,
       spaceStats,
       sortedDiaries,
       setProfile,
@@ -385,7 +311,6 @@ export const useLoveStore = defineStore(
       removeChecklistItem,
       saveDiary,
       removeDiary,
-      checkInAs,
       saveAnswer,
       clearAll
     }
@@ -397,24 +322,16 @@ export const useLoveStore = defineStore(
        * v1 插件整包 hydrate：旧 storage 里的 diaries: [] 会把首装示例盖成空，
        * 所以恢复后补一次。sampleSeeded 为 true 说明用户已经写过 / 删过日记，
        * 保持现状，避免「删光了又自己长回来」。
-       * 同时把旧版「单方打卡」的日期补成双方完成，连续天数不会突然清零。
        */
       afterRestore: ({ store }) => {
         const s = store as unknown as {
           diaries: LoveDiary[]
           sampleSeeded: boolean
-          checkins: string[]
-          checkinRoles: Record<string, LoveCheckinDay>
         }
         if (!s.sampleSeeded && !s.diaries?.length) {
           s.diaries = cloneDeep(DEFAULT_DIARIES)
         }
         s.sampleSeeded = true
-        const roles = { ...(s.checkinRoles || {}) }
-        ;(s.checkins || []).forEach(date => {
-          if (!roles[date]) roles[date] = { mine: true, partner: true }
-        })
-        s.checkinRoles = roles
       }
     }
   }

@@ -128,10 +128,6 @@
     </view>
     <view class="settings__stats lv-card">
       <view class="settings__stat">
-        <text class="settings__stat-num">{{ love.spaceStats.checkins }}</text>
-        <text class="settings__stat-label">双人打卡</text>
-      </view>
-      <view class="settings__stat">
         <text class="settings__stat-num">{{ love.spaceStats.diaries }}</text>
         <text class="settings__stat-label">恋爱日记</text>
       </view>

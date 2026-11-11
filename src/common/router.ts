@@ -99,7 +99,7 @@ export const Routes: Record<keyof RootStacksParams, string> = {
   LoveChecklist: '/pkg-love/checklist/index',
   LoveDiaries: '/pkg-love/diary/index',
   EditLoveDiary: '/pkg-love/diary/edit',
-  LoveCheckin: '/pkg-love/checkin/index'
+  LoveQuestion: '/pkg-love/question/index'
 } as Record<keyof RootStacksParams, string>
 
 const stringifyParams = (params?: Record<string, any>) => {

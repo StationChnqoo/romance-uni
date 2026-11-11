@@ -489,10 +489,10 @@
           }
         },
         {
-          "path": "checkin/index",
+          "path": "question/index",
           "style": {
             "navigationStyle": "default",
-            "navigationBarTitleText": "每日打卡",
+            "navigationBarTitleText": "每日一问",
             "navigationBarBackgroundColor": "#FFE9F1",
             "navigationBarTextStyle": "black"
           }

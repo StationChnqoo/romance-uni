@@ -72,5 +72,5 @@ export type RootStacksParams = {
   LoveChecklist: undefined;
   LoveDiaries: undefined;
   EditLoveDiary: { id?: string } | undefined;
-  LoveCheckin: undefined;
+  LoveQuestion: undefined;
 };

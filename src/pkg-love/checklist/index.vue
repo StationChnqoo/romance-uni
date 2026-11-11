@@ -134,7 +134,7 @@
               <text class="love-icon love-i-calendar" />
               <text>{{ active.doneAt }} 解锁 · 已收好 {{ love.checklistDoneCount }} 件</text>
             </view>
-            <text class="ck__undo" @click="onUndo">{{ undoConfirm ? '确定撤销？再点一次' : '撤销这次打卡' }}</text>
+            <text class="ck__undo" @click="onUndo">{{ undoConfirm ? '确定撤销？再点一次' : '撤销这次解锁' }}</text>
           </view>
         </view>
       </view>
@@ -289,7 +289,7 @@ const onUndo = () => {
   }
   love.undoChecklistItem(active.value.id)
   detailVisible.value = false
-  toast('已撤销，可以重新打卡')
+  toast('已撤销，可以重新解锁')
 }
 
 /* ---------------- 新增小事 ---------------- */
